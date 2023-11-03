@@ -38,6 +38,9 @@
         android:name=".SignUp_activity"
         android:exported="true"/>
     <activity
+        android:name=".SignUpemail_activity"
+        android:exported="true"/>
+    <activity
         android:name=".MainActivity"
         android:exported="true"/>
     <activity
