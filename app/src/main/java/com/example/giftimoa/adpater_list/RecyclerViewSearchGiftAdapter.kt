@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView // Import CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.giftimoa.R
-import com.example.giftimoa.Search_gift_activity
+import com.example.giftimoa.home_fragment_List.Search_gift_activity
 import com.example.giftimoa.dto.Search_Gift
 
 class RecyclerViewSearchGiftAdapter constructor(
@@ -24,7 +24,7 @@ class RecyclerViewSearchGiftAdapter constructor(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val gift = giftList[position]
+        var gift = giftList[position]
         holder.tv_brand.text = gift.title
         holder.iv_product_preview.setImageResource(gift.image)
 

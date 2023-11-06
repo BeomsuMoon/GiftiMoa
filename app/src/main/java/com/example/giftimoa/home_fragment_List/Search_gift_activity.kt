@@ -1,4 +1,4 @@
-package com.example.giftimoa
+package com.example.giftimoa.home_fragment_List
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import androidx.viewpager2.widget.ViewPager2
+import com.example.giftimoa.R
 import com.example.giftimoa.adpater_list.HomeFragment_adpater_list
 
 class Search_gift_activity : AppCompatActivity() {
@@ -14,7 +15,7 @@ class Search_gift_activity : AppCompatActivity() {
         setContentView(R.layout.layout_search_gift) // 사용할 레이아웃 파일
 
         //툴바
-        val toolbar: Toolbar = findViewById(R.id.my_toolbar) 
+        val toolbar: Toolbar = findViewById(R.id.my_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)

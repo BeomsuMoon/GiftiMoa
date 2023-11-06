@@ -37,7 +37,7 @@
                 android:layout_marginRight="18dp"
                 android:adjustViewBounds="true"
                 android:background="#EEEEEE"
-                android:scaleType="center"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_camera" />
 
             <LinearLayout
@@ -49,12 +49,13 @@
                 android:elevation="8dp"
                 android:orientation="vertical">
 
-                <!--등록 Edittext-->
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <!--상품명-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -71,8 +72,11 @@
                         android:inputType="textMultiLine|textNoSuggestions"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
+                        android:singleLine="true"
+                        android:maxLines="1"
                         tools:ignore="TouchTargetSizeCheck" />
 
+                    <!--유효기간-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -81,16 +85,18 @@
                         android:textColor="@color/black"
                         android:textSize="13dp"/>
                     <EditText
-                        android:id="@+id/text_barcode"
+                        android:id="@+id/text_Effective_date"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
                         android:layout_margin="6dp"
                         android:background="@drawable/border"
-                        android:inputType="textMultiLine|textNoSuggestions"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
+                        android:singleLine="true"
+                        android:maxLines="1"
                         tools:ignore="TouchTargetSizeCheck" />
 
+                    <!--바코드-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -100,7 +106,7 @@
                         android:textSize="13dp"/>
 
                     <EditText
-                        android:id="@+id/text_place"
+                        android:id="@+id/text_barcode"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
                         android:layout_margin="6dp"
@@ -108,8 +114,11 @@
                         android:inputType="textMultiLine|textNoSuggestions"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
+                        android:singleLine="true"
+                        android:maxLines="1"
                         tools:ignore="TouchTargetSizeCheck" />
 
+                    <!--사용처-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -119,7 +128,7 @@
                         android:textSize="13dp"/>
 
                     <EditText
-                        android:id="@+id/text_expiration"
+                        android:id="@+id/text_usage"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
                         android:layout_margin="6dp"
@@ -127,9 +136,12 @@
                         android:inputType="textMultiLine|textNoSuggestions"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
+                        android:singleLine="true"
+                        android:maxLines="1"
                         tools:ignore="TouchTargetSizeCheck" />
 
                     <Button
+                        android:id="@+id/add_btn"
                         android:foreground="?attr/selectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.giftimoa.R
-import com.example.giftimoa.Search_gift_activity
 import com.example.giftimoa.dto.Search_Gift
 import com.example.giftimoa.adpater_list.RecyclerViewSearchGiftAdapter
 

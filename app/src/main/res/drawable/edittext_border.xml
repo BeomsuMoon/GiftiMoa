@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@android:color/transparent" /> <!-- 배경색은 투명하게 설정 -->
+    <solid android:color="@android:color/white" /> <!-- 배경색은 투명하게 설정 transparent -->
     <stroke
         android:width="1dp"
         android:color="#D3D3D3" /> <!-- 외곽선 색상을 원하는 색으로 설정 -->

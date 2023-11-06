@@ -7,15 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.giftimoa.Home_gift_add_activity
+import com.example.giftimoa.ID_Find_activity
 import com.example.giftimoa.R
-import com.example.giftimoa.Search_gift_activity
+import com.example.giftimoa.home_fragment_List.Search_gift_activity
 import com.example.giftimoa.adpater_list.Banner_Adapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import me.relex.circleindicator.CircleIndicator3

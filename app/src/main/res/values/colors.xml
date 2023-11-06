@@ -14,6 +14,9 @@
     <color name="blackshadow">#303030</color>
     <color name="brown">#604309</color>
     <color name="orange">#F7B733</color>
+    <color name="red">#FF0000</color>
+    <color name="crimson">#DC143C</color>
+
 
     <!--회색-->
     <color name="grey_01">#5f5f69</color>
