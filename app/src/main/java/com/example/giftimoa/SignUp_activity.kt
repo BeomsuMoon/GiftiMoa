@@ -28,8 +28,6 @@ class SignUp_activity : AppCompatActivity() {
     private lateinit var phoneNumberEditText: TextInputEditText
     private lateinit var nicknameEditText: TextInputEditText
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_sign_up)
@@ -38,7 +36,7 @@ class SignUp_activity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.title = "회원가입"
+        supportActionBar?.title = "회원가입"  // 액션바 제목 설정
 
         val signUpButton: Button = findViewById(R.id.signup_button)
         emailEditText = findViewById(R.id.ID_textField_editText)
@@ -48,6 +46,7 @@ class SignUp_activity : AppCompatActivity() {
         phoneNumberEditText = findViewById(R.id.user_phone_number_editText)
         nicknameEditText = findViewById(R.id.user_nickname_editText)
 
+        // 닉네임 중복 확인 버튼 클릭 이벤트 처리
         val nicknameDoubleCheckButton: Button = findViewById(R.id.nickname_double_check)
         nicknameDoubleCheckButton.setOnClickListener {
             val nickname = nicknameEditText.text.toString()
@@ -102,10 +101,10 @@ class SignUp_activity : AppCompatActivity() {
             }
         }
 
-
+        // 핸드폰 번호 중복 확인 버튼 클릭 이벤트 처리
         val phoneDoubleCheckButton: Button = findViewById(R.id.phone_double_check)
         phoneDoubleCheckButton.setOnClickListener {
-            val phoneNumber = (findViewById<TextInputEditText>(R.id.user_phone_number_editText)).text.toString()
+            val phoneNumber = phoneNumberEditText.text.toString()
 
             val url = "http://3.35.110.246:3306/checkPhoneNumber" // 핸드폰 번호 중복 체크
             val json = JsonObject().apply {
@@ -153,15 +152,11 @@ class SignUp_activity : AppCompatActivity() {
             }
         }
 
-
-
-
-        //이메일 값 전달받기ㅁㄴ
         val receivedEmail = intent.getStringExtra("email_text")
         if (receivedEmail != null) {
             emailEditText.setText(receivedEmail)
         }
-        setUseableEditText(emailEditText,false)
+        setUseableEditText(emailEditText, false)  // 이메일 입력 필드를 비활성화
 
         signUpButton.setOnClickListener {
             if (validateForm()) {
@@ -186,7 +181,7 @@ class SignUp_activity : AppCompatActivity() {
                     .post(requestBody)
                     .build()
 
-                // Use CoroutineScope for asynchronous network request
+                // 비동기 네트워크 요청을 위해 CoroutineScope 사용
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         val response: Response = withContext(Dispatchers.IO) {
@@ -215,9 +210,6 @@ class SignUp_activity : AppCompatActivity() {
         }
     }
 
-
-
-
     private fun setUseableEditText(et: EditText, useable: Boolean) {
         et.isClickable = useable
         et.isEnabled = useable
@@ -225,6 +217,7 @@ class SignUp_activity : AppCompatActivity() {
         et.isFocusableInTouchMode = useable
     }
 
+    // 양식 유효성 검사를 수행하는 메서드
     private fun validateForm(): Boolean {
         val email = emailEditText.text.toString()
         val password = passwordEditText.text.toString()
@@ -254,7 +247,6 @@ class SignUp_activity : AppCompatActivity() {
             confirmPasswordEditText.error = null
         }
 
-
         if (!isValidPhoneNumber(phoneNumber)) {
             phoneNumberEditText.error = "올바른 핸드폰 번호를 입력하세요."
             return false
@@ -269,21 +261,24 @@ class SignUp_activity : AppCompatActivity() {
         return true
     }
 
-
+    // 이메일 유효성 검사를 수행하는 메서드
     private fun isValidEmail(email: String): Boolean {
         val emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}"
         return email.matches(emailPattern.toRegex())
     }
 
+    // 비밀번호 유효성 검사를 수행하는 메서드
     private fun isValidPassword(password: String): Boolean {
         val passwordPattern = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#\$%^&+=]).{8,}$"
         return password.matches(passwordPattern.toRegex())
     }
 
+    // 핸드폰 번호 유효성 검사를 수행하는 메서드
     private fun isValidPhoneNumber(phoneNumber: String): Boolean {
         val phoneNumberPattern = "^01[0-9]{8,9}$"
         return phoneNumber.matches(phoneNumberPattern.toRegex())
     }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
