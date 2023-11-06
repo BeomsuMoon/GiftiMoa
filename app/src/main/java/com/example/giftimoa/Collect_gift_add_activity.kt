@@ -16,7 +16,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.giftimoa.ViewModel.Gifticon_ViewModel
 import com.example.giftimoa.bottom_nav_fragment.Collect_fragment
 import com.example.giftimoa.databinding.LayoutCollectGiftAddBinding
 import com.example.giftimoa.dto.Collect_Gift
@@ -26,8 +28,12 @@ import java.io.InputStream
 
 class Collect_gift_add_activity : AppCompatActivity() {
     private lateinit var binding : LayoutCollectGiftAddBinding
+    val viewModel = ViewModelProvider(this).get(Gifticon_ViewModel::class.java)
+
 
     private val REQUEST_READ_EXTERNAL_STORAGE = 1000
+
+    private var giftList = mutableListOf<Collect_Gift>()
 
     lateinit var tess: TessBaseAPI //Tesseract API 객체 생성
     var dataPath: String = "" //데이터 경로 변수 선언
@@ -137,27 +143,30 @@ class Collect_gift_add_activity : AppCompatActivity() {
     }
 
 
-    private fun giftAdd_Btn() {
-        binding.addBtn.setOnClickListener {
-            var str_uri: String
-            if(dataUri==null){
-                str_uri=origin_uri
-            }else{
-                str_uri=dataUri.toString()
-            }
+    private fun giftAdd() {
             var giftName = binding.textGiftName.text.toString()
             var effectiveDate = binding.textEffectiveDate.text.toString()
             var barcode = binding.textBarcode.text.toString()
             var usage = binding.textUsage.text.toString()
 
+        viewModel.setGiftData(giftName, effectiveDate, barcode, usage)
 
-            val intent = Intent(this, Collect_fragment::class.java)
+            val intent = Intent(this, Collect_gift_add_info_activity::class.java)
             intent.putExtra("gift_Name", giftName)
             intent.putExtra("gift_effectiveDate", effectiveDate)
             intent.putExtra("gift_barcode", barcode)
             intent.putExtra("gift_usage", usage)
             startActivity(intent)
 
+            //텍스트 필드 초기화
+            binding.textGiftName.text.clear()
+            binding.textEffectiveDate.text.clear()
+            binding.textBarcode.text.clear()
+            binding.textUsage.text.clear()
+    }
+    private fun giftAdd_Btn() {
+        binding.addBtn.setOnClickListener {
+            giftAdd()
         }
     }
 }

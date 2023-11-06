@@ -15,12 +15,6 @@
         android:background="@color/white"
         android:elevation="11dp"/>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_Gift_Collect"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
 <!--    <TextView
         android:id="@+id/tv_noGifticon"
         android:layout_width="wrap_content"
