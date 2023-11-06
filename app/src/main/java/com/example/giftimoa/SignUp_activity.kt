@@ -166,7 +166,7 @@ class SignUp_activity : AppCompatActivity() {
                 val phoneNumber = phoneNumberEditText.text.toString()
                 val username = nicknameEditText.text.toString()
 
-                val url = "http://3.35.110.246:3306/signup3"
+                val url = "http://3.35.110.246:3306/signup_node"
                 val json = JsonObject().apply {
                     addProperty("email", email)
                     addProperty("password", password)
