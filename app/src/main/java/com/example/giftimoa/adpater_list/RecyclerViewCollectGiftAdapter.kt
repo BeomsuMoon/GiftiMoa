@@ -83,4 +83,5 @@ class RecyclerViewCollectGiftAdapter constructor(
         var giftImageView: ImageView = itemView.findViewById(R.id.iv_product_preview)
         var tv_banner_badge: TextView = itemView.findViewById(R.id.tv_banner_badge)
     }
+
 }
