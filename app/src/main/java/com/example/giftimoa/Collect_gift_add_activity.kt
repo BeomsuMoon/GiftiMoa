@@ -1,55 +1,34 @@
 package com.example.giftimoa
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.giftimoa.ViewModel.Gifticon_ViewModel
 import com.example.giftimoa.bottom_nav_fragment.Collect_fragment
 import com.example.giftimoa.databinding.LayoutCollectGiftAddBinding
 import com.example.giftimoa.dto.Collect_Gift
-import com.googlecode.tesseract.android.TessBaseAPI
-import java.io.File
-import java.io.InputStream
 
 class Collect_gift_add_activity : AppCompatActivity() {
     private lateinit var binding : LayoutCollectGiftAddBinding
-    val viewModel = ViewModelProvider(this).get(Gifticon_ViewModel::class.java)
-
 
     private val REQUEST_READ_EXTERNAL_STORAGE = 1000
 
-    private var giftList = mutableListOf<Collect_Gift>()
-
-    lateinit var tess: TessBaseAPI //Tesseract API 객체 생성
-    var dataPath: String = "" //데이터 경로 변수 선언
-
-    var dataUri: Uri? = null
-    var str_uri: String = ""
-    var origin_uri:String =""
+    private var giftName = ""
+    private var effectiveDate = ""
+    private var barcode = ""
+    private var usage = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = LayoutCollectGiftAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val intent = intent
-        str_uri=intent.getStringExtra("intent_uri").toString()
-        origin_uri = str_uri
 
         //액션바 활성화
         setSupportActionBar(binding.myToolbar)
@@ -59,6 +38,7 @@ class Collect_gift_add_activity : AppCompatActivity() {
 
         galleryClickEvent()
         giftAdd_Btn()
+
 
     }
 
@@ -101,21 +81,6 @@ class Collect_gift_add_activity : AppCompatActivity() {
             } else {
 
                 loadImage()
-/*
-                dataPath = filesDir.toString() + "/tesseract/" //언어데이터의 경로 미리 지정
-
-                checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
-                checkFile(File(dataPath + "tessdata/"), "eng")
-
-                var lang: String = "kor+eng"
-                tess = TessBaseAPI() //api준비
-                Log.d("sys", "api")
-                tess.setDebug(true)
-                Log.d("sys", "디버그")
-                tess.init(dataPath, lang) //해당 사용할 언어데이터로 초기화
-                Log.d("sys", "언어초기화")
-*/
-
             }
         })
     }
@@ -144,29 +109,25 @@ class Collect_gift_add_activity : AppCompatActivity() {
 
 
     private fun giftAdd() {
-            var giftName = binding.textGiftName.text.toString()
-            var effectiveDate = binding.textEffectiveDate.text.toString()
-            var barcode = binding.textBarcode.text.toString()
-            var usage = binding.textUsage.text.toString()
+/*            var giftName = binding.textGiftName.text?.toString()
+            var effectiveDate = binding.textEffectiveDate.text?.toString()
+            var barcode = binding.textBarcode.text?.toString()
+            var usage = binding.textUsage.text?.toString()*/
 
-        viewModel.setGiftData(giftName, effectiveDate, barcode, usage)
+        val bundle = Bundle()
+        bundle.putString("giftName", giftName)
+        bundle.putString("effectiveDate", effectiveDate)
+        bundle.putString("barcode", barcode)
+        bundle.putString("usage", usage)
+        val fragment = Collect_fragment()
+        fragment.arguments = bundle
 
-            val intent = Intent(this, Collect_gift_add_info_activity::class.java)
-            intent.putExtra("gift_Name", giftName)
-            intent.putExtra("gift_effectiveDate", effectiveDate)
-            intent.putExtra("gift_barcode", barcode)
-            intent.putExtra("gift_usage", usage)
-            startActivity(intent)
 
-            //텍스트 필드 초기화
-            binding.textGiftName.text.clear()
-            binding.textEffectiveDate.text.clear()
-            binding.textBarcode.text.clear()
-            binding.textUsage.text.clear()
     }
     private fun giftAdd_Btn() {
         binding.addBtn.setOnClickListener {
             giftAdd()
+            finish()
         }
     }
 }
