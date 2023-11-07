@@ -20,10 +20,10 @@ class Collect_gift_add_activity : AppCompatActivity() {
 
     private val REQUEST_READ_EXTERNAL_STORAGE = 1000
 
-    private var giftName = ""
-    private var effectiveDate = ""
-    private var barcode = ""
-    private var usage = ""
+    private var giftName:String = ""
+    private var effectiveDate:String = ""
+    private var barcode:String = ""
+    private var usage:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,10 +109,10 @@ class Collect_gift_add_activity : AppCompatActivity() {
 
 
     private fun giftAdd() {
-/*            var giftName = binding.textGiftName.text?.toString()
-            var effectiveDate = binding.textEffectiveDate.text?.toString()
-            var barcode = binding.textBarcode.text?.toString()
-            var usage = binding.textUsage.text?.toString()*/
+        var giftNames = binding.textGiftName.text?.toString()
+        var effectiveDates = binding.textEffectiveDate.text?.toString()
+        var barcodes = binding.textBarcode.text?.toString()
+        var usages = binding.textUsage.text?.toString()
 
         val bundle = Bundle()
         bundle.putString("giftName", giftName)

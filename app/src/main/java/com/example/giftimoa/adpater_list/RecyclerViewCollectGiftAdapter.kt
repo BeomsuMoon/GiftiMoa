@@ -39,4 +39,5 @@ class RecyclerViewCollectGiftAdapter constructor(
         var tv_name: TextView = itemView.findViewById(R.id.tv_name)
         var cardView: CardView = itemView.findViewById(R.id.cardView)
     }
+
 }

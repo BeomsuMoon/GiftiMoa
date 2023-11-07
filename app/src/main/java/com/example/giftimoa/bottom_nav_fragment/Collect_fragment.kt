@@ -29,7 +29,7 @@ import com.example.giftimoa.dto.Collect_Gift
 import com.example.giftimoa.home_fragment_List.Search_gift_activity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class Collect_fragment : Fragment() {
+open class Collect_fragment : Fragment() {
 
     private lateinit var binding : FragmentCollectBinding
     private var recyclerView: RecyclerView? = null
@@ -89,7 +89,7 @@ class Collect_fragment : Fragment() {
             giftList.add(gift)
             recyclerViewCollectGiftAdapter?.notifyDataSetChanged()
         } else {
-            Log.d(TAG,"데이터 사입 오류")
+            Log.d(TAG,"데이터 삽입 오류")
         }
 
     }
