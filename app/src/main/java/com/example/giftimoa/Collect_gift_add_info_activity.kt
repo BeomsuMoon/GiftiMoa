@@ -1,14 +1,15 @@
 package com.example.giftimoa
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.giftimoa.databinding.LayoutCollectGiftAddBinding
+import com.bumptech.glide.Glide
 import com.example.giftimoa.databinding.LayoutCollectGiftAddInfoBinding
 import com.example.giftimoa.dto.Collect_Gift
 
 class Collect_gift_add_info_activity : AppCompatActivity() {
     private lateinit var binding : LayoutCollectGiftAddInfoBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = LayoutCollectGiftAddInfoBinding.inflate(layoutInflater)
@@ -21,22 +22,26 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
         supportActionBar?.title = "기프티콘 정보"
 
         val gift = intent.getSerializableExtra("gift") as Collect_Gift
-        var giftNameTextView = binding.textGiftName
-        var textEffectiveDateTextView = binding.textEffectiveDate
-        var textBarcodeTextView = binding.textBarcode
-        var textUsageTextView = binding.textUsage
 
-        giftNameTextView.text = gift.giftName
-        textEffectiveDateTextView.text = gift.effectiveDate
-        textBarcodeTextView.text = gift.barcode
-        textUsageTextView.text = gift.usage
+        binding.textGiftName.text = gift.giftName
+        binding.textEffectiveDate.text = gift.effectiveDate
+        binding.textBarcode.text = gift.barcode
+        binding.textUsage.text = gift.usage
 
+        Glide.with(this)
+            .load(gift.imageUrl)
+            .into(binding.uploadImage)
+
+        //이미지 클릭시 이미지 전체 화면 보기
+        binding.uploadImage.setOnClickListener {
+            val intent = Intent(this, FullScreenImage_Activity::class.java)
+            intent.putExtra("imageUrl", gift.imageUrl)
+            startActivity(intent)
+        }
     }
-
 
     override fun onSupportNavigateUp(): Boolean { // 액션바 뒤로가기
         onBackPressed()
         return true
     }
-
 }
