@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
-        android:elevation="3dp"/>
+        android:elevation="6dp"/>
 
 <!--    <TextView
         android:id="@+id/tv_noGifticon"

@@ -12,7 +12,8 @@ import com.example.giftimoa.R
 import com.example.giftimoa.dto.Collect_Gift
 
 class RecyclerViewCollectGiftAdapter constructor(
-    private var giftList: MutableList<Collect_Gift>  // giftList를 MutableList로 선언
+    private var giftList: MutableList<Collect_Gift>,
+    private val itemClickListener: (Collect_Gift) -> Unit  // itemClickListener를 추가
 ) : RecyclerView.Adapter<RecyclerViewCollectGiftAdapter.MyViewHolder>() {
 
     fun setGiftList(gifts: MutableList<Collect_Gift>) {
@@ -38,7 +39,7 @@ class RecyclerViewCollectGiftAdapter constructor(
         holder.tv_name.text = gift.giftName
 
         holder.cardView.setOnClickListener {
-
+            itemClickListener(gift)  // 클릭 이벤트가 발생하면 itemClickListener를 호출
         }
     }
 
