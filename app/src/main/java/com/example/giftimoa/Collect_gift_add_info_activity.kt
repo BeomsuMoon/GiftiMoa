@@ -67,6 +67,10 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
         }
     }
 
+    var gift_Name = intent.getStringExtra("gift_Name")
+    var gift_effectiveDate = intent.getStringExtra("gift_effectiveDate")
+    var gift_barcode = intent.getStringExtra("gift_barcode")
+    var gift_usage = intent.getStringExtra("gift_usage")
     override fun onSupportNavigateUp(): Boolean { // 액션바 뒤로가기
         onBackPressed()
         return true
