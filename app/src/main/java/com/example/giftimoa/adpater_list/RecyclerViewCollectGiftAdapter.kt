@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.giftimoa.R
 import com.example.giftimoa.dto.Collect_Gift
 
@@ -35,8 +36,11 @@ class RecyclerViewCollectGiftAdapter constructor(
         val gift = giftList[position]
         holder.tv_brand.text = gift.usage
         holder.tv_date.text = gift.effectiveDate
-        /*        holder.iv_product_preview.setImageResource(gift.img)*/
         holder.tv_name.text = gift.giftName
+
+        Glide.with(holder.itemView)
+            .load(gift.imageUrl)
+            .into(holder.giftImageView)
 
         holder.cardView.setOnClickListener {
             itemClickListener(gift)  // 클릭 이벤트가 발생하면 itemClickListener를 호출
@@ -50,9 +54,9 @@ class RecyclerViewCollectGiftAdapter constructor(
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tv_brand: TextView = itemView.findViewById(R.id.tv_brand)
         var tv_date: TextView = itemView.findViewById(R.id.tv_date)
-        //        var iv_product_preview: ImageView = itemView.findViewById(R.id.iv_product_preview)
         var tv_name: TextView = itemView.findViewById(R.id.tv_name)
         var cardView: CardView = itemView.findViewById(R.id.cardView)
+        var giftImageView: ImageView = itemView.findViewById(R.id.iv_product_preview)
         //var tv_banner_badge: TextView = itemView.findViewById(R.id.tv_banner_badge)
     }
 }
