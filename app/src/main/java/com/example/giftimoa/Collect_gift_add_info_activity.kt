@@ -62,6 +62,7 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
         binding.uploadImage.setOnClickListener {
             val intent = Intent(this, FullScreenImage_Activity::class.java)
             intent.putExtra("imageUrl", gift.imageUrl)
+/*            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)*/
             startActivity(intent)
             finish()
         }
