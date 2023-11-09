@@ -45,7 +45,6 @@ class Menu_Fragment : Fragment() {
             // 예를 들어, LoginActivity로 이동하려면 다음과 같이 처리할 수 있습니다:
             val intent = Intent(activity, Login_activity::class.java)
             startActivity(intent)
-
         }
 
         return view
