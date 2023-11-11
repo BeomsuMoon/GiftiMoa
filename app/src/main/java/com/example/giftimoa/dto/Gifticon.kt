@@ -32,7 +32,3 @@ data class Brand(
     }
 }
 
-data class Badge(
-    val content: String,
-    val color: String
-)

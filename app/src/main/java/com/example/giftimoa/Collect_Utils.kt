@@ -3,14 +3,17 @@ package com.example.giftimoa
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.giftimoa.dto.Badge
+import com.example.giftimoa.dto.Collect_Gift
 import com.example.giftimoa.dto.Gifticon
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 object Utils {
     @RequiresApi(Build.VERSION_CODES.O)
-    fun calDday(gifticon: Gifticon): Badge {
+    fun calDday(gifticon: Collect_Gift): Badge {
         //0:사용가능, 1:사용완료, 2:기간만료
         return when (gifticon.state) {
             1 -> {
@@ -22,7 +25,7 @@ object Utils {
             }
             else -> {
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-                val due = gifticon.due.split(" ")[0].format(dateFormat)
+                val due = gifticon.effectiveDate.split(" ")[0].format(dateFormat)
                 var now = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
                 val dueTime = dateFormat.parse(due)?.time
@@ -49,11 +52,11 @@ object Utils {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun calState(gifticon: Gifticon): Int {
+    fun calState(gifticon: Collect_Gift): Int {
         //0:사용가능, 1:사용완료, 2:기간만료
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-        val due = gifticon.due.split(" ")[0].format(dateFormat)
+        val due = gifticon.effectiveDate.split(" ")[0].format(dateFormat)
         var now = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
         val dueTime = dateFormat.parse(due)?.time
