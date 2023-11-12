@@ -4,14 +4,11 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.giftimoa.dto.Badge
 import com.example.giftimoa.dto.Collect_Gift
-import com.example.giftimoa.dto.Gifticon
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.concurrent.TimeUnit
 
-object Utils {
+object Collect_Utils {
     @RequiresApi(Build.VERSION_CODES.O)
     fun calDday(gifticon: Collect_Gift): Badge {
         //0:사용가능, 1:사용완료, 2:기간만료

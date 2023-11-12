@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.giftimoa.R
-import com.example.giftimoa.Utils
+import com.example.giftimoa.Collect_Utils
 import com.example.giftimoa.dto.Collect_Gift
 
 class RecyclerViewCollectGiftAdapter constructor(
@@ -56,7 +55,7 @@ class RecyclerViewCollectGiftAdapter constructor(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val gift = giftList[position]
         val dateString = "${gift.effectiveDate}까지"
-        val badge = Utils.calDday(gift) //남은 기간 D-day
+        val badge = Collect_Utils.calDday(gift) //남은 기간 D-day
         holder.tv_brand.text = gift.usage
         holder.tv_date.text = dateString
         holder.tv_name.text = gift.giftName

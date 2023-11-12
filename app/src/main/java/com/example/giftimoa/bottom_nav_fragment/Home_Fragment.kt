@@ -3,20 +3,28 @@ package com.example.giftimoa.bottom_nav_fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.giftimoa.Home_gift_add_activity
-import com.example.giftimoa.ID_Find_activity
+import com.example.giftimoa.Home_gift_add_info_activity
 import com.example.giftimoa.R
+import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.home_fragment_List.Search_gift_activity
 import com.example.giftimoa.adpater_list.Banner_Adapter
+import com.example.giftimoa.adpater_list.RecyclerViewHomeGiftAdapter
+import com.example.giftimoa.dto.Home_gift
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import me.relex.circleindicator.CircleIndicator3
 
@@ -27,6 +35,17 @@ class Home_Fragment : Fragment() {
     private val numPage = 4
     private lateinit var mIndicator: CircleIndicator3
 
+    private lateinit var giftViewModel: Gificon_ViewModel
+    private lateinit var RecyclerViewHomeGiftAdapter: RecyclerViewHomeGiftAdapter
+    private lateinit var recyclerView: RecyclerView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true) // 프래그먼트에서 옵션 메뉴 사용을 활성화
+        giftViewModel = ViewModelProvider(requireActivity()).get(Gificon_ViewModel::class.java)
+    }
+
+    //홈 메뉴 및 배너 생성
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -113,14 +132,53 @@ class Home_Fragment : Fragment() {
         return rootView
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 플로팅 버튼 클릭 시 다음 화면의 액티비티로 이동
-        view.findViewById<FloatingActionButton>(R.id.fab_btn).setOnClickListener {
-            val intent = Intent(requireContext(), Home_gift_add_activity::class.java)
+        recyclerView = view.findViewById<RecyclerView>(R.id.rv_Gift_Home)
+        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireActivity(), 3)
+        recyclerView.layoutManager = layoutManager
+
+        // 어댑터 초기화 및 RecyclerView에 연결
+        RecyclerViewHomeGiftAdapter = RecyclerViewHomeGiftAdapter(mutableListOf()) { gift ->
+            // Start the new activity
+            val intent = Intent(requireContext(), Home_gift_add_info_activity::class.java)
+            intent.putExtra("gift", gift)
             startActivity(intent)
         }
+        recyclerView.adapter = RecyclerViewHomeGiftAdapter
+
+        // 플로팅 버튼 클릭 시 다음 화면의 액티비티로 이동
+        view.findViewById<FloatingActionButton>(R.id.fab_btn).setOnClickListener {
+            startCollectGiftAddActivity()
+        }
+    }
+
+
+    private val activityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            val homeGift = result.data!!.extras!!.get("gift") as Home_gift
+            giftViewModel.addGift(homeGift)
+        }
+    }
+
+    private fun startCollectGiftAddActivity() {
+        val intent = Intent(requireContext(), Home_gift_add_activity::class.java)
+        activityResult.launch(intent)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+        // 뷰모델을 이용해 기프티콘 등록
+        giftViewModel.homeGifts.observe(viewLifecycleOwner, { gifts ->
+            // 어댑터에 데이터 업데이트
+            RecyclerViewHomeGiftAdapter.setGiftList(gifts.toMutableList())
+            RecyclerViewHomeGiftAdapter.notifyDataSetChanged()
+            Log.d("로그", "기프티콘: $gifts")
+        })
     }
 
     class ClickListeners {
@@ -131,7 +189,9 @@ class Home_Fragment : Fragment() {
                     val intent = Intent(activity, Search_gift_activity::class.java)
                     activity.startActivity(intent)
                 }
+
             }
         }
     }
+
 }
