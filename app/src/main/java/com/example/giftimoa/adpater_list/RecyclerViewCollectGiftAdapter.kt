@@ -30,6 +30,22 @@ class RecyclerViewCollectGiftAdapter constructor(
         notifyItemInserted(giftList.size - 1)
     }
 
+    fun updateGift(updatedGift: Collect_Gift, position: Int) {
+        giftList[position] = updatedGift
+        notifyItemChanged(position)
+    }
+
+    fun deleteGift(gift: Collect_Gift) {
+        val position = giftList.indexOf(gift)
+        if (position != -1) {
+            giftList.removeAt(position)
+            notifyItemRemoved(position)
+        } else {
+
+        }
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_collect_giticard, parent, false)
@@ -39,14 +55,13 @@ class RecyclerViewCollectGiftAdapter constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val gift = giftList[position]
+        val dateString = "${gift.effectiveDate}까지"
+        val badge = Utils.calDday(gift) //남은 기간 D-day
         holder.tv_brand.text = gift.usage
-        holder.tv_date.text = gift.effectiveDate
+        holder.tv_date.text = dateString
         holder.tv_name.text = gift.giftName
-
-        // 남은 기간을 계산하고 표시합니다.
-        val badge = Utils.calDday(gift)
         holder.tv_banner_badge.text = badge.content
-        holder.tv_banner_badge.setTextColor(Color.parseColor(badge.color))
+        holder.tv_banner_badge.setBackgroundColor(Color.parseColor(badge.color))
 
         Glide.with(holder.itemView)
             .load(gift.imageUrl)
