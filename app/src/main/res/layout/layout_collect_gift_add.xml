@@ -93,7 +93,6 @@
                         android:textColor="@color/black"
                         android:singleLine="true"
                         android:maxLines="1"
-                        android:focusable="false"
                         tools:ignore="TouchTargetSizeCheck" />
 
                     <!--바코드-->

@@ -67,10 +67,15 @@ class Collect_gift_edit_activity : AppCompatActivity() {
                 state = gift.state
             )
 
-
             Log.d("로그", "수정 된 기프티콘 : $updatedGift")
+
             // ViewModel에 Collect_Gift 객체 업데이트
             giftViewModel.updateGift(updatedGift)
+
+            // 수정된 결과를 액티비티에 전달
+            val intent = Intent()
+            intent.putExtra("modifiedGift", updatedGift)
+            setResult(Activity.RESULT_OK, intent)
 
             // 이전 화면으로 돌아가기
             finish()
