@@ -3,61 +3,76 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--  읽기 권한  -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!--  현재위치  -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>    <!--저장소 읽기 권한-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>    <!--저장소 쓰기 권한-->
 
 
-    <application
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.GiftiMoa"
-        tools:targetApi="31">
+<application
+    android:networkSecurityConfig="@xml/network_security_config"
+    android:allowBackup="true"
+    android:dataExtractionRules="@xml/data_extraction_rules"
+    android:fullBackupContent="@xml/backup_rules"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/Theme.GiftiMoa"
+    tools:targetApi="31">
+
+
+    <activity
+        android:name=".ID_Find_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".PW_Find_Result_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".PW_Find_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".home_fragment_List.Search_gift_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".FullScreenImage_Activity"
+        android:exported="true"/>
+    <activity
+        android:name=".Collect_gift_edit_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".Collect_gift_add_info_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".Collect_gift_add_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".Home_gift_add_info_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".Home_gift_add_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".SignUp_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".SignUpemail_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".MainActivity"
+        android:exported="true"/>
+    <activity
+        android:name=".Login_activity"
+        android:exported="true">
 
 
 
-        <activity
-            android:name=".ID_Find_activity"
-            android:exported="true"/>
-        <activity
-            android:name=".PW_Find_activity"
-            android:exported="true"/>
-        <activity
-            android:name=".home_fragment_List.Search_gift_activity"
-            android:exported="true"/>
-        <activity
-            android:name=".Collect_gift_add_activity"
-            android:exported="true"/>
-        <activity
-            android:name=".Home_gift_add_activity"
-            android:exported="true"/>
-        <activity
-            android:name=".SignUp_activity"
-            android:exported="true"/>
-        <activity
-            android:name=".SignUpemail_activity"
-            android:exported="true"/>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
 
 
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+</application>
 
 </manifest>
