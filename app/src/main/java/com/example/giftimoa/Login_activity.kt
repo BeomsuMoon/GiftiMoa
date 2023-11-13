@@ -14,6 +14,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.system.exitProcess
 
 class Login_activity : AppCompatActivity() {
 
@@ -29,6 +30,12 @@ class Login_activity : AppCompatActivity() {
         val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
         val loginButton = findViewById<Button>(R.id.loginButton)
 
+        // ID_Find_activity에서 넘겨받은 이메일 값이 있는지 확인하고, 있다면 이메일 입력 필드에 설정
+        val receivedEmail = intent.getStringExtra("email_text")
+        if (!receivedEmail.isNullOrEmpty()) {
+            emailEditText.setText(receivedEmail)
+        }
+
         // 로그인 버튼 클릭 시 이벤트 처리
         loginButton.setOnClickListener(View.OnClickListener {
             // 입력된 이메일과 비밀번호 가져오기
@@ -36,8 +43,7 @@ class Login_activity : AppCompatActivity() {
             val password = passwordEditText.text.toString()
 
             // 서버 URL 설정
-            val serverUrl = "http://3.35.110.246:3306/users?email=$email&password=$password"
-
+            val serverUrl = "http://3.35.110.246:3306/login_node?email=$email&password=$password"
 
             // HTTP GET 요청 보내기
             Thread {
@@ -89,7 +95,7 @@ class Login_activity : AppCompatActivity() {
                     } else {
                         // 서버 응답이 실패인 경우
                         runOnUiThread {
-                            Toast.makeText(applicationContext, "서버 응답 실패.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, "서버 응답 실패", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } catch (e: Exception) {
@@ -101,7 +107,7 @@ class Login_activity : AppCompatActivity() {
             }.start()
         })
 
-        //회원가입 버튼 클릭 이벤트
+        // 회원가입 버튼 클릭 이벤트
         Sign_up.setOnClickListener {
             val intent = Intent(this, SignUpemail_activity::class.java)
             startActivity(intent)
@@ -116,6 +122,24 @@ class Login_activity : AppCompatActivity() {
             val intent = Intent(this, PW_Find_activity::class.java)
             startActivity(intent)
         }
+    }
 
+    private var backPressedTime: Long = 0
+
+    override fun onBackPressed() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - backPressedTime > 2000) {
+            Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+            backPressedTime = currentTime
+        } else {
+            exitApp() // 앱 종료 함수 호출
+        }
+    }
+
+    private fun exitApp() {
+        finish() // 현재 액티비티 종료
+        moveTaskToBack(true) // 태스크를 백그라운드로 이동
+        android.os.Process.killProcess(android.os.Process.myPid()) // 프로세스 종료
+        exitProcess(1) // 시스템 종료
     }
 }

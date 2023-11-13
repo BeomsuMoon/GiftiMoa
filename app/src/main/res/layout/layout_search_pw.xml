@@ -1,140 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:gravity="center_horizontal"
-android:orientation="vertical"
-android:background="@color/white">
-
-<androidx.appcompat.widget.Toolbar
-    android:id="@+id/my_toolbar"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="@color/white"
-    android:elevation="4dp"
-    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@color/white">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <!--이메일 -->
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:id="@+id/user_nickname"
-        android:layout_width="270dp"
-        android:layout_height="55dp"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--이메일 -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/user_nickname"
+            android:layout_width="270dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="10dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="#8b00ff"
+            android:hint="이메일 입력"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:singleLine="true"
+                android:maxLines="1"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--패스워드 -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/user_password"
+            android:layout_width="270dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="10dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="#8b00ff"
+            android:hint="이메일 입력"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:singleLine="true"
+                android:maxLines="1"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <!--중복확인-->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/email_double_check"
+            android:layout_width="79dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="305dp"
+            android:text="이메일확인"
+            android:textSize="12dp"
+            android:background="@drawable/border_icon_solid"
+            android:textColor="@color/blackshadow"/>
+    </RelativeLayout>
+
+    <!--인증번호 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/certification_num_Layout"
+            android:layout_width="270dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="10dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxStrokeColor="#8b00ff"
+            android:hint="인증번호 입력"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/certification_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:singleLine="true"
+                android:maxLines="1"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--중복확인-->
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/nextView_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginBottom="10dp"
-        app:boxBackgroundColor="@color/white"
-        app:boxStrokeColor="#8b00ff"
-        android:hint="이메일 입력"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email_editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:singleLine="true"
-            android:maxLines="1"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!--패스워드 -->
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:id="@+id/user_password"
-        android:layout_width="270dp"
-        android:layout_height="55dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="10dp"
-        app:boxBackgroundColor="@color/white"
-        app:boxStrokeColor="#8b00ff"
-        android:hint="이메일 입력"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password_editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:singleLine="true"
-            android:maxLines="1"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-
-    <!--중복확인-->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/email_double_check"
-        android:layout_width="79dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="305dp"
-        android:text="중복확인"
-        android:textSize="12dp"
-        android:background="@drawable/border_icon_solid"
-        android:textColor="@color/blackshadow"/>
-</RelativeLayout>
-
-<!--인증번호 -->
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:id="@+id/certification_num_Layout"
-        android:layout_width="270dp"
-        android:layout_height="55dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="10dp"
-        app:boxBackgroundColor="@color/white"
-        app:boxStrokeColor="#8b00ff"
-        android:hint="인증번호 입력"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/certification_num"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:singleLine="true"
-            android:maxLines="1"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!--중복확인-->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/certification_num_check"
-        android:layout_width="79dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="305dp"
-        android:text="인증번호 확인"
-        android:textSize="10dp"
-        android:background="@drawable/border_icon_solid"
-        android:textColor="@color/blackshadow"/>
-</RelativeLayout>
-
-<Button
-    android:id="@+id/nextView_btn"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginLeft="30dp"
-    android:layout_marginRight="30dp"
-    android:background="@drawable/button_solid"
-    android:text="다 음"
-    android:textStyle="bold" />
+        android:background="@drawable/button_solid"
+        android:text="다 음"
+        android:textStyle="bold" />
 </LinearLayout>
