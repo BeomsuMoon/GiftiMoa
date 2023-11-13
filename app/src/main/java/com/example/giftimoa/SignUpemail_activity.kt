@@ -13,7 +13,6 @@ import org.json.JSONObject
 import java.io.IOException
 
 class SignUpemail_activity : AppCompatActivity() {
-
     private lateinit var emailEditText: EditText
     private lateinit var certificationNum: EditText
 
@@ -51,9 +50,10 @@ class SignUpemail_activity : AppCompatActivity() {
         }
     }
 
+    // 이메일 중복 확인을 수행하는 메서드
     private fun checkEmailDuplicate(email: String) {
         val client = OkHttpClient()
-        val url = "http://3.35.110.246:3306/checkDuplicateEmail" // 서버의 중복 확인 엔드포인트
+        val url = "http://3.35.110.246:3306/EmailNumbersend_node" // 서버의 중복 확인 엔드포인트
         val json = """{"email": "$email"}"""
         val mediaType = "application/json; charset=utf-8".toMediaType()
         val requestBody = json.toRequestBody(mediaType)
@@ -82,7 +82,6 @@ class SignUpemail_activity : AppCompatActivity() {
                             // 중복 확인이 성공한 경우, 이메일 입력 필드를 비활성화
                             emailEditText.isEnabled = false
                             emailEditText.isFocusable = false
-
                         }
                     }
                 } else {
@@ -95,9 +94,10 @@ class SignUpemail_activity : AppCompatActivity() {
         })
     }
 
+    // 인증 코드 확인을 수행하는 메서드
     private fun verifyVerificationCode(email: String, enteredCode: String) {
         val client = OkHttpClient()
-        val url = "http://3.35.110.246:3306/verify_verification_code" // 서버의 인증 코드 확인 엔드포인트
+        val url = "http://3.35.110.246:3306/SignUpEmail_node" // 서버의 인증 코드 확인 엔드포인트
         val json = """{"email": "$email", "verCode": "$enteredCode"}"""
         val mediaType = "application/json; charset=utf-8".toMediaType()
         val requestBody = json.toRequestBody(mediaType)
@@ -139,7 +139,6 @@ class SignUpemail_activity : AppCompatActivity() {
             }
         })
     }
-
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
