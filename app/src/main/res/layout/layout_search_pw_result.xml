@@ -71,6 +71,7 @@
                 android:textSize="14dp"
                 android:singleLine="true"
                 android:maxLines="1"
+                android:inputType="textPassword"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -97,6 +98,7 @@
                 android:textSize="14dp"
                 android:singleLine="true"
                 android:maxLines="1"
+                android:inputType="textPassword"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
