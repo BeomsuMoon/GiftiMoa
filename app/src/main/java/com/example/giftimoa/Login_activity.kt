@@ -89,7 +89,7 @@ class Login_activity : AppCompatActivity() {
                     } else {
                         // 서버 응답이 실패인 경우
                         runOnUiThread {
-                            Toast.makeText(applicationContext, "서버 응답 실패", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, "서버 응답 실패.", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } catch (e: Exception) {
