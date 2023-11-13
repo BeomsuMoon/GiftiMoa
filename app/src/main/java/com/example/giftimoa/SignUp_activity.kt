@@ -81,7 +81,7 @@ class SignUp_activity : AppCompatActivity() {
                             if (status == "중복") {
                                 Toast.makeText(this@SignUp_activity, "이 닉네임은 이미 사용 중입니다.", Toast.LENGTH_SHORT).show()
                             } else if (status == "중복 아님") {
-                                Toast.makeText(this@SignUp_activity, "사용 가능한 닉네임입니다.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@SignUp_activity, "사용 가능한 닉네임입니다", Toast.LENGTH_SHORT).show()
                                 nicknameEditText.isEnabled = false
                                 nicknameEditText.isFocusable = false
                                 nicknameEditText.isFocusableInTouchMode = false
