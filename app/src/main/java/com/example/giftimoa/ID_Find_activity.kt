@@ -1,31 +1,28 @@
 package com.example.giftimoa
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.giftimoa.databinding.LayoutCollectGiftAddBinding
 import com.example.giftimoa.databinding.LayoutSearchIdBinding
-import android.widget.EditText // EditText를 사용하기 위해 추가
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
-
-data class PhoneRequest(val phoneNumber: String)
-data class EmailResponse(val email: String)
-
-interface ApiService {
-    @POST("/findEmailByPhoneNumber")
-    fun findEmailByPhoneNumber(@Body request: PhoneRequest): Call<EmailResponse>
-}
+import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
+import com.google.gson.JsonParser
 
 class ID_Find_activity : AppCompatActivity() {
     private lateinit var binding: LayoutSearchIdBinding
-    private lateinit var email_text: EditText
-    private lateinit var phone_id: EditText
+    private var foundEmail: String = "" // 글로벌로 사용할 이메일 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,40 +33,88 @@ class ID_Find_activity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        email_text = findViewById(R.id.email_text)
-        phone_id = findViewById(R.id.phone_id)
+        val findButton: Button = findViewById(R.id.find_button)
+        val loginButton: Button = findViewById(R.id.login_Button)
+        val phoneEditText: EditText = findViewById(R.id.phone_id)
+        val emailTextView: TextView = findViewById(R.id.email_text)
 
-        val find_button = findViewById<Button>(R.id.find_button)
+        findButton.setOnClickListener {
+            val phoneNumber = phoneEditText.text.toString()
 
-        find_button.setOnClickListener {
-            val phoneNumber = phone_id.text.toString()
+            // 전화번호 유효성 체크
+            if (isValidPhoneNumber(phoneNumber)) {
+                // 서버에서 아이디 찾기 로직 수행
+                val url = "http://3.35.110.246:3306/idFind"  // 서버 URL로 대체
+                val json = JsonObject().apply {
+                    addProperty("phoneNumber", phoneNumber)  // 서버 요청 파라미터 이름을 서버에서 기대하는 이름으로 변경
+                }
+                val mediaType = "application/json; charset=utf-8".toMediaType()
+                val requestBody = json.toString().toRequestBody(mediaType)
 
-            val retrofit = Retrofit.Builder()
-                .baseUrl("http://3.35.110.246") // 서버의 기본 URL로 변경
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+                val request = Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .build()
 
-            val apiService = retrofit.create(ApiService::class.java)
-
-            val request = PhoneRequest(phoneNumber)
-            val call = apiService.findEmailByPhoneNumber(request)
-
-            call.enqueue(object : Callback<EmailResponse> {
-                override fun onResponse(call: Call<EmailResponse>, response: Response<EmailResponse>) {
-                    if (response.isSuccessful) {
-                        val email = response.body()?.email
-                        if (!email.isNullOrBlank()) {
-                            email_text.setText(email)
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val response: Response = withContext(Dispatchers.IO) {
+                            OkHttpClient().newCall(request).execute()
                         }
-                    } else {
-                        // 서버 요청 실패 또는 응답 처리에 실패한 경우에 대한 처리
+
+                        if (response.isSuccessful) {
+                            val responseData = response.body?.string()
+                            val jsonObject = JsonParser().parse(responseData).asJsonObject
+
+                            runOnUiThread {
+                                // 서버 응답에서 "error"가 없으면 이메일을 가져와서 표시
+                                if (!jsonObject.has("error")) {
+                                    foundEmail = jsonObject.get("email").asString // 이메일 값을 글로벌 변수에 저장
+                                    emailTextView.text = "찾은 이메일: $foundEmail"
+                                    Toast.makeText(this@ID_Find_activity, "아이디 찾기에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                                    emailTextView.isEnabled = false
+                                    emailTextView.isFocusable = false
+                                } else {
+                                    val errorMessage = jsonObject.get("message").asString
+                                    Toast.makeText(this@ID_Find_activity, errorMessage, Toast.LENGTH_SHORT).show()
+                                    emailTextView.text = ""
+                                }
+                            }
+                        } else {
+                            runOnUiThread {
+                                // Handle unsuccessful response...
+                                Toast.makeText(this@ID_Find_activity, "아이디 찾기에 실패 하였습니다.", Toast.LENGTH_SHORT).show()
+                                emailTextView.text = ""
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        runOnUiThread {
+                            Toast.makeText(this@ID_Find_activity, "오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
+            } else {
+                Toast.makeText(this@ID_Find_activity, "유효하지 않은 전화번호입니다.", Toast.LENGTH_SHORT).show()
+                emailTextView.text = ""
+            }
+        }
 
-                override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
-                    // 네트워크 오류 또는 예외 처리
-                }
-            })
+        loginButton.setOnClickListener {
+            // TextView에서 이메일 가져오기
+            val email = foundEmail
+
+            if (email.isNotEmpty()) {
+                // Login_activity를 시작하는 Intent 생성
+                val intent = Intent(this@ID_Find_activity, Login_activity::class.java)
+                // 이메일을 인텐트의 추가 데이터로 넣기
+                intent.putExtra("email_text", email)
+                // Login_activity 시작
+                startActivity(intent)
+            } else {
+                val intent = Intent(this@ID_Find_activity, Login_activity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
@@ -77,5 +122,9 @@ class ID_Find_activity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-}
 
+    private fun isValidPhoneNumber(phoneNumber: String): Boolean {
+        val phoneNumberPattern = "^01[0-9]{8,9}$"
+        return phoneNumber.matches(phoneNumberPattern.toRegex())
+    }
+}

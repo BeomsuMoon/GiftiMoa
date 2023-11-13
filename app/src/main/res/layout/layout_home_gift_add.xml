@@ -54,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <!--상품명-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -67,11 +68,11 @@
                         android:layout_height="42dp"
                         android:layout_margin="6dp"
                         android:background="@drawable/border"
-                        android:inputType="textMultiLine|textNoSuggestions"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
                         tools:ignore="TouchTargetSizeCheck" />
 
+                    <!--유효기간-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -80,34 +81,35 @@
                         android:textColor="@color/black"
                         android:textSize="13dp"/>
                     <EditText
-                        android:id="@+id/text_barcode"
+                        android:id="@+id/text_Effective_date"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
                         android:layout_margin="6dp"
                         android:background="@drawable/border"
-                        android:inputType="textMultiLine|textNoSuggestions"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
+                        android:focusable="false"
                         tools:ignore="TouchTargetSizeCheck" />
 
+                    <!--가격-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="바코드"
+                        android:text="가격"
                         android:layout_marginLeft="6dp"
                         android:textColor="@color/black"
                         android:textSize="13dp"/>
 
                     <EditText
-                        android:id="@+id/text_place"
+                        android:id="@+id/text_price"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
                         android:layout_margin="6dp"
                         android:background="@drawable/border"
-                        android:inputType="textMultiLine|textNoSuggestions"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
-                        tools:ignore="TouchTargetSizeCheck" />
+                        tools:ignore="TouchTargetSizeCheck"
+                        android:inputType="number"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -123,7 +125,6 @@
                         android:layout_height="42dp"
                         android:layout_margin="6dp"
                         android:background="@drawable/border"
-                        android:inputType="textMultiLine|textNoSuggestions"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
                         tools:ignore="TouchTargetSizeCheck"/>
@@ -137,18 +138,21 @@
                         android:textSize="13dp"/>
 
                     <EditText
-                        android:id="@+id/Product_Description"
+                        android:id="@+id/text_Product_Description"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
+                        android:layout_height="219dp"
                         android:layout_margin="6dp"
                         android:background="@drawable/border"
+                        android:gravity="top"
+                        android:hint="\n 기프티콘 등록 시 바코드를 올리지 마세요.\n\n GIFTIMOA는 판매자의 실수로 인한 책임을 지지않습니다."
                         android:inputType="textMultiLine|textNoSuggestions"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
-                        tools:ignore="TouchTargetSizeCheck"
-                        android:gravity="top"/>
+                        android:textSize="13dp"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <Button
+                        android:id="@+id/add_btn"
                         android:foreground="?attr/selectableItemBackground"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

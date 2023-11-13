@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -255,11 +256,15 @@
     <!--중고 아이템 목록-->
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_Gift_Home"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="2257dp"
         android:layout_marginTop="430dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_anchor="@+id/linearLayout"
-        app:layout_anchorGravity="bottom|center">
+        app:layout_anchorGravity="bottom|center"
+        app:spanCount="3"
+        tools:listitem="@layout/item_home_giftcard">
 
 
     </androidx.recyclerview.widget.RecyclerView>
@@ -274,4 +279,4 @@
         app:elevation="6dp"
         android:src="@drawable/ic_add"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>
