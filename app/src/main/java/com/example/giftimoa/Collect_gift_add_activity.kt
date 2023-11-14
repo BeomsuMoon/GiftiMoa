@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -154,10 +156,34 @@ class Collect_gift_add_activity : AppCompatActivity() {
         DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
             val selectedDate = Calendar.getInstance()
             selectedDate.set(selectedYear, selectedMonth, selectedDay)
-            val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate.time)
-            binding.textEffectiveDate.setText(date)
+
+            // 현재 날짜와 선택한 날짜를 비교
+            if (selectedDate.before(calendar)) {
+                // 선택한 날짜가 현재 날짜보다 이전이면 다이얼로그를 표시하고 effectiveDate는 변경하지 않습니다.
+                val builder = AlertDialog.Builder(this)
+                val inflater = layoutInflater
+                val dialogLayout = inflater.inflate(R.layout.dialog_gifticon_date_cancle, null)
+                builder.setView(dialogLayout)
+                val dialog = builder.create()
+                dialog.setOnShowListener {
+                    val okButton = dialog.findViewById<TextView>(R.id.btn_ok)
+                    okButton?.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                }
+                dialog.show()
+            } else {
+                // 선택한 날짜가 현재 날짜보다 이후이면 effectiveDate를 설정합니다.
+                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate.time)
+                binding.textEffectiveDate.setText(date)
+            }
         }, year, month, day).show()
     }
+
+
+
+
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
