@@ -93,7 +93,8 @@
                         android:textColor="@color/black"
                         android:singleLine="true"
                         android:maxLines="1"
-                        tools:ignore="TouchTargetSizeCheck" />
+                        tools:ignore="TouchTargetSizeCheck"
+                        android:focusable="false"/>
 
                     <!--바코드-->
                     <TextView

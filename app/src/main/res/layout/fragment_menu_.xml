@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -42,7 +42,8 @@
                     android:scaleType="fitCenter"
                     android:adjustViewBounds="true"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:src="@drawable/join_id"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
@@ -55,7 +56,8 @@
                         android:id="@+id/tv_title_account"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="닉네임"
+                        android:layout_marginTop="10dp"
+                        android:text="닉네임님 환영합니다."
                         style="@style/Bold"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent" />
@@ -65,7 +67,7 @@
                         style="@style/Regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{user.email}"
+                        android:text="test@naver.com"
                         android:textSize="12sp"
                         app:layout_constraintTop_toBottomOf="@+id/tv_title_account"
                         app:layout_constraintLeft_toLeftOf="parent" />
@@ -269,7 +271,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_logout"
+            android:id="@+id/tv_favorite"
             style="@style/Bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -279,9 +281,25 @@
             android:paddingLeft="20dp"
             android:paddingBottom="16dp"
             android:background="@drawable/change_color_press_white"
-            android:text="@string/logout"
+            android:text="나의 관심 기프티콘"
             app:layout_constraintTop_toBottomOf="@+id/l_noti"
             android:foreground="?attr/selectableItemBackground"/>
+
+        <TextView
+            android:id="@+id/tv_logout"
+            style="@style/Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:background="@drawable/change_color_press_white"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingLeft="20dp"
+            android:paddingTop="16dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="16dp"
+            android:text="@string/logout"
+            app:layout_constraintTop_toBottomOf="@+id/l_noti"
+            tools:layout_editor_absoluteX="0dp" />
 
         <TextView
             android:id="@+id/tv_withdraw"
