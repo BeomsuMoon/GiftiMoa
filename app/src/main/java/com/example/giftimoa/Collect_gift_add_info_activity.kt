@@ -123,6 +123,7 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
                 binding.textEffectiveDate.text = gift.effectiveDate
                 binding.textBarcode.text = gift.barcode
                 binding.textUsage.text = gift.usage
+                //에러발생 삐용삐용
             }
         }
     }

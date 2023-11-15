@@ -12,7 +12,7 @@ data class Collect_Gift(
 ) : Serializable
 {
     override fun toString(): String {
-        return "Gift Name: $giftName, Effective Date: $effectiveDate, Barcode: $barcode, Usage: $usage, Image URL: $imageUrl"
+        return "ID: $id , Gift Name: $giftName, Effective Date: $effectiveDate, Barcode: $barcode, Usage: $usage, Image URL: $imageUrl"
     }
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

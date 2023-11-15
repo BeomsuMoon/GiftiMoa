@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -25,6 +26,16 @@ import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.LayoutCollectGiftAddBinding
 import com.example.giftimoa.dto.Collect_Gift
+import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -140,17 +151,77 @@ class Collect_gift_add_activity : AppCompatActivity() {
         var barcode = binding.textBarcode.text.toString()
         var usage = binding.textUsage.text.toString()
 
-        if(giftName.isEmpty() || effectiveDate.isEmpty() || barcode.isEmpty() || usage.isEmpty() || imageUrl.isEmpty()) {
-            Toast.makeText(this, "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
-        } else {
-            val id = UUID.randomUUID().hashCode()
-            val collectGift = Collect_Gift(id,giftName, effectiveDate, barcode, usage, imageUrl, 0)
-            collectGift.state = Collect_Utils.calState(collectGift)  // state 값에 calState의 결과를 할당
-            val resultIntent = Intent()
-            resultIntent.putExtra("gift", collectGift)
-            setResult(Activity.RESULT_OK, resultIntent)
+        try {
+            if (giftName.isEmpty() || effectiveDate.isEmpty() || barcode.isEmpty() || usage.isEmpty() || imageUrl.isEmpty()) {
+                Toast.makeText(this, "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                val id = UUID.randomUUID().hashCode()
+                val collectGift = Collect_Gift(id, giftName, effectiveDate, barcode, usage, imageUrl, 0)
 
-            finish()
+
+                collectGift.state = Collect_Utils.calState(collectGift)  // state 값에 calState의 결과를 할당
+                val resultIntent = Intent()
+                resultIntent.putExtra("gift", collectGift)
+                setResult(Activity.RESULT_OK, resultIntent)
+
+                val url = "http://3.35.110.246:3306/collect_gift_add"
+                val json = JsonObject().apply {
+                    addProperty("giftName", giftName)
+                    addProperty("effectiveDate", effectiveDate)
+                    addProperty("barcode", barcode)
+                    addProperty("usage", usage)
+                    addProperty("imageUrl", imageUrl)
+                    addProperty("state", 0)
+                }
+
+                val mediaType = "application/json; charset=utf-8".toMediaType()
+                val requestBody = json.toString().toRequestBody(mediaType)
+                val request = Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .build()
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val client = OkHttpClient()
+                        val response: Response = client.newCall(request).execute()
+
+                        if (response.isSuccessful) {
+                            runOnUiThread {
+                                Toast.makeText(this@Collect_gift_add_activity, "DB 정보 입력 성공", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            runOnUiThread {
+                                val errorBody = response.body?.string()
+                                Toast.makeText(this@Collect_gift_add_activity, "DB 정보 입력 실패: $errorBody", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Log.e("Collect_gift_add_act", "DB 에러: ${e.message}", e)
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@Collect_gift_add_activity,
+                                "오류 발생: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+
+                finish()
+
+            }
+        } catch (e: Exception) {
+            e.printStackTrace() // 로깅을 위해 사용하지 않음
+            Log.e("Collect_gift_add_act", "에러: ${e.message}", e)  // 예외 정보를 Log.e로 출력
+            runOnUiThread {
+                Toast.makeText(
+                    this@Collect_gift_add_activity,
+                    "오류 발생: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
