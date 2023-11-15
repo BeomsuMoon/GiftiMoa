@@ -1,9 +1,12 @@
 package com.example.giftimoa
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -18,27 +21,14 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
     private lateinit var gift: Collect_Gift
     private lateinit var giftViewModel: Gificon_ViewModel
 
-    private val editActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val updatedGift = result.data?.getSerializableExtra("updatedGift") as? Collect_Gift
-            if (updatedGift != null) {
-                gift = updatedGift
-                // 여기에서 updatedGift를 화면에 업데이트합니다.
-                binding.textGiftName.text = gift.giftName
-                binding.textEffectiveDate.text = gift.effectiveDate
-                binding.textBarcode.text = gift.barcode
-                binding.textUsage.text = gift.usage
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = LayoutCollectGiftAddInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val builder = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_image, null)
+        val dialogImage = dialogView.findViewById<ImageView>(R.id.dialog_image)
         giftViewModel = ViewModelProvider(this).get(Gificon_ViewModel::class.java)
 
         //액션바 활성화
@@ -58,14 +48,33 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
             .load(gift.imageUrl)
             .into(binding.uploadImage)
 
-        //이미지 클릭시 이미지 전체 화면 보기
         binding.uploadImage.setOnClickListener {
-            val intent = Intent(this, FullScreenImage_Activity::class.java)
-            intent.putExtra("imageUrl", gift.imageUrl)
-            startActivity(intent)
-            finish()
+            showFullscreenImageDialog(gift.imageUrl)
         }
+
     }
+        //이미지 클릭시 이미지 전체 화면 보기
+        fun showFullscreenImageDialog(imageUrl: String) {
+            val builder = AlertDialog.Builder(this)
+            val inflater = layoutInflater
+            val dialogLayout = inflater.inflate(R.layout.dialog_image, null)
+            val dialogImage = dialogLayout.findViewById<ImageView>(R.id.dialog_image)
+
+            Glide.with(this)
+                .load(imageUrl)
+                .into(dialogImage)
+
+            val dialog = builder.setView(dialogLayout)
+                .create()
+
+            dialogImage.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.BLACK))
+            dialog.show()
+        }
+
 
     override fun onSupportNavigateUp(): Boolean { // 액션바 뒤로가기
         onBackPressed()
@@ -101,4 +110,21 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private val editActivityResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val updatedGift = result.data?.getSerializableExtra("updatedGift") as? Collect_Gift
+            if (updatedGift != null) {
+                gift = updatedGift
+                // 여기에서 updatedGift를 화면에 업데이트합니다.
+                binding.textGiftName.text = gift.giftName
+                binding.textEffectiveDate.text = gift.effectiveDate
+                binding.textBarcode.text = gift.barcode
+                binding.textUsage.text = gift.usage
+            }
+        }
+    }
+
 }

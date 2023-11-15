@@ -1,7 +1,7 @@
 package com.example.giftimoa.dto
 import java.io.Serializable
 
-class Collect_Gift(
+data class Collect_Gift(
     val id: Int,
     var giftName: String,
     var effectiveDate: String,

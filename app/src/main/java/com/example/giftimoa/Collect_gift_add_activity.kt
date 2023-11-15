@@ -5,9 +5,12 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -92,17 +95,22 @@ class Collect_gift_add_activity : AppCompatActivity() {
                     )
                 }
             } else {
-
-                loadImage()
-
+                // If imageUrl is not empty show the image in fullscreen, else load image
+                if (imageUrl.isNotEmpty()) {
+                    showFullscreenImageDialog(imageUrl)
+                } else {
+                    loadImage()
+                }
             }
         })
     }
+
     private fun loadImage() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         activityResult.launch(intent)
     }
+
     //갤러리 호출
     private val activityResult:ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()){
@@ -146,7 +154,6 @@ class Collect_gift_add_activity : AppCompatActivity() {
         }
     }
 
-
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -180,16 +187,31 @@ class Collect_gift_add_activity : AppCompatActivity() {
         }, year, month, day).show()
     }
 
-
-
-
-
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun giftAdd_Btn() {
         binding.addBtn.setOnClickListener {
             giftAdd()
         }
+    }
+
+    private fun showFullscreenImageDialog(imageUrl: String) {
+        val builder = AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val dialogLayout = inflater.inflate(R.layout.dialog_image, null)
+        val dialogImage = dialogLayout.findViewById<ImageView>(R.id.dialog_image)
+
+        Glide.with(this)
+            .load(imageUrl)
+            .into(dialogImage)
+
+        val dialog = builder.setView(dialogLayout)
+            .create()
+
+        dialogImage.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.BLACK))
+        dialog.show()
     }
 }

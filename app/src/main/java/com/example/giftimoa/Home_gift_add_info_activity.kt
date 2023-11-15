@@ -15,23 +15,6 @@ class Home_gift_add_info_activity : AppCompatActivity() {
     private lateinit var gift: Home_gift
     private lateinit var giftViewModel: Gificon_ViewModel
 
-    private val editActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val updatedGift = result.data?.getSerializableExtra("updatedGift") as? Home_gift
-            if (updatedGift != null) {
-                gift = updatedGift
-                // 여기에서 updatedGift를 화면에 업데이트합니다.
-                binding.textGiftName.text = gift.h_product_name
-                binding.textEffectiveDate.text = gift.h_effectiveDate
-                binding.textPrice.text = gift.h_price
-                binding.textExpiration.text = gift.h_brand
-                binding.textProductDescription.text = gift.h_product_description
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = LayoutHomeGiftAddInfoBinding.inflate(layoutInflater)
@@ -66,6 +49,45 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         }
     }
 
+    fun toggleFavorite(homeGift: Home_gift) {
+        // Home_gift 객체의 favorite 필드를 업데이트합니다.
+        homeGift.favorite = if (homeGift.favorite == 0) 1 else 0
+    }
+
+    fun updateFavoriteImage(homeGift: Home_gift) {
+        // favorite 이미지를 업데이트합니다.
+        binding.favoriteClk.setImageResource(if (homeGift.favorite == 1) R.drawable.ic_favorite_outline else R.drawable.ic_favorite)
+    }
+
+    fun updateFavoriteList(homeGift: Home_gift, favoriteGiftsList: MutableList<Home_gift>) {
+        // 관심 상품 리스트에 추가 또는 제거합니다.
+        if (homeGift.favorite == 1) {
+            // 관심 상품 리스트에 추가합니다.
+            favoriteGiftsList.add(homeGift)
+        } else {
+            // 관심 상품 리스트에서 제거합니다.
+            favoriteGiftsList.remove(homeGift)
+        }
+    }
+
+
+
+    private val editActivityResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val updatedGift = result.data?.getSerializableExtra("updatedGift") as? Home_gift
+            if (updatedGift != null) {
+                gift = updatedGift
+                // 여기에서 updatedGift를 화면에 업데이트합니다.
+                binding.textGiftName.text = gift.h_product_name
+                binding.textEffectiveDate.text = gift.h_effectiveDate
+                binding.textPrice.text = gift.h_price
+                binding.textExpiration.text = gift.h_brand
+                binding.textProductDescription.text = gift.h_product_description
+            }
+        }
+    }
     override fun onSupportNavigateUp(): Boolean { // 액션바 뒤로가기
         onBackPressed()
         return true
