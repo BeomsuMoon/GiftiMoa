@@ -32,15 +32,22 @@ class Menu_Fragment : Fragment() {
         binding.lNotiFirst.setOnClickListener {
 
         }
+
         //마감임박 알림 간격
         binding.lNotiInterval.setOnClickListener {
 
         }
+        binding.lNotiTime.setOnClickListener {
 
+        }
+
+        //나의 관심 기프티콘
         binding.tvFavorite.setOnClickListener {
             val intent = Intent(requireContext(), Menu_favorite_activity::class.java)
             startActivity(intent)
         }
+
+        //내 상품 관리
         binding.myGifticon.setOnClickListener {
             val intent = Intent(requireContext(), Menu_Mygifticon_activity::class.java)
             startActivity(intent)
@@ -51,9 +58,24 @@ class Menu_Fragment : Fragment() {
         binding.tvWithdraw.setOnClickListener {
 
         }
-        // 나머지 뷰에 대해서도 동일하게 처리하면 됩니다.
+
         binding.switchNoti.setOnCheckedChangeListener { _, isChecked ->
-            // 체크 상태 변경 시 수행할 작업을 여기에 작성합니다.
+            binding.lNotiFirst.isEnabled = isChecked
+            binding.lNotiFirst.isClickable = isChecked
+
+            binding.lNotiInterval.isEnabled = isChecked
+            binding.lNotiInterval.isClickable = isChecked
+
+            binding.lNotiTime.isEnabled = isChecked
+            binding.lNotiTime.isClickable = isChecked
+
+            // isChecked가 true이면 알림을 설정합니다.
+            if (isChecked) {
+                // 알림 설정 코드를 여기에 작성합니다.
+            } else {
+                // 알림을 해제하는 코드를 여기에 작성합니다.
+            }
         }
+
     }
 }

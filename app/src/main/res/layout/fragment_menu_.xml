@@ -217,7 +217,8 @@
                     android:paddingLeft="34dp"
                     android:paddingBottom="8dp"
                     android:background="@drawable/change_color_press_white"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:foreground="?attr/selectableItemBackground">
 
                     <TextView
                         android:id="@+id/tv_noti_title_time"
