@@ -47,16 +47,24 @@ class Home_gift_add_info_activity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        binding.favoriteClk.setOnClickListener {
+            toggleFavorite(gift)
+            updateFavoriteImage(gift)
+        }
     }
 
     fun toggleFavorite(homeGift: Home_gift) {
-        // Home_gift 객체의 favorite 필드를 업데이트합니다.
         homeGift.favorite = if (homeGift.favorite == 0) 1 else 0
     }
 
+
     fun updateFavoriteImage(homeGift: Home_gift) {
-        // favorite 이미지를 업데이트합니다.
-        binding.favoriteClk.setImageResource(if (homeGift.favorite == 1) R.drawable.ic_favorite_outline else R.drawable.ic_favorite)
+        if (homeGift.favorite == 1) {
+            binding.favoriteClk.setImageResource(R.drawable.ic_favorite)
+        } else {
+            binding.favoriteClk.setImageResource(R.drawable.ic_favorite_outline)
+        }
     }
 
     fun updateFavoriteList(homeGift: Home_gift, favoriteGiftsList: MutableList<Home_gift>) {

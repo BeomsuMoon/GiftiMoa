@@ -69,6 +69,6 @@ class RecyclerViewHomeGiftAdapter constructor(
         var tv_date: TextView = itemView.findViewById(R.id.tv_date) //유효기간
         var cardView: CardView = itemView.findViewById(R.id.cardView) //카드 뷰
         var giftImageView: ImageView = itemView.findViewById(R.id.iv_product_preview) //이미지
-        var tv_banner_badge: TextView = itemView.findViewById(R.id.tv_banner_badge) //남은 기간
+        var tv_banner_badge: TextView = itemView.findViewById(R.id.tv_banner_badge) //남은 기간z
     }
 }
