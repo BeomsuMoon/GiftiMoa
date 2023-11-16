@@ -5,9 +5,11 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -20,9 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
-import com.example.giftimoa.databinding.LayoutCollectGiftAddBinding
 import com.example.giftimoa.databinding.LayoutHomeGiftAddBinding
-import com.example.giftimoa.dto.Collect_Gift
 import com.example.giftimoa.dto.Home_gift
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -92,9 +92,12 @@ class Home_gift_add_activity : AppCompatActivity() {
                     )
                 }
             } else {
-
-                loadImage()
-
+                // If imageUrl is not empty show the image in fullscreen, else load image
+                if (imageUrl.isNotEmpty()) {
+                    showFullscreenImageDialog(imageUrl)
+                } else {
+                    loadImage()
+                }
             }
         })
     }
@@ -129,11 +132,14 @@ class Home_gift_add_activity : AppCompatActivity() {
         var brand = binding.textExpiration.text.toString()
         var Product = binding.textProductDescription.text.toString()
 
+
+
         if(giftName.isEmpty() || effectiveDate.isEmpty() || price.isEmpty() || brand.isEmpty() || imageUrl.isEmpty()|| Product.isEmpty()) {
             Toast.makeText(this, "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
         } else {
             val id = UUID.randomUUID().hashCode()
-            val homeGift = Home_gift(id, giftName, effectiveDate, price, brand, Product, imageUrl,0)
+            val homeGift = Home_gift(id, giftName, effectiveDate, price, brand, Product, imageUrl, 0)
+
             homeGift.h_state = Home_Utils.calState(homeGift)  // state 값에 calState의 결과를 할당
             val resultIntent = Intent()
             resultIntent.putExtra("gift", homeGift)
@@ -176,6 +182,27 @@ class Home_gift_add_activity : AppCompatActivity() {
                 binding.textEffectiveDate.setText(date)
             }
         }, year, month, day).show()
+    }
+
+    private fun showFullscreenImageDialog(imageUrl: String) {
+        val builder = AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val dialogLayout = inflater.inflate(R.layout.dialog_image, null)
+        val dialogImage = dialogLayout.findViewById<ImageView>(R.id.dialog_image)
+
+        Glide.with(this)
+            .load(imageUrl)
+            .into(dialogImage)
+
+        val dialog = builder.setView(dialogLayout)
+            .create()
+
+        dialogImage.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.BLACK))
+        dialog.show()
     }
 
 

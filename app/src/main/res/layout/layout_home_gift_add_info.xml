@@ -18,58 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/white">
 
-        <!--상품 찜 -->
-        <ImageView
-            android:id="@+id/favorite_clk"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginLeft="7dp"
-            android:src="@drawable/ic_favorite_outline"
-            android:foreground="?attr/selectableItemBackground"/>
-
-        <!--기프티콘 가격-->
-        <TextView
-            android:id="@+id/text_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="45dp"
-            android:text="99,000원"
-            android:textColor="@color/black"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/text_expiration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="29dp"
-            android:layout_marginLeft="45dp"
-            android:text="스타벅스"
-            android:textColor="@color/black"
-            android:textSize="12dp" />
-
-        <Button
-            android:id="@+id/chat_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginLeft="300dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edittext_border"
-            android:text="채팅하기"
-            android:textStyle="bold"
-            />
-
-    </RelativeLayout>
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -95,30 +44,32 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="405dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/card_view"
                 android:elevation="8dp"
                 android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <!--유저 프로필-->
-                <ImageView
-                    android:id="@+id/user_profile"
-                    android:layout_width="40dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/join_id"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <!--유저 닉네임-->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="유저 닉네임"/>
+                    <!--유저 프로필-->
+                    <ImageView
+                        android:id="@+id/user_profile"
+                        android:layout_width="40dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/join_id" />
 
-            </LinearLayout>
+                    <!--유저 닉네임-->
+                    <TextView
+                        android:id="@+id/user_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="유저 닉네임" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -167,5 +118,62 @@
         </LinearLayout>
     </ScrollView>
 
-    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/white">
+
+        <View
+            android:layout_width="0.1dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="44dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/black"/>
+        <!--상품 찜 -->
+        <ImageView
+            android:id="@+id/favorite_clk"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/ic_favorite_outline"
+            android:foreground="?attr/selectableItemBackground"/>
+
+        <!--기프티콘 가격-->
+        <TextView
+            android:id="@+id/text_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="53dp"
+            android:text="99,000원"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_expiration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="29dp"
+            android:layout_marginLeft="53dp"
+            android:text="스타벅스"
+            android:textColor="@color/black"
+            android:textSize="12dp" />
+
+        <Button
+            android:id="@+id/chat_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="300dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edittext_border"
+            android:text="채팅하기"
+            android:textStyle="bold"
+            />
+
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

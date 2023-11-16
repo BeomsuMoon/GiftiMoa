@@ -26,18 +26,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/upload_image"
-                android:layout_width="match_parent"
-                android:layout_height="311dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginRight="18dp"
-                android:adjustViewBounds="true"
-                android:background="#EEEEEE"
-                android:scaleType="center"
-                android:src="@drawable/ic_camera" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/upload_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="311dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginRight="18dp"
+                    android:adjustViewBounds="true"
+                    android:background="#EEEEEE"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_camera" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="298dp"
+                    android:layout_marginLeft="367dp"
+                    android:src="@drawable/ic_zoom"
+                    android:background="@drawable/border_zoom_transparent"/>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -144,11 +156,11 @@
                         android:layout_margin="6dp"
                         android:background="@drawable/border"
                         android:gravity="top"
-                        android:hint="\n 기프티콘 등록 시 바코드를 올리지 마세요.\n\n GIFTIMOA는 판매자의 실수로 인한 책임을 지지않습니다."
+                        android:hint="기프티콘 등록 시 바코드를 올리지 마세요.\n\n GIFTIMOA는 판매자의 실수로 인한 책임을 지지않습니다."
                         android:inputType="textMultiLine|textNoSuggestions"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
-                        android:textSize="13dp"
+                        android:textSize="14dp"
                         tools:ignore="TouchTargetSizeCheck" />
 
                     <Button

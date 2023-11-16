@@ -23,6 +23,12 @@
         android:name=".Login_activity"
         android:exported="true"/>
     <activity
+        android:name=".Menu_Mygifticon_activity"
+        android:exported="true"/>
+    <activity
+        android:name=".Menu_favorite_activity"
+        android:exported="true"/>
+    <activity
         android:name=".ID_Find_activity"
         android:exported="true"/>
     <activity
@@ -33,9 +39,6 @@
         android:exported="true"/>
     <activity
         android:name=".home_fragment_List.Search_gift_activity"
-        android:exported="true"/>
-    <activity
-        android:name=".FullScreenImage_Activity"
         android:exported="true"/>
     <activity
         android:name=".Collect_gift_edit_activity"

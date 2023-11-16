@@ -1,14 +1,20 @@
 package com.example.giftimoa
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.LayoutHomeGiftAddInfoBinding
 import com.example.giftimoa.dto.Home_gift
+import com.example.giftimoa.dto.favorite
 
 class Home_gift_add_info_activity : AppCompatActivity() {
     private lateinit var binding : LayoutHomeGiftAddInfoBinding
@@ -20,6 +26,7 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         binding = LayoutHomeGiftAddInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         giftViewModel = ViewModelProvider(this).get(Gificon_ViewModel::class.java)
 
         //액션바 활성화
@@ -30,34 +37,40 @@ class Home_gift_add_info_activity : AppCompatActivity() {
 
         gift = intent.getSerializableExtra("gift") as Home_gift
 
+        //뷰 시작시 생성 정보
         binding.textGiftName.text = gift.h_product_name
         binding.textEffectiveDate.text = gift.h_effectiveDate
         binding.textPrice.text = gift.h_price
         binding.textExpiration.text = gift.h_brand
         binding.textProductDescription.text = gift.h_product_description
-
         Glide.with(this)
             .load(gift.h_imageUrl)
             .into(binding.uploadImage)
 
-        //이미지 클릭시 이미지 전체 화면 보기
-        binding.uploadImage.setOnClickListener {
-            val intent = Intent(this, FullScreenImage_Activity::class.java)
-            intent.putExtra("imageUrl", gift.h_imageUrl)
-            startActivity(intent)
-            finish()
-        }
-
+        // 좋아요 클릭 시
         binding.favoriteClk.setOnClickListener {
+            Log.d("로그","찜 추가 클릭")
             toggleFavorite(gift)
             updateFavoriteImage(gift)
         }
+
+        binding.uploadImage.setOnClickListener {
+            showFullscreenImageDialog(gift.h_imageUrl)
+        }
+
     }
 
     fun toggleFavorite(homeGift: Home_gift) {
         homeGift.favorite = if (homeGift.favorite == 0) 1 else 0
+        if (homeGift.favorite == 1) {
+            // 찜한 목록에 추가
+            favorite.FavoriteGifts.list.add(homeGift)
+        } else {
+            // 찜한 목록에서 제거
+            favorite.FavoriteGifts.list.remove(homeGift)
+        }
+        updateFavoriteImage(homeGift)
     }
-
 
     fun updateFavoriteImage(homeGift: Home_gift) {
         if (homeGift.favorite == 1) {
@@ -78,8 +91,6 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         }
     }
 
-
-
     private val editActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -96,6 +107,29 @@ class Home_gift_add_info_activity : AppCompatActivity() {
             }
         }
     }
+
+    //이미지 클릭시 이미지 전체 화면 보기
+    fun showFullscreenImageDialog(imageUrl: String) {
+        val builder = AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val dialogLayout = inflater.inflate(R.layout.dialog_image, null)
+        val dialogImage = dialogLayout.findViewById<ImageView>(R.id.dialog_image)
+
+        Glide.with(this)
+            .load(imageUrl)
+            .into(dialogImage)
+
+        val dialog = builder.setView(dialogLayout)
+            .create()
+
+        dialogImage.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.BLACK))
+        dialog.show()
+    }
+
     override fun onSupportNavigateUp(): Boolean { // 액션바 뒤로가기
         onBackPressed()
         return true

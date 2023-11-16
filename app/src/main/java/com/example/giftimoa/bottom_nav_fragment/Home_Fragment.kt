@@ -153,6 +153,13 @@ class Home_Fragment : Fragment() {
         view.findViewById<FloatingActionButton>(R.id.fab_btn).setOnClickListener {
             startCollectGiftAddActivity()
         }
+
+        giftViewModel.homeGifts.observe(viewLifecycleOwner, { gifts ->
+            // 어댑터에 데이터 업데이트
+            RecyclerViewHomeGiftAdapter.setGiftList(gifts.toMutableList())
+            RecyclerViewHomeGiftAdapter.notifyDataSetChanged()
+            Log.d("로그", "기프티콘: $gifts")
+        })
     }
 
 
@@ -168,18 +175,6 @@ class Home_Fragment : Fragment() {
         activityResult.launch(intent)
     }
 
-
-    override fun onResume() {
-        super.onResume()
-
-        // 뷰모델을 이용해 기프티콘 등록
-        giftViewModel.homeGifts.observe(viewLifecycleOwner, { gifts ->
-            // 어댑터에 데이터 업데이트
-            RecyclerViewHomeGiftAdapter.setGiftList(gifts.toMutableList())
-            RecyclerViewHomeGiftAdapter.notifyDataSetChanged()
-            Log.d("로그", "기프티콘: $gifts")
-        })
-    }
 
     class ClickListeners {
         companion object {

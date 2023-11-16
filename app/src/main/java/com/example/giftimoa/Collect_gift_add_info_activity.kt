@@ -26,9 +26,6 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
         binding = LayoutCollectGiftAddInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val builder = AlertDialog.Builder(this)
-        val dialogView = layoutInflater.inflate(R.layout.dialog_image, null)
-        val dialogImage = dialogView.findViewById<ImageView>(R.id.dialog_image)
         giftViewModel = ViewModelProvider(this).get(Gificon_ViewModel::class.java)
 
         //액션바 활성화
