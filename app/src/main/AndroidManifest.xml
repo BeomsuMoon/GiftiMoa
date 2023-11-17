@@ -19,9 +19,7 @@
     android:theme="@style/Theme.GiftiMoa"
     tools:targetApi="31">
 
-    <activity
-        android:name=".Login_activity"
-        android:exported="true"/>
+
     <activity
         android:name=".Menu_Mygifticon_activity"
         android:exported="true"/>
@@ -63,6 +61,9 @@
         android:exported="true"/>
     <activity
         android:name=".MainActivity"
+        android:exported="true"/>
+    <activity
+        android:name=".Login_activity"
         android:exported="true">
 
 

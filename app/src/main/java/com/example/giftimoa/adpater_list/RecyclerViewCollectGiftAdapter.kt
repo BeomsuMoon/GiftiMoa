@@ -17,7 +17,7 @@ import com.example.giftimoa.dto.Collect_Gift
 
 class RecyclerViewCollectGiftAdapter constructor(
     private var giftList: MutableList<Collect_Gift>,
-    private val itemClickListener: (Collect_Gift) -> Unit  // itemClickListener를 추가
+    private val itemClickListener: (Collect_Gift) -> Unit
 ) : RecyclerView.Adapter<RecyclerViewCollectGiftAdapter.MyViewHolder>() {
 
     fun setGiftList(gifts: MutableList<Collect_Gift>) {
@@ -45,6 +45,13 @@ class RecyclerViewCollectGiftAdapter constructor(
     }
 
 
+    // 새로운 데이터를 설정하는 메서드 추가
+    fun setGiftListFromExternalDB(gifts: List<Collect_Gift>) {
+        this.giftList.clear() // 기존 목록 비우기
+        this.giftList.addAll(gifts) // 외부 DB에서 가져온 목록으로 채우기
+        notifyDataSetChanged() // 어댑터에 데이터가 변경되었음을 알림
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_collect_giticard, parent, false)
@@ -56,6 +63,11 @@ class RecyclerViewCollectGiftAdapter constructor(
         val gift = giftList[position]
         val dateString = "${gift.effectiveDate}까지"
         val badge = Collect_Utils.calDday(gift) //남은 기간 D-day
+
+
+
+
+
         holder.tv_brand.text = gift.usage
         holder.tv_date.text = dateString
         holder.tv_name.text = gift.giftName
