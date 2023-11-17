@@ -18,8 +18,8 @@ class Search_gift_activity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.my_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.title = "GIFTIMOA"
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.title = "브랜드"
 
         // ViewPager2와 어댑터 초기화
         val viewPager: ViewPager2 = findViewById(R.id.view_pager)
@@ -45,7 +45,32 @@ class Search_gift_activity : AppCompatActivity() {
                 else -> "상품권"
             }
         }.attach()
+
+        // 페이지 변경 시 액션바의 타이틀 업데이트
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                supportActionBar?.title = when (position) {
+                    0 -> "커피"
+                    1 -> "치킨"
+                    2 -> "피자"
+                    3 -> "패스트푸드"
+                    4 -> "편의점･마트"
+                    5 -> "베이커리"
+                    6 -> "아이스크림"
+                    7 -> "외식･분식"
+                    8 -> "영화"
+                    else -> "상품권"
+                }
+            }
+        })
+
+        // Intent로부터 tabIndex를 가져옴
+        val tabIndex = intent.getIntExtra("tabIndex", 0)
+        viewPager.currentItem = tabIndex
     }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

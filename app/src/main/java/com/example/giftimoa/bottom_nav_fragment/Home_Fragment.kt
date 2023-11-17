@@ -1,13 +1,17 @@
 package com.example.giftimoa.bottom_nav_fragment
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -27,6 +31,8 @@ import com.example.giftimoa.adpater_list.RecyclerViewHomeGiftAdapter
 import com.example.giftimoa.dto.Home_gift
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import me.relex.circleindicator.CircleIndicator3
+import java.util.Timer
+import java.util.TimerTask
 
 class Home_Fragment : Fragment() {
 
@@ -38,6 +44,18 @@ class Home_Fragment : Fragment() {
     private lateinit var giftViewModel: Gificon_ViewModel
     private lateinit var RecyclerViewHomeGiftAdapter: RecyclerViewHomeGiftAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var activityResult: ActivityResultLauncher<Intent>
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        activityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val homeGift = result.data!!.extras!!.get("gift") as Home_gift
+                giftViewModel.addGift(homeGift)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +69,6 @@ class Home_Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_home_, container, false)
-        val commonClickListener = ClickListeners.getCommonClickListener(requireActivity())
 
         val toolbar = rootView.findViewById<Toolbar>(R.id.my_toolbar)
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
@@ -59,45 +76,36 @@ class Home_Fragment : Fragment() {
 
         //커피 아이콘 인텐트
         val Home_menu_list_coffee = rootView.findViewById<ImageView>(R.id.home_ic_coffee)
-        Home_menu_list_coffee.setOnClickListener(commonClickListener)
-
+        Home_menu_list_coffee.setOnClickListener(getCommonClickListener(requireActivity(), 0))
         //치킨 아이콘 인텐트
         val Home_menu_list_chiken = rootView.findViewById<ImageView>(R.id.home_ic_chicken)
-        Home_menu_list_chiken.setOnClickListener(commonClickListener)
-
+        Home_menu_list_chiken.setOnClickListener(getCommonClickListener(requireActivity(), 1))
         //피자 아이콘 인텐트
         val Home_menu_list_pizza = rootView.findViewById<ImageView>(R.id.home_ic_pizza)
-        Home_menu_list_pizza.setOnClickListener(commonClickListener)
-
+        Home_menu_list_pizza.setOnClickListener(getCommonClickListener(requireActivity(), 2))
         //패스트푸드 아이콘 인텐트
         val Home_menu_list_fastfood = rootView.findViewById<ImageView>(R.id.home_ic_festfood)
-        Home_menu_list_fastfood.setOnClickListener(commonClickListener)
-
+        Home_menu_list_fastfood.setOnClickListener(getCommonClickListener(requireActivity(), 3))
         //마트,편의점 아이콘 인텐트
         val Home_menu_list_mart = rootView.findViewById<ImageView>(R.id.home_ic_mart)
-        Home_menu_list_mart.setOnClickListener(commonClickListener)
-
+        Home_menu_list_mart.setOnClickListener(getCommonClickListener(requireActivity(), 4))
         //베이커리 아이콘 인텐트
         val Home_menu_list_bakery = rootView.findViewById<ImageView>(R.id.home_ic_bread)
-        Home_menu_list_bakery.setOnClickListener(commonClickListener)
-
+        Home_menu_list_bakery.setOnClickListener(getCommonClickListener(requireActivity(), 5))
         //아이스크림 아이콘 인텐트
         val Home_menu_list_icecream = rootView.findViewById<ImageView>(R.id.home_ic_icecream)
-        Home_menu_list_icecream.setOnClickListener(commonClickListener)
-
+        Home_menu_list_icecream.setOnClickListener(getCommonClickListener(requireActivity(), 6))
         //스낵 아이콘 인텐트
         val Home_menu_list_snack = rootView.findViewById<ImageView>(R.id.home_ic_snack)
-        Home_menu_list_snack.setOnClickListener(commonClickListener)
-
+        Home_menu_list_snack.setOnClickListener(getCommonClickListener(requireActivity(), 7))
         //영화 아이콘 인텐트
         val Home_menu_list_movie = rootView.findViewById<ImageView>(R.id.home_ic_movie)
-        Home_menu_list_movie.setOnClickListener(commonClickListener)
-
+        Home_menu_list_movie.setOnClickListener(getCommonClickListener(requireActivity(), 8))
         //상품권 아이콘 인텐트
         val Home_menu_list_giftcard = rootView.findViewById<ImageView>(R.id.home_ic_giftcard)
-        Home_menu_list_giftcard.setOnClickListener(commonClickListener)
+        Home_menu_list_giftcard.setOnClickListener(getCommonClickListener(requireActivity(), 9))
 
-        // ViewPager2
+        // 배너 ViewPager2
         mPager = rootView.findViewById(R.id.viewpager)
         // Adapter
         pagerAdapter = Banner_Adapter(requireActivity(), numPage)
@@ -129,15 +137,38 @@ class Home_Fragment : Fragment() {
                 mIndicator.animatePageSelected(position % numPage)
             }
         })
+
+// 자동 슬라이드 코드 추가
+        var currentPage = 1000
+        val handler = Handler(Looper.getMainLooper())
+        val update = Runnable {
+            if (currentPage == numPage) {
+                currentPage = 0
+            }
+            mPager.setCurrentItem(currentPage++, true)
+        }
+
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                handler.post(update)
+            }
+        }, 500, 3000) // 500은 시작 전 대기 시간(0.5초 후 시작), 3000은 각 슬라이드 간의 시간 간격(3초마다 업데이트)
+
         return rootView
     }
-
+    fun getCommonClickListener(activity: Activity, tabIndex: Int): View.OnClickListener {
+        return View.OnClickListener {
+            val intent = Intent(activity, Search_gift_activity::class.java)
+            intent.putExtra("tabIndex", tabIndex)
+            activity.startActivity(intent)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView = view.findViewById<RecyclerView>(R.id.rv_Gift_Home)
-        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireActivity(), 3)
+        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireActivity(), 2)
         recyclerView.layoutManager = layoutManager
 
         // 어댑터 초기화 및 RecyclerView에 연결
@@ -162,31 +193,9 @@ class Home_Fragment : Fragment() {
         })
     }
 
-
-    private val activityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-            val homeGift = result.data!!.extras!!.get("gift") as Home_gift
-            giftViewModel.addGift(homeGift)
-        }
-    }
-
     private fun startCollectGiftAddActivity() {
         val intent = Intent(requireContext(), Home_gift_add_activity::class.java)
         activityResult.launch(intent)
-    }
-
-
-    class ClickListeners {
-        companion object {
-            //공용 리스너 클래스 정의
-            fun getCommonClickListener(activity: Activity): View.OnClickListener {
-                return View.OnClickListener {
-                    val intent = Intent(activity, Search_gift_activity::class.java)
-                    activity.startActivity(intent)
-                }
-
-            }
-        }
     }
 
 }

@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grayF1">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grayF1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".bottom_nav_fragment.Home_Fragment"
@@ -268,19 +278,17 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_Gift_Home"
         android:layout_width="match_parent"
-        android:layout_height="2257dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="465dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_anchor="@+id/linearLayout"
-        app:layout_anchorGravity="bottom|center"
-        app:spanCount="3"
+
+        app:spanCount="2"
         tools:listitem="@layout/item_home_giftcard">
-
-
     </androidx.recyclerview.widget.RecyclerView>
-
+</FrameLayout>
+</androidx.core.widget.NestedScrollView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_btn"
         android:layout_width="wrap_content"
@@ -290,5 +298,4 @@
         app:backgroundTint="@color/maincolor"
         app:elevation="6dp"
         android:src="@drawable/ic_add"/>
-
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

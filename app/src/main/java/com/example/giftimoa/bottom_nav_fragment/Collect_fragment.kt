@@ -1,6 +1,7 @@
 package com.example.giftimoa.bottom_nav_fragment
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +33,19 @@ class Collect_fragment : Fragment() {
     private lateinit var noGifticonTextView: TextView
     private lateinit var recyclerView: RecyclerView
 
+
+    private lateinit var activityResult: ActivityResultLauncher<Intent>
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        //새로운 액티비티를 시작하고 그 결과를 받기 위한 콜백을 등록하는 메서드
+        activityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val collectGift = result.data!!.extras!!.get("gift") as Collect_Gift
+                giftViewModel.addGift(collectGift)
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true) // 프래그먼트에서 옵션 메뉴 사용을 활성화
@@ -49,15 +64,6 @@ class Collect_fragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar?.title = "GIFTIMOA"
 
         return view
-    }
-
-    private val activityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-            // Get the gift from the result Intent
-            val collectGift = result.data!!.extras!!.get("gift") as Collect_Gift
-            // Add the gift to the ViewModel
-            giftViewModel.addGift(collectGift)
-        }
     }
 
     private fun startCollectGiftAddActivity() {
@@ -86,12 +92,7 @@ class Collect_fragment : Fragment() {
         view.findViewById<FloatingActionButton>(R.id.fab_btn).setOnClickListener {
             startCollectGiftAddActivity()
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-
-        // 뷰모델을 이용해 기프티콘 등록
         giftViewModel.collectGifts.observe(viewLifecycleOwner, { gifts ->
             // 어댑터에 데이터 업데이트
             recyclerViewCollectGiftAdapter.setGiftList(gifts.toMutableList())

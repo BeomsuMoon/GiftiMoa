@@ -33,42 +33,6 @@ class Menu_Fragment : Fragment() {
         getNicknameFromServer(userEmail)
     }
 
-    private fun getNicknameFromServer(userEmail: String?) {
-        val client = OkHttpClient()
-        val url = "http://3.35.110.246:3306/getNicknameByEmail" // 서버의 닉네임 확인 엔드포인트
-
-        // 이메일이 null이 아니면 서버에 요청을 보냄
-        if (!userEmail.isNullOrBlank()) {
-            val json = """{"email": "$userEmail"}"""
-            val mediaType = "application/json; charset=utf-8".toMediaType()
-            val requestBody = json.toRequestBody(mediaType)
-            val request = Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build()
-
-            client.newCall(request).enqueue(object : okhttp3.Callback {
-                override fun onFailure(call: okhttp3.Call, e: IOException) {
-                    e.printStackTrace()
-                }
-
-                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                    val responseData = response.body?.string()
-                    activity?.runOnUiThread {
-                        updateNicknameInView(responseData)
-                    }
-                }
-            })
-        }
-    }
-
-    private fun updateNicknameInView(nickname: String?) {
-        if (!nickname.isNullOrBlank()) {
-            val welcomeMessage = "$nickname" + "님 환영합니다."
-            binding.root.findViewById<TextView>(R.id.tv_title_account).text = welcomeMessage
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -115,13 +79,14 @@ class Menu_Fragment : Fragment() {
             val intent = Intent(requireContext(), Menu_Mygifticon_activity::class.java)
             startActivity(intent)
         }
-        binding.tvLogout.setOnClickListener {
 
-        }
+
+        //회원탈퇴
         binding.tvWithdraw.setOnClickListener {
 
         }
 
+        //로그아웃
         binding.tvLogout.setOnClickListener {
             // SharedPreferences에서 이메일 삭제
             val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
@@ -137,21 +102,43 @@ class Menu_Fragment : Fragment() {
         }
 
         binding.switchNoti.setOnCheckedChangeListener { _, isChecked ->
-            binding.lNotiFirst.isEnabled = isChecked
-            binding.lNotiFirst.isClickable = isChecked
 
-            binding.lNotiInterval.isEnabled = isChecked
-            binding.lNotiInterval.isClickable = isChecked
-
-            binding.lNotiTime.isEnabled = isChecked
-            binding.lNotiTime.isClickable = isChecked
-
-            // isChecked가 true이면 알림을 설정합니다.
-            if (isChecked) {
-                // 알림 설정 코드를 여기에 작성합니다.
-            } else {
-                // 알림을 해제하는 코드를 여기에 작성합니다.
-            }
         }
     }
+    private fun getNicknameFromServer(userEmail: String?) {
+        val client = OkHttpClient()
+        val url = "http://3.35.110.246:3306/getNicknameByEmail" // 서버의 닉네임 확인 엔드포인트
+
+        // 이메일이 null이 아니면 서버에 요청을 보냄
+        if (!userEmail.isNullOrBlank()) {
+            val json = """{"email": "$userEmail"}"""
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            val requestBody = json.toRequestBody(mediaType)
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+
+            client.newCall(request).enqueue(object : okhttp3.Callback {
+                override fun onFailure(call: okhttp3.Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                    val responseData = response.body?.string()
+                    activity?.runOnUiThread {
+                        updateNicknameInView(responseData)
+                    }
+                }
+            })
+        }
+    }
+
+    private fun updateNicknameInView(nickname: String?) {
+        if (!nickname.isNullOrBlank()) {
+            val welcomeMessage = "$nickname" + "님 환영합니다."
+            binding.root.findViewById<TextView>(R.id.tv_title_account).text = welcomeMessage
+        }
+    }
+
 }
