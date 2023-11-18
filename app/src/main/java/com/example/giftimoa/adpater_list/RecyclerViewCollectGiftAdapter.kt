@@ -64,10 +64,6 @@ class RecyclerViewCollectGiftAdapter constructor(
         val dateString = "${gift.effectiveDate}까지"
         val badge = Collect_Utils.calDday(gift) //남은 기간 D-day
 
-
-
-
-
         holder.tv_brand.text = gift.usage
         holder.tv_date.text = dateString
         holder.tv_name.text = gift.giftName

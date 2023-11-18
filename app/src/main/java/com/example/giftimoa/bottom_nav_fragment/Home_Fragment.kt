@@ -152,7 +152,7 @@ class Home_Fragment : Fragment() {
             override fun run() {
                 handler.post(update)
             }
-        }, 500, 3000) // 500은 시작 전 대기 시간(0.5초 후 시작), 3000은 각 슬라이드 간의 시간 간격(3초마다 업데이트)
+        }, 500, 6000) // 500은 시작 전 대기 시간(0.5초 후 시작), 3000은 각 슬라이드 간의 시간 간격(3초마다 업데이트)
 
         return rootView
     }

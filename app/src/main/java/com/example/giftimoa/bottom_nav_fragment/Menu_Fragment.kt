@@ -1,5 +1,7 @@
 package com.example.giftimoa.bottom_nav_fragment
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.example.giftimoa.AlarmReceiver
 import com.example.giftimoa.Login_activity
 import com.example.giftimoa.Menu_Mygifticon_activity
 import com.example.giftimoa.Menu_favorite_activity
@@ -22,6 +25,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
+import java.util.Calendar
 
 class Menu_Fragment : Fragment() {
     private lateinit var binding: FragmentMenuBinding
@@ -57,7 +61,9 @@ class Menu_Fragment : Fragment() {
         // userEmail 값을 tv_account에 설정
         binding.root.findViewById<TextView>(R.id.tv_account).text = userEmail
 
-// 스위치의 체크 상태 변경 리스너 설정
+        // 초기 상태 설정 (스위치를 활성 상태로 설정)
+        binding.switchNoti.isChecked = true
+        // 스위치의 체크 상태 변경 리스너 설정
         binding.switchNoti.setOnCheckedChangeListener { _, isChecked ->
             // 스위치가 체크되어 있으면 lNotiFirst, lNotiInterval, lNotiTime 클릭 가능
             binding.lNotiFirst.isClickable = isChecked
@@ -69,33 +75,40 @@ class Menu_Fragment : Fragment() {
                 binding.lNotiFirst.setOnClickListener(null)
                 binding.lNotiInterval.setOnClickListener(null)
                 binding.lNotiTime.setOnClickListener(null)
+                binding.lNotiAlram.setOnClickListener(null)
 
-                binding.lNotiFirst.setBackgroundColor(Color.GRAY)
-                binding.lNotiInterval.setBackgroundColor(Color.GRAY)
-                binding.lNotiTime.setBackgroundColor(Color.GRAY)
+                binding.tvNotiSettingFirst.setTextColor(Color.parseColor("#939393"))
+                binding.tvNotiSettingFirstText.setTextColor(Color.parseColor("#939393"))
+                binding.tvNotiTitleFirst.setTextColor(Color.parseColor("#939393"))
+
+                binding.tvNotiSettingInterval.setTextColor(Color.parseColor("#939393"))
+                binding.tvNotiSettingIntervalText.setTextColor(Color.parseColor("#939393"))
+                binding.tvNotiTitleInterval.setTextColor(Color.parseColor("#939393"))
+
+                binding.tvNotiSettingTime.setTextColor(Color.parseColor("#939393"))
+                binding.tvNotiTitleTime.setTextColor(Color.parseColor("#939393"))
+
 
             } else {
                 binding.lNotiFirst.setOnClickListener { showNumberPickerFirstDialog() }
                 binding.lNotiInterval.setOnClickListener { showNumberPickerAlramDialog() }
                 binding.lNotiTime.setOnClickListener { showTimePickerDialog() }
+
+                binding.tvNotiSettingFirst.setTextColor(Color.parseColor("#000000"))
+                binding.tvNotiSettingFirstText.setTextColor(Color.parseColor("#000000"))
+                binding.tvNotiTitleFirst.setTextColor(Color.parseColor("#000000"))
+
+                binding.tvNotiSettingInterval.setTextColor(Color.parseColor("#000000"))
+                binding.tvNotiSettingIntervalText.setTextColor(Color.parseColor("#000000"))
+                binding.tvNotiTitleInterval.setTextColor(Color.parseColor("#000000"))
+
+                binding.tvNotiSettingTime.setTextColor(Color.parseColor("#000000"))
+                binding.tvNotiTitleTime.setTextColor(Color.parseColor("#000000"))
             }
         }
 
-// 초기 상태 설정 (스위치를 활성 상태로 설정)
-        binding.switchNoti.isChecked = true
 
-        //마감임박 최초 알림
-        binding.lNotiFirst.setOnClickListener {
-            showNumberPickerFirstDialog()
-        }
-        //마감임박 알림 간격
-        binding.lNotiInterval.setOnClickListener {
-            showNumberPickerAlramDialog()
-        }
 
-        binding.lNotiTime.setOnClickListener {
-            showTimePickerDialog()
-        }
         //나의 관심 기프티콘
         binding.tvFavorite.setOnClickListener {
             val intent = Intent(requireContext(), Menu_favorite_activity::class.java)
@@ -140,10 +153,6 @@ class Menu_Fragment : Fragment() {
         binding.tvWithdraw.setOnClickListener {
 
         }
-
-
-
-
 
     }
     private fun getNicknameFromServer(userEmail: String?) {
@@ -194,10 +203,24 @@ class Menu_Fragment : Fragment() {
         // '완료' 버튼 클릭 시 동작
         dialogBinding.btnComplete.setOnClickListener {
             val selectedDay = dialogBinding.npSelect.value
-            binding.tvNotiSettingFirst.text = selectedDay.toString()
+            setAlarm(selectedDay) // 알림 설정
             alertDialog.dismiss()
         }
     }
+
+    fun setAlarm(daysBefore: Int) {
+        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+
+        val calendar = Calendar.getInstance().apply {
+            // 현재 날짜에서 daysBefore만큼 뺀 날짜로 설정
+            add(Calendar.DAY_OF_YEAR, -daysBefore)
+        }
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+    }
+
 
     fun showNumberPickerAlramDialog() {
         val dialogBinding = DialogNumpickBinding.inflate(LayoutInflater.from(requireContext()))

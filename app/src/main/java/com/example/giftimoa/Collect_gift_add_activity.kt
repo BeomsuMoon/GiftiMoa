@@ -158,7 +158,6 @@ class Collect_gift_add_activity : AppCompatActivity() {
                 val id = UUID.randomUUID().hashCode()
                 val collectGift = Collect_Gift(id, giftName, effectiveDate, barcode, usage, imageUrl, 0)
 
-
                 collectGift.state = Collect_Utils.calState(collectGift)  // state 값에 calState의 결과를 할당
                 val resultIntent = Intent()
                 resultIntent.putExtra("gift", collectGift)
