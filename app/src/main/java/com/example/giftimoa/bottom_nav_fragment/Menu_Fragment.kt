@@ -5,27 +5,34 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.giftimoa.AlarmReceiver
 import com.example.giftimoa.Login_activity
 import com.example.giftimoa.Menu_Mygifticon_activity
 import com.example.giftimoa.Menu_favorite_activity
 import com.example.giftimoa.R
+import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.DialogNumpickBinding
 import com.example.giftimoa.databinding.DialogYcBtnBinding
 import com.example.giftimoa.databinding.FragmentMenuBinding
+import com.example.giftimoa.dto.Collect_Gift
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 
 class Menu_Fragment : Fragment() {
     private lateinit var binding: FragmentMenuBinding
@@ -53,6 +60,7 @@ class Menu_Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // userEmail 값을 tv_account에 설정
         val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("user_email", "")
@@ -61,50 +69,37 @@ class Menu_Fragment : Fragment() {
         // userEmail 값을 tv_account에 설정
         binding.root.findViewById<TextView>(R.id.tv_account).text = userEmail
 
+
+        //나중에 DB로 대체 되어야 함
+        val sharedPreferencesFirst = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        val firstNoti = sharedPreferencesFirst.getInt("first_noti", 0)
+        val intervalNoti = sharedPreferencesFirst.getInt("interval_noti", 0)
+        val timeNoti = sharedPreferencesFirst.getString("time_noti", "")
+
+        // 불러온 알림 설정 정보를 뷰에 설정합니다.
+        binding.tvNotiSettingFirst.text = firstNoti.toString()
+        binding.tvNotiSettingInterval.text = intervalNoti.toString()
+        binding.tvNotiSettingTime.text = timeNoti.toString()
         // 초기 상태 설정 (스위치를 활성 상태로 설정)
-        binding.switchNoti.isChecked = true
+        initializeViewState()
         // 스위치의 체크 상태 변경 리스너 설정
         binding.switchNoti.setOnCheckedChangeListener { _, isChecked ->
-            // 스위치가 체크되어 있으면 lNotiFirst, lNotiInterval, lNotiTime 클릭 가능
             binding.lNotiFirst.isClickable = isChecked
             binding.lNotiInterval.isClickable = isChecked
             binding.lNotiTime.isClickable = isChecked
 
-            // 스위치가 체크되어 있지 않으면 lNotiFirst, lNotiInterval, lNotiTime 클릭 불가능
             if (!isChecked) {
                 binding.lNotiFirst.setOnClickListener(null)
                 binding.lNotiInterval.setOnClickListener(null)
                 binding.lNotiTime.setOnClickListener(null)
                 binding.lNotiAlram.setOnClickListener(null)
-
-                binding.tvNotiSettingFirst.setTextColor(Color.parseColor("#939393"))
-                binding.tvNotiSettingFirstText.setTextColor(Color.parseColor("#939393"))
-                binding.tvNotiTitleFirst.setTextColor(Color.parseColor("#939393"))
-
-                binding.tvNotiSettingInterval.setTextColor(Color.parseColor("#939393"))
-                binding.tvNotiSettingIntervalText.setTextColor(Color.parseColor("#939393"))
-                binding.tvNotiTitleInterval.setTextColor(Color.parseColor("#939393"))
-
-                binding.tvNotiSettingTime.setTextColor(Color.parseColor("#939393"))
-                binding.tvNotiTitleTime.setTextColor(Color.parseColor("#939393"))
-
-
             } else {
                 binding.lNotiFirst.setOnClickListener { showNumberPickerFirstDialog() }
-                binding.lNotiInterval.setOnClickListener { showNumberPickerAlramDialog() }
+                binding.lNotiInterval.setOnClickListener { showNotificationIntervalPickerDialog() }
                 binding.lNotiTime.setOnClickListener { showTimePickerDialog() }
-
-                binding.tvNotiSettingFirst.setTextColor(Color.parseColor("#000000"))
-                binding.tvNotiSettingFirstText.setTextColor(Color.parseColor("#000000"))
-                binding.tvNotiTitleFirst.setTextColor(Color.parseColor("#000000"))
-
-                binding.tvNotiSettingInterval.setTextColor(Color.parseColor("#000000"))
-                binding.tvNotiSettingIntervalText.setTextColor(Color.parseColor("#000000"))
-                binding.tvNotiTitleInterval.setTextColor(Color.parseColor("#000000"))
-
-                binding.tvNotiSettingTime.setTextColor(Color.parseColor("#000000"))
-                binding.tvNotiTitleTime.setTextColor(Color.parseColor("#000000"))
             }
+
+            setTextColor(isChecked)
         }
 
 
@@ -155,6 +150,9 @@ class Menu_Fragment : Fragment() {
         }
 
     }
+
+
+
     private fun getNicknameFromServer(userEmail: String?) {
         val client = OkHttpClient()
         val url = "http://3.35.110.246:3306/getNicknameByEmail" // 서버의 닉네임 확인 엔드포인트
@@ -184,6 +182,27 @@ class Menu_Fragment : Fragment() {
         }
     }
 
+    //등록한 기프티콘의 유효기간 만료 안내 알림
+    fun setAlarm(daysBefore: Int, gifticon: Collect_Gift) {
+        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("giftName", gifticon.giftName)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE or 0)
+
+        // String 형식의 effectiveDate를 Date 형식으로 변환합니다.
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val gifticonEffectiveDate: Date = sdf.parse(gifticon.effectiveDate)
+
+        // 사용자가 설정한 알림을 받고자 하는 날짜를 계산합니다.
+        val calendar = Calendar.getInstance().apply {
+            time = gifticonEffectiveDate
+            add(Calendar.DAY_OF_YEAR, -daysBefore)
+        }
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+    }
+    //마감임박 최초 알림
     fun showNumberPickerFirstDialog() {
         val dialogBinding = DialogNumpickBinding.inflate(LayoutInflater.from(requireContext()))
 
@@ -203,26 +222,32 @@ class Menu_Fragment : Fragment() {
         // '완료' 버튼 클릭 시 동작
         dialogBinding.btnComplete.setOnClickListener {
             val selectedDay = dialogBinding.npSelect.value
-            setAlarm(selectedDay) // 알림 설정
+
+            // ViewModel을 통해 기프티콘 리스트를 가져옵니다.
+            val viewModel = ViewModelProvider(requireActivity()).get(Gificon_ViewModel::class.java)
+            val gifticonList = viewModel.collectGifts.value
+
+            // 기프티콘 리스트가 비어있지 않을 때만 알림을 설정합니다.
+            if (!gifticonList.isNullOrEmpty()) {
+                for (gifticon in gifticonList) {
+                    setAlarm(selectedDay, gifticon)
+                }
+            }
+
+            // SharedPreferences에 알림 설정 정보를 저장합니다. 나중에 DB로 대체
+            val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putInt("first_noti", selectedDay)
+            editor.apply()
+
+            binding.tvNotiSettingFirst.text = selectedDay.toString()
             alertDialog.dismiss()
         }
-    }
 
-    fun setAlarm(daysBefore: Int) {
-        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-
-        val calendar = Calendar.getInstance().apply {
-            // 현재 날짜에서 daysBefore만큼 뺀 날짜로 설정
-            add(Calendar.DAY_OF_YEAR, -daysBefore)
-        }
-
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
 
 
-    fun showNumberPickerAlramDialog() {
+    fun showNotificationIntervalPickerDialog() {
         val dialogBinding = DialogNumpickBinding.inflate(LayoutInflater.from(requireContext()))
 
         // 넘버픽커 설정
@@ -231,8 +256,8 @@ class Menu_Fragment : Fragment() {
         dialogBinding.npSelect.wrapSelectorWheel = false
 
         // 타이틀과 단위 텍스트 설정
-        dialogBinding.tvSelectTitle.text = "마감임박 최초 알림"
-        dialogBinding.tvSelect.text = "일전"
+        dialogBinding.tvSelectTitle.text = "알림 주기 설정"
+        dialogBinding.tvSelect.text = "일마다"
 
         // 다이얼로그 생성
         val builder = AlertDialog.Builder(requireContext()).setView(dialogBinding.root)
@@ -240,9 +265,20 @@ class Menu_Fragment : Fragment() {
 
         // '완료' 버튼 클릭 시 동작
         dialogBinding.btnComplete.setOnClickListener {
-            val selectedDay = dialogBinding.npSelect.value
-            binding.tvNotiSettingInterval.text = selectedDay.toString()
+            val selectedInterval = dialogBinding.npSelect.value
+            binding.tvNotiSettingInterval.text = selectedInterval.toString()
             alertDialog.dismiss()
+
+            // 알람 주기 설정
+            val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(requireContext(), AlarmReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            // 주기를 밀리세컨드로 변환
+            val intervalMillis = selectedInterval * 24 * 60 * 60 * 1000L
+
+            // 알람 설정
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                intervalMillis, pendingIntent)
         }
     }
 
@@ -271,6 +307,30 @@ class Menu_Fragment : Fragment() {
         dialogBinding.npSelect.setOnValueChangedListener { _, _, newVal ->
             binding.tvNotiSettingTime.text = times[newVal]
         }
+    }
+
+    fun setTextColor(isChecked: Boolean) {
+        val color = if (isChecked) "#000000" else "#939393"
+
+        binding.tvNotiSettingFirst.setTextColor(Color.parseColor(color))
+        binding.tvNotiSettingFirstText.setTextColor(Color.parseColor(color))
+        binding.tvNotiTitleFirst.setTextColor(Color.parseColor(color))
+        binding.tvNotiSettingInterval.setTextColor(Color.parseColor(color))
+        binding.tvNotiSettingIntervalText.setTextColor(Color.parseColor(color))
+        binding.tvNotiTitleInterval.setTextColor(Color.parseColor(color))
+        binding.tvNotiSettingTime.setTextColor(Color.parseColor(color))
+        binding.tvNotiTitleTime.setTextColor(Color.parseColor(color))
+    }
+    fun initializeViewState() {
+        binding.switchNoti.isChecked = true
+        binding.lNotiFirst.isClickable = true
+        binding.lNotiInterval.isClickable = true
+        binding.lNotiTime.isClickable = true
+        binding.lNotiFirst.setOnClickListener { showNumberPickerFirstDialog() }
+        binding.lNotiInterval.setOnClickListener { showNotificationIntervalPickerDialog() }
+        binding.lNotiTime.setOnClickListener { showTimePickerDialog() }
+
+        setTextColor(true)  // 위에서 정의한 색깔 변경 함수 호출
     }
 
 

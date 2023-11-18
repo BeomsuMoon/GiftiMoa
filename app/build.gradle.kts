@@ -12,7 +12,9 @@ android {
         viewBinding = true
         dataBinding = true
     }
-
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 
     defaultConfig {
         applicationId = "com.example.giftimoa"

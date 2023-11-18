@@ -15,6 +15,8 @@ class AlarmReceiver : BroadcastReceiver() {
 
     var builder: NotificationCompat.Builder? = null
     override fun onReceive(context: Context, intent: Intent) {
+        val giftName = intent.getStringExtra("giftName")
+
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         builder = null
         manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -32,7 +34,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val pendingIntent = PendingIntent.getActivity(context, 101, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
 
         //알림창 제목
-        builder!!.setContentTitle("기한 만료 전에 기프티콘을 사용해주세요!")
+        builder!!.setContentTitle("$giftName 의 기한이 만료되기 전에 사용해주세요!")
         //알림창 아이콘
         builder!!.setSmallIcon(R.mipmap.ic_launcher)
         //알림창 터치시 자동 삭제
@@ -40,7 +42,6 @@ class AlarmReceiver : BroadcastReceiver() {
         builder!!.setContentIntent(pendingIntent)
         val notification = builder!!.build()
         manager!!.notify(1, notification)
-
     }
 
     companion object {
@@ -49,3 +50,4 @@ class AlarmReceiver : BroadcastReceiver() {
         private const val CHANNEL_NAME = "Channel1"
     }
 }
+
