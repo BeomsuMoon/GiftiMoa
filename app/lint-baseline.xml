@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.1.2" type="baseline" client="gradle" dependencies="false" name="AGP (8.1.2)" variant="fatal" version="8.1.2">
+
+    <issue
+        id="UnspecifiedImmutableFlag"
+        message="Missing `PendingIntent` mutability flag"
+        errorLine1="        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)"
+        errorLine2="                                                                           ~">
+        <location
+            file="src/main/java/com/example/giftimoa/bottom_nav_fragment/Menu_Fragment.kt"
+            line="214"
+            column="76"/>
+    </issue>
+
+</issues>

@@ -25,7 +25,12 @@
 
     <receiver android:name=".AlarmReceiver" />
 
-
+        <activity
+            android:name=".Login_activity"
+            android:exported="true"/>
+        <activity
+            android:name=".Splash_activity"
+            android:exported="true"/>
     <activity
         android:name=".Menu_Mygifticon_activity"
         android:exported="true"/>
@@ -67,13 +72,8 @@
         android:exported="true"/>
     <activity
         android:name=".MainActivity"
-        android:exported="true"/>
-    <activity
-        android:name=".Login_activity"
-        android:exported="true"/>
-    <activity
-        android:name=".Splash_activity"
         android:exported="true">
+
 
 
         <intent-filter>
