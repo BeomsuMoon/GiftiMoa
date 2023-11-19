@@ -38,7 +38,7 @@ class Menu_favorite_activity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         // GridLayoutManager에서 두 번째 인자는 열의 수를 지정합니다.
-        val layoutManager = GridLayoutManager(this, 3)
+        val layoutManager = GridLayoutManager(this, 2)
         binding.rvFavorite.layoutManager = layoutManager
         binding.rvFavorite.adapter = giftAdapter
     }

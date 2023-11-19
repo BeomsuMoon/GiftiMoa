@@ -37,9 +37,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val pendingIntent = PendingIntent.getActivity(context, 101, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
 
         //알림창 제목
-        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
-        val currentTime = sdf.format(Date())
-        builder!!.setContentTitle("$giftName 의 기한이 만료되기 전에 사용해주세요! (알림 시간: $currentTime)")
+        builder!!.setContentTitle("$giftName 의 기한이 만료되기 전에 사용해주세요!")
         //알림창 아이콘
         builder!!.setSmallIcon(R.mipmap.ic_launcher)
         //알림창 터치시 자동 삭제
