@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.giftimoa.Collect_gift_add_activity
@@ -26,19 +27,19 @@ import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.adpater_list.RecyclerViewCollectGiftAdapter
 import com.example.giftimoa.dto.Collect_Gift
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 
 class Collect_fragment : Fragment() {
+
     private lateinit var giftViewModel: Gificon_ViewModel
     private lateinit var recyclerViewCollectGiftAdapter: RecyclerViewCollectGiftAdapter
     private lateinit var noGifticonTextView: TextView
     private lateinit var recyclerView: RecyclerView
 
-
     private lateinit var activityResult: ActivityResultLauncher<Intent>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        //새로운 액티비티를 시작하고 그 결과를 받기 위한 콜백을 등록하는 메서드
         activityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
                 val collectGift = result.data!!.extras!!.get("gift") as Collect_Gift
@@ -46,9 +47,10 @@ class Collect_fragment : Fragment() {
             }
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true) // 프래그먼트에서 옵션 메뉴 사용을 활성화
+        setHasOptionsMenu(true)
         giftViewModel = ViewModelProvider(requireActivity()).get(Gificon_ViewModel::class.java)
     }
 
@@ -57,12 +59,9 @@ class Collect_fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_collect, container, false)
-
-        //툴바 활성화
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
         (requireActivity() as AppCompatActivity).supportActionBar?.title = "GIFTIMOA"
-
         return view
     }
 
@@ -79,27 +78,33 @@ class Collect_fragment : Fragment() {
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireActivity(), 2)
         recyclerView.layoutManager = layoutManager
 
-        // 어댑터 초기화 및 RecyclerView에 연결
         recyclerViewCollectGiftAdapter = RecyclerViewCollectGiftAdapter(mutableListOf()) { gift ->
-            // Start the new activity
             val intent = Intent(requireContext(), Collect_gift_add_info_activity::class.java)
             intent.putExtra("gift", gift)
             startActivity(intent)
         }
         recyclerView.adapter = recyclerViewCollectGiftAdapter
 
-        // 플로팅 버튼 클릭 시 다음 화면의 액티비티로 이동(기프티콘 등록)
         view.findViewById<FloatingActionButton>(R.id.fab_btn).setOnClickListener {
             startCollectGiftAddActivity()
         }
 
+        // 코루틴을 사용하여 fetchGiftListFromRepository 호출
+        viewLifecycleOwner.lifecycleScope.launch {
+            val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+            val userEmail = sharedPreferences.getString("user_email", null)
+            if (userEmail != null && userEmail.isNotEmpty()) {
+                giftViewModel.fetchGiftListFromRepository(requireContext(), userEmail)
+            } else {
+                Log.d("test","test : $userEmail")
+            }
+
+        }
+
         giftViewModel.collectGifts.observe(viewLifecycleOwner, { gifts ->
-            // 어댑터에 데이터 업데이트
             recyclerViewCollectGiftAdapter.setGiftList(gifts.toMutableList())
             recyclerViewCollectGiftAdapter.notifyDataSetChanged()
-            Log.d("로그", "기프티콘: $gifts")
 
-            // 만약 기프티콘이 등록 되면 등록안내 문구 hide 아니면 show
             if (gifts.isEmpty()) {
                 noGifticonTextView.visibility = View.VISIBLE
             } else {
@@ -108,11 +113,12 @@ class Collect_fragment : Fragment() {
         })
     }
 
-    //액션바 옵션(검색)
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.collect_fragment_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }
+
 
 

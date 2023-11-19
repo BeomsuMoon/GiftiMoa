@@ -1,12 +1,17 @@
 package com.example.giftimoa.ViewModel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.giftimoa.dto.Collect_Gift
 import com.example.giftimoa.dto.Home_gift
-
+import com.example.giftimoa.repository.GiftAddRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Gificon_ViewModel : ViewModel() {
     private val _collectGifts = MutableLiveData<List<Collect_Gift>>(emptyList())
@@ -40,6 +45,24 @@ class Gificon_ViewModel : ViewModel() {
         }
     }
 
+    // GiftAddRepository를 통해 데이터를 가져오는 함수 추가
+    fun fetchGiftListFromRepository(context: Context, userEmail: String) {
+        viewModelScope.launch {
+            try {
+                // 백그라운드 스레드에서 GiftAddRepository를 통해 데이터를 가져오기
+                val gifts = withContext(Dispatchers.IO) {
+                    GiftAddRepository(context).fetchGiftListFromServer(userEmail)
+                }
+
+                // LiveData에 업데이트
+                _collectGifts.postValue(gifts)
+            } catch (e: Exception) {
+                Log.e("Gificon_ViewModel", "Error fetching data: ${e.message}", e)
+                // 오류 처리
+            }
+        }
+    }
+
     // 새로운 홈 기프트 추가
     fun addGift(gift: Home_gift) {
         val currentGifts = _homeGifts.value?.toMutableList() ?: mutableListOf()
@@ -67,8 +90,6 @@ class Gificon_ViewModel : ViewModel() {
 
     // 찜한 기프트 가져오기
     fun getFavoriteGifts(): LiveData<List<Home_gift>> {
-        return homeGifts // 수정된 부분
+        return homeGifts
     }
 }
-
-

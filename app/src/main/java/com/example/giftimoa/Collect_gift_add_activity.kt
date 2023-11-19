@@ -3,6 +3,7 @@ package com.example.giftimoa
 import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -146,6 +147,9 @@ class Collect_gift_add_activity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun giftAdd() {
+        val sharedPreferences = this.getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("user_email", null)
+
         var giftName = binding.textGiftName.text.toString()
         var effectiveDate = binding.textEffectiveDate.text.toString()
         var barcode = binding.textBarcode.text.toString()
@@ -171,6 +175,9 @@ class Collect_gift_add_activity : AppCompatActivity() {
                     addProperty("usage", usage)
                     addProperty("imageUrl", imageUrl)
                     addProperty("state", 0)
+                    if (userEmail != null && userEmail.isNotEmpty()) {
+                        addProperty("userEmail", userEmail)
+                    }
                 }
 
                 val mediaType = "application/json; charset=utf-8".toMediaType()

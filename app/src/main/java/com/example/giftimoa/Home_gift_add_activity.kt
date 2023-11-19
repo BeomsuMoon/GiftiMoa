@@ -138,7 +138,8 @@ class Home_gift_add_activity : AppCompatActivity() {
             Toast.makeText(this, "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
         } else {
             val id = UUID.randomUUID().hashCode()
-            val homeGift = Home_gift(id, giftName, effectiveDate, price, brand, Product, imageUrl, 0)
+            val homeGift = Home_gift(id, giftName, effectiveDate, price, brand, Product, imageUrl, 0,0)
+
 
             homeGift.h_state = Home_Utils.calState(homeGift)  // state 값에 calState의 결과를 할당
             val resultIntent = Intent()
