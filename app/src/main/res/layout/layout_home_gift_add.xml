@@ -123,23 +123,45 @@
                         tools:ignore="TouchTargetSizeCheck"
                         android:inputType="number"/>
 
+                    <!--카테고리-->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="사용처"
+                        android:text="카테고리"
                         android:layout_marginLeft="6dp"
                         android:textColor="@color/black"
                         android:textSize="13dp"/>
 
-                    <EditText
-                        android:id="@+id/text_expiration"
+                    <Spinner
+                        android:id="@+id/spinnerCategory"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
                         android:layout_margin="6dp"
                         android:background="@drawable/border"
                         android:paddingLeft="6dp"
                         android:textColor="@color/black"
-                        tools:ignore="TouchTargetSizeCheck"/>
+                        tools:ignore="TouchTargetSizeCheck"
+                        android:theme="@style/SpinnerTheme"/>
+
+                    <!--브랜드-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="브랜드"
+                        android:layout_marginLeft="6dp"
+                        android:textColor="@color/black"
+                        android:textSize="13dp"/>
+
+                    <Spinner
+                        android:id="@+id/spinnerBrand"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:layout_margin="6dp"
+                        android:background="@drawable/border"
+                        android:paddingLeft="6dp"
+                        android:textColor="@color/black"
+                        tools:ignore="TouchTargetSizeCheck"
+                        android:theme="@style/SpinnerTheme"/>
 
                     <TextView
                         android:layout_width="wrap_content"
