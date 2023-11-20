@@ -164,4 +164,31 @@ class GiftAddRepository(private val context: Context) {
         }
         return HomeGift
     }
+    suspend fun deleteGiftFromServer(ID: Int) {
+        try {
+            val url = "http://3.35.110.246:3306/deleteGift?ID=$ID"
+            val request = Request.Builder()
+                .url(url)
+                .delete()
+                .build()
+
+            val client = OkHttpClient.Builder()
+                .build()
+
+            val response = client.newCall(request).execute()
+
+            if (!response.isSuccessful) {
+                val errorBody = response.body?.string()
+                Log.e("GiftAddRepository", "Server error: $errorBody")
+                throw IOException("Failed to delete gift from the server")
+            }
+            else{
+                Log.d("tlqkf1","$ID")
+            }
+        } catch (e: Exception) {
+            Log.e("GiftAddRepository", "Exception: ${e.message}", e)
+            throw IOException("Failed to delete gift from the server")
+        }
+    }
+
 }

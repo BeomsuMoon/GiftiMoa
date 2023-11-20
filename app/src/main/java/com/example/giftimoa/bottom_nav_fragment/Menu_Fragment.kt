@@ -212,7 +212,7 @@ class Menu_Fragment : Fragment() {
             for (gifticon in gifticonList) {
                 val intent = Intent(context, AlarmReceiver::class.java)
                 // 각 기프티콘에 대한 고유한 PendingIntent를 생성합니다.
-                val pendingIntent = PendingIntent.getBroadcast(context, gifticon.id, intent, PendingIntent.FLAG_IMMUTABLE or 0)
+                val pendingIntent = PendingIntent.getBroadcast(context, gifticon.ID, intent, PendingIntent.FLAG_IMMUTABLE or 0)
                 // 알람 취소
                 alarmManager.cancel(pendingIntent)
             }

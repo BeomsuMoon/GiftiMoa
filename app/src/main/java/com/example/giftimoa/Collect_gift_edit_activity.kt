@@ -58,7 +58,7 @@ class Collect_gift_edit_activity : AppCompatActivity() {
 
             // 새로운 Collect_Gift 객체 생성
             val updatedGift = Collect_Gift(
-                id = gift.id,
+                ID = gift.ID,
                 giftName = newGiftName,
                 effectiveDate = newEffectiveDate,
                 barcode = newBarcode,

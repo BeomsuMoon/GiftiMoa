@@ -84,6 +84,7 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
         return true
     }
 
+    // 기프트 삭제
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.collect_info_edit -> {
@@ -109,11 +110,13 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
         }
     }
 
+
+
     private val editActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            val updatedGift = result.data?.getSerializableExtra("updatedGift") as? Collect_Gift
+            val updatedGift = result.data?.getSerializableExtra("modifiedGift") as? Collect_Gift
             if (updatedGift != null) {
                 gift = updatedGift
                 // 여기에서 updatedGift를 화면에 업데이트합니다.
@@ -121,9 +124,8 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
                 binding.textEffectiveDate.text = gift.effectiveDate
                 binding.textBarcode.text = gift.barcode
                 binding.textUsage.text = gift.usage
-                //에러발생 삐용삐용
+                // 에러가 발생하지 않아야 합니다.
             }
         }
     }
-
 }

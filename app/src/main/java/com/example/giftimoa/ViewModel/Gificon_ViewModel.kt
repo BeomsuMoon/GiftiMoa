@@ -1,10 +1,13 @@
 package com.example.giftimoa.ViewModel
 
+import android.app.Application
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.giftimoa.dto.Collect_Gift
 import com.example.giftimoa.dto.Home_gift
@@ -13,7 +16,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Gificon_ViewModel : ViewModel() {
+class Gificon_ViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val context: Context = application
     private val _collectGifts = MutableLiveData<List<Collect_Gift>>(emptyList())
     val collectGifts: LiveData<List<Collect_Gift>> get() = _collectGifts
 
@@ -30,17 +35,9 @@ class Gificon_ViewModel : ViewModel() {
     // 기프트 업데이트
     fun updateGift(gift: Collect_Gift) {
         val currentGifts = _collectGifts.value?.toMutableList() ?: mutableListOf()
-        val index = currentGifts.indexOfFirst { it.id == gift.id }
+        val index = currentGifts.indexOfFirst { it.ID == gift.ID }
         if (index != -1) {
             currentGifts[index] = gift
-            _collectGifts.value = currentGifts
-        }
-    }
-
-    // 기프트 삭제
-    fun deleteGift(gift: Collect_Gift) {
-        val currentGifts = _collectGifts.value?.toMutableList() ?: mutableListOf()
-        if (currentGifts.remove(gift)) {
             _collectGifts.value = currentGifts
         }
     }
@@ -64,8 +61,6 @@ class Gificon_ViewModel : ViewModel() {
         }
     }
 
-
-
     fun fetchGiftListFromRepository(context: Context, userEmail: String) {
         viewModelScope.launch {
             try {
@@ -82,6 +77,31 @@ class Gificon_ViewModel : ViewModel() {
             }
         }
     }
+
+    // 기프트 삭제
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun deleteGift(gift: Collect_Gift) {
+        viewModelScope.launch {
+            try {
+                // 서버에서 기프트 삭제
+                withContext(Dispatchers.IO) {
+                    GiftAddRepository(context).deleteGiftFromServer(gift.ID)
+                }
+
+                // 로컬 LiveData에서도 삭제
+                val currentGifts = _collectGifts.value?.toMutableList() ?: mutableListOf()
+                currentGifts.removeIf { it.ID == gift.ID }
+                Log.d("tlqkf", "$gift.ID")
+
+                _collectGifts.value = currentGifts
+
+            } catch (e: Exception) {
+                Log.e("Gificon_ViewModel", "Error deleting gift: ${e.message}", e)
+                // 오류 처리
+            }
+        }
+    }
+
 
 
     // 새로운 홈 기프트 추가
@@ -102,12 +122,12 @@ class Gificon_ViewModel : ViewModel() {
     }
 
     // 홈 기프트 삭제
-    fun deleteGift(gift: Home_gift) {
+/*    fun deleteGift(gift: Home_gift) {
         val currentGifts = _homeGifts.value?.toMutableList() ?: mutableListOf()
         if (currentGifts.remove(gift)) {
             _homeGifts.value = currentGifts
         }
-    }
+    }*/
 
     // 찜한 기프트 가져오기
     fun getFavoriteGifts(): LiveData<List<Home_gift>> {

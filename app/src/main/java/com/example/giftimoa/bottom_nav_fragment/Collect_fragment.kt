@@ -83,6 +83,7 @@ class Collect_fragment : Fragment() {
             intent.putExtra("gift", gift)
             startActivity(intent)
         }
+
         recyclerView.adapter = recyclerViewCollectGiftAdapter
 
         view.findViewById<FloatingActionButton>(R.id.fab_btn).setOnClickListener {
@@ -96,9 +97,8 @@ class Collect_fragment : Fragment() {
             if (userEmail != null && userEmail.isNotEmpty()) {
                 giftViewModel.fetchGiftListFromRepository(requireContext(), userEmail)
             } else {
-                Log.d("test","test : $userEmail")
+                Log.d("test", "test : $userEmail")
             }
-
         }
 
         giftViewModel.collectGifts.observe(viewLifecycleOwner, { gifts ->
@@ -111,6 +111,16 @@ class Collect_fragment : Fragment() {
                 noGifticonTextView.visibility = View.GONE
             }
         })
+
+    }
+
+    private fun setupRecyclerView() {
+        recyclerViewCollectGiftAdapter = RecyclerViewCollectGiftAdapter(mutableListOf()) { gift ->
+            val intent = Intent(requireContext(), Collect_gift_add_info_activity::class.java)
+            intent.putExtra("gift", gift)
+            startActivity(intent)
+        }
+        recyclerView.adapter = recyclerViewCollectGiftAdapter
     }
 
 

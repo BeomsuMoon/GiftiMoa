@@ -20,8 +20,11 @@ class RecyclerViewCollectGiftAdapter constructor(
     private val itemClickListener: (Collect_Gift) -> Unit
 ) : RecyclerView.Adapter<RecyclerViewCollectGiftAdapter.MyViewHolder>() {
 
-    fun setGiftList(gifts: MutableList<Collect_Gift>) {
-        this.giftList = gifts
+
+    fun setGiftList(newList: List<Collect_Gift>) {
+        giftList.clear()
+        giftList.addAll(newList)
+        notifyDataSetChanged()
     }
 
     fun addGift(collectGift: Collect_Gift) {
@@ -43,6 +46,7 @@ class RecyclerViewCollectGiftAdapter constructor(
 
         }
     }
+
 
 
     // 새로운 데이터를 설정하는 메서드 추가
@@ -82,6 +86,8 @@ class RecyclerViewCollectGiftAdapter constructor(
     override fun getItemCount(): Int {
         return giftList.size
     }
+
+
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tv_brand: TextView = itemView.findViewById(R.id.tv_brand)
