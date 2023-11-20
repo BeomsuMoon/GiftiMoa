@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -30,6 +31,7 @@ import com.example.giftimoa.adpater_list.Banner_Adapter
 import com.example.giftimoa.adpater_list.RecyclerViewHomeGiftAdapter
 import com.example.giftimoa.dto.Home_gift
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 import me.relex.circleindicator.CircleIndicator3
 import java.util.Timer
 import java.util.TimerTask
@@ -183,6 +185,17 @@ class Home_Fragment : Fragment() {
         // 플로팅 버튼 클릭 시 다음 화면의 액티비티로 이동
         view.findViewById<FloatingActionButton>(R.id.fab_btn).setOnClickListener {
             startCollectGiftAddActivity()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+            val userEmail = sharedPreferences.getString("user_email", null)
+            if (userEmail != null && userEmail.isNotEmpty()) {
+                giftViewModel.fetchHomeGiftsFromRepository(requireContext(), userEmail)
+            } else {
+                Log.d("test","test : $userEmail")
+            }
+
         }
 
         giftViewModel.homeGifts.observe(viewLifecycleOwner, { gifts ->

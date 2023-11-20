@@ -12,8 +12,10 @@ data class Home_gift(
     var h_product_description: String,
     var h_imageUrl: String, //이미지 URI
     var h_state: Int, //유효기간 상태 체크
-    var favorite: Int = 0, //나의 관심 상품 체크
+    var favorite: Int, //나의 관심 상품 체크
 ) : Serializable
+
+
 
 data class H_Badge(
     val h_content: String,

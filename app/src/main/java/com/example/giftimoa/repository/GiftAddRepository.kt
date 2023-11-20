@@ -92,13 +92,13 @@ class GiftAddRepository(private val context: Context) {
         return giftList
     }
 
-   /* // Hoom 기프티콘 추가
+    // Hoom 기프티콘 추가
     suspend fun fetchHomeGiftsFromServer(userEmail: String): List<Home_gift> {
         var response: Response? = null
         try {
             // Adjust the URL and other parameters according to your API
             Log.d("GiftAddRepository", "fetchHomeGiftsFromServer - userEmail: $userEmail")
-            val url = "http://3.35.110.246:3306/homeGifts?email=$userEmail"
+            val url = "http://3.35.110.246:3306/homeGifts"
             val request = Request.Builder()
                 .url(url)
                 .get()
@@ -164,5 +164,4 @@ class GiftAddRepository(private val context: Context) {
         }
         return HomeGift
     }
-*/
 }

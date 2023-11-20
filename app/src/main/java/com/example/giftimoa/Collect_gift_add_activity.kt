@@ -150,6 +150,7 @@ class Collect_gift_add_activity : AppCompatActivity() {
         val sharedPreferences = this.getSharedPreferences("user_data", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("user_email", null)
 
+
         var giftName = binding.textGiftName.text.toString()
         var effectiveDate = binding.textEffectiveDate.text.toString()
         var barcode = binding.textBarcode.text.toString()

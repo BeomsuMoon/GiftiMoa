@@ -3,12 +3,14 @@ package com.example.giftimoa
 import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -24,6 +26,15 @@ import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.LayoutHomeGiftAddBinding
 import com.example.giftimoa.dto.Home_gift
+import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -34,7 +45,7 @@ class Home_gift_add_activity : AppCompatActivity() {
 
     private lateinit var giftViewModel: Gificon_ViewModel
     private val REQUEST_READ_EXTERNAL_STORAGE = 1001
-    private var imageUrl: String = ""
+    private var h_imageUrl: String = ""
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,8 +104,8 @@ class Home_gift_add_activity : AppCompatActivity() {
                 }
             } else {
                 // If imageUrl is not empty show the image in fullscreen, else load image
-                if (imageUrl.isNotEmpty()) {
-                    showFullscreenImageDialog(imageUrl)
+                if (h_imageUrl.isNotEmpty()) {
+                    showFullscreenImageDialog(h_imageUrl)
                 } else {
                     loadImage()
                 }
@@ -119,36 +130,114 @@ class Home_gift_add_activity : AppCompatActivity() {
                 .into(binding.uploadImage)
 
             // 이미지 URI를 문자열로 변환하여 저장
-            imageUrl = uri.toString()
+            h_imageUrl = uri.toString()
         }
     }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun giftAdd() {
-        var giftName = binding.textGiftName.text.toString()
-        var effectiveDate = binding.textEffectiveDate.text.toString()
-        var price = binding.textPrice.text.toString()
-        var brand = binding.textExpiration.text.toString()
-        var Product = binding.textProductDescription.text.toString()
+
+        val sharedPreferences = this.getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("user_email", "") ?: ""
 
 
+        var h_product_name = binding.textGiftName.text.toString()
+        var h_effectiveDate = binding.textEffectiveDate.text.toString()
+        var h_price = binding.textPrice.text.toString()
+        var h_brand = binding.textExpiration.text.toString()
+        var h_product_description = binding.textProductDescription.text.toString()
 
-        if(giftName.isEmpty() || effectiveDate.isEmpty() || price.isEmpty() || brand.isEmpty() || imageUrl.isEmpty()|| Product.isEmpty()) {
-            Toast.makeText(this, "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
-        } else {
-            val id = UUID.randomUUID().hashCode()
-            val homeGift = Home_gift(id, giftName, effectiveDate, price, brand, Product, imageUrl, 0,0)
+
+        try {
+            if (h_product_name.isEmpty() || h_effectiveDate.isEmpty() || h_price.isEmpty() || h_brand.isEmpty() || h_imageUrl.isEmpty() || h_product_description.isEmpty()) {
+                Toast.makeText(this, "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                val id = UUID.randomUUID().hashCode()
+                val homeGift =
+                    Home_gift(id, h_product_name, h_effectiveDate, h_price, h_brand, h_product_description, h_imageUrl, 0, 0,)
 
 
-            homeGift.h_state = Home_Utils.calState(homeGift)  // state 값에 calState의 결과를 할당
-            val resultIntent = Intent()
-            resultIntent.putExtra("gift", homeGift)
-            setResult(Activity.RESULT_OK, resultIntent)
+                homeGift.h_state = Home_Utils.calState(homeGift)  // state 값에 calState의 결과를 할당
+                val resultIntent = Intent()
+                resultIntent.putExtra("gift", homeGift)
+                setResult(Activity.RESULT_OK, resultIntent)
 
-            finish()
+                val url = "http://3.35.110.246:3306/home_gift_add"
+                val json = JsonObject().apply {
+                    addProperty("h_product_name", h_product_name)
+                    addProperty("h_effectiveDate", h_effectiveDate)
+                    addProperty("h_price", h_price)
+                    addProperty("h_brand", h_brand)
+                    addProperty("h_product_description", h_product_description)
+                    addProperty("h_imageUrl", h_imageUrl)
+                    addProperty("h_state", 0)
+                    addProperty("favorite", 0)
+                    if (userEmail != null && userEmail.isNotEmpty()) {
+                        Log.d("userEmail","$userEmail")
+                        addProperty("userEmail", userEmail)
+                    }
+                }
+
+                val mediaType = "application/json; charset=utf-8".toMediaType()
+                val requestBody = json.toString().toRequestBody(mediaType)
+                val request = Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .build()
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val client = OkHttpClient()
+                        val response: Response = client.newCall(request).execute()
+
+                        if (response.isSuccessful) {
+                            runOnUiThread {
+                                Toast.makeText(
+                                    this@Home_gift_add_activity,
+                                    "DB 정보 입력 성공",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
+                            runOnUiThread {
+                                val errorBody = response.body?.string()
+                                Log.d("Hoom_gift_test:", "$errorBody")
+                                Toast.makeText(
+                                    this@Home_gift_add_activity,
+                                    "DB 정보 입력 실패: $errorBody",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Log.e("Home_gift_add_act", "DB 에러: ${e.message}", e)
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@Home_gift_add_activity,
+                                "오류 발생: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+
+                finish()
+            }
+        }catch (e: Exception) {
+            e.printStackTrace() // 로깅을 위해 사용하지 않음
+            Log.e("Home_gift_add_act", "에러: ${e.message}", e)  // 예외 정보를 Log.e로 출력
+            runOnUiThread {
+                Toast.makeText(
+                    this@Home_gift_add_activity,
+                    "오류 발생: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
+
 
 
     private fun showDatePickerDialog() {
@@ -185,14 +274,14 @@ class Home_gift_add_activity : AppCompatActivity() {
         }, year, month, day).show()
     }
 
-    private fun showFullscreenImageDialog(imageUrl: String) {
+    private fun showFullscreenImageDialog(h_imageUrl: String) {
         val builder = AlertDialog.Builder(this)
         val inflater = layoutInflater
         val dialogLayout = inflater.inflate(R.layout.dialog_image, null)
         val dialogImage = dialogLayout.findViewById<ImageView>(R.id.dialog_image)
 
         Glide.with(this)
-            .load(imageUrl)
+            .load(h_imageUrl)
             .into(dialogImage)
 
         val dialog = builder.setView(dialogLayout)

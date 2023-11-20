@@ -41,6 +41,7 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
         binding.textBarcode.text = gift.barcode
         binding.textUsage.text = gift.usage
 
+
         Glide.with(this)
             .load(gift.imageUrl)
             .into(binding.uploadImage)

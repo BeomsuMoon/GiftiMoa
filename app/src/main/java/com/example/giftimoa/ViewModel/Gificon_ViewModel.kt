@@ -46,6 +46,26 @@ class Gificon_ViewModel : ViewModel() {
     }
 
     // GiftAddRepository를 통해 데이터를 가져오는 함수 추가
+    // Fetch Home Gifts from the repository
+    fun fetchHomeGiftsFromRepository(context: Context, userEmail: String) {
+        viewModelScope.launch {
+            try {
+                // 백그라운드 스레드에서 GiftAddRepository를 통해 데이터를 가져오기
+                val homeGifts = withContext(Dispatchers.IO) {
+                    GiftAddRepository(context).fetchHomeGiftsFromServer(userEmail)
+                }
+
+                // LiveData에 업데이트
+                _homeGifts.postValue(homeGifts)
+            } catch (e: Exception) {
+                Log.e("Gificon_ViewModel", "Error fetching home gifts: ${e.message}", e)
+                // 오류 처리
+            }
+        }
+    }
+
+
+
     fun fetchGiftListFromRepository(context: Context, userEmail: String) {
         viewModelScope.launch {
             try {
@@ -62,6 +82,7 @@ class Gificon_ViewModel : ViewModel() {
             }
         }
     }
+
 
     // 새로운 홈 기프트 추가
     fun addGift(gift: Home_gift) {
