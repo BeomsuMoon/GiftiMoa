@@ -44,7 +44,6 @@ class Menu_favorite_activity : AppCompatActivity() {
     }
 
 
-
     override fun onSupportNavigateUp(): Boolean { // 액션바 뒤로가기
         onBackPressed()
         return true

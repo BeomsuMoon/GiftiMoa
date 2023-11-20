@@ -63,6 +63,8 @@ class Home_Fragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true) // 프래그먼트에서 옵션 메뉴 사용을 활성화
         giftViewModel = ViewModelProvider(requireActivity()).get(Gificon_ViewModel::class.java)
+
+
     }
 
     //홈 메뉴 및 배너 생성
@@ -107,17 +109,31 @@ class Home_Fragment : Fragment() {
         val Home_menu_list_giftcard = rootView.findViewById<ImageView>(R.id.home_ic_giftcard)
         Home_menu_list_giftcard.setOnClickListener(getCommonClickListener(requireActivity(), 9))
 
+        return rootView
+    }
+    fun getCommonClickListener(activity: Activity, tabIndex: Int): View.OnClickListener {
+        return View.OnClickListener {
+            val intent = Intent(activity, Search_gift_activity::class.java)
+            intent.putExtra("tabIndex", tabIndex)
+            activity.startActivity(intent)
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         // 배너 ViewPager2
-        mPager = rootView.findViewById(R.id.viewpager)
+        mPager = view.findViewById(R.id.viewpager)
         // Adapter
         pagerAdapter = Banner_Adapter(requireActivity(), numPage)
         mPager.adapter = pagerAdapter
         // Indicator
-        mIndicator = rootView.findViewById(R.id.indicator)
+        mIndicator = view.findViewById(R.id.indicator)
         mIndicator.setViewPager(mPager)
         mIndicator.createIndicators(numPage, 0)
         // ViewPager 설정
         mPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        mPager.setSaveEnabled(false)
 
         mPager.setCurrentItem(1000, true) // 시작 지점 (두 번째 인수로 부드러운 스크롤을 사용하려면 true로 설정)
         mPager.offscreenPageLimit = 4 // 최대 이미지 수
@@ -140,7 +156,7 @@ class Home_Fragment : Fragment() {
             }
         })
 
-// 자동 슬라이드 코드 추가
+        // 자동 슬라이드 코드 추가
         var currentPage = 1000
         val handler = Handler(Looper.getMainLooper())
         val update = Runnable {
@@ -154,20 +170,7 @@ class Home_Fragment : Fragment() {
             override fun run() {
                 handler.post(update)
             }
-        }, 500, 6000) // 500은 시작 전 대기 시간(0.5초 후 시작), 3000은 각 슬라이드 간의 시간 간격(3초마다 업데이트)
-
-        return rootView
-    }
-    fun getCommonClickListener(activity: Activity, tabIndex: Int): View.OnClickListener {
-        return View.OnClickListener {
-            val intent = Intent(activity, Search_gift_activity::class.java)
-            intent.putExtra("tabIndex", tabIndex)
-            activity.startActivity(intent)
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        }, 500, 6000)
 
         recyclerView = view.findViewById<RecyclerView>(R.id.rv_Gift_Home)
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireActivity(), 2)
@@ -204,6 +207,10 @@ class Home_Fragment : Fragment() {
             RecyclerViewHomeGiftAdapter.notifyDataSetChanged()
             Log.d("로그", "기프티콘: $gifts")
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        // super.onSaveInstanceState(outState) // 이 부분을 주석 처리하거나 삭제
     }
 
     private fun startCollectGiftAddActivity() {
