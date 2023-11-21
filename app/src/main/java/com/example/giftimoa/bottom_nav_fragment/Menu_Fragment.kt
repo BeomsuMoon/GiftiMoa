@@ -448,7 +448,9 @@ class Menu_Fragment : Fragment() {
     private fun updateNicknameInView(nickname: String?) {
         if (!nickname.isNullOrBlank()) {
             val welcomeMessage = "$nickname" + "님 환영합니다."
-            binding.root.findViewById<TextView>(R.id.tv_title_account).text = welcomeMessage
+            // 큰 따옴표를 제거합니다.
+            val formattedNickname = welcomeMessage.replace("\"", "")
+            binding.root.findViewById<TextView>(R.id.tv_title_account).text = formattedNickname
         }
     }
 

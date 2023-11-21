@@ -38,6 +38,7 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         gift = intent.getSerializableExtra("gift") as Home_gift
 
         //뷰 시작시 생성 정보
+        binding.userNickname.text = gift.nickname
         binding.textGiftName.text = gift.h_product_name
         binding.textEffectiveDate.text = gift.h_effectiveDate
         binding.textPrice.text = gift.h_price
@@ -99,6 +100,7 @@ class Home_gift_add_info_activity : AppCompatActivity() {
             if (updatedGift != null) {
                 gift = updatedGift
                 // 여기에서 updatedGift를 화면에 업데이트합니다.
+                binding.userNickname.text = gift.nickname
                 binding.textGiftName.text = gift.h_product_name
                 binding.textEffectiveDate.text = gift.h_effectiveDate
                 binding.textPrice.text = gift.h_price

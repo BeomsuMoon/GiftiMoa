@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.LayoutHomeGiftAddBinding
@@ -33,15 +34,20 @@ import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
+import kotlin.coroutines.suspendCoroutine
 
 class Home_gift_add_activity : AppCompatActivity() {
     private lateinit var binding : LayoutHomeGiftAddBinding
@@ -172,11 +178,47 @@ class Home_gift_add_activity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun giftAdd() {
+    private suspend fun getNicknameFromServer(userEmail: String?): String = suspendCoroutine { continuation ->
+        val client = OkHttpClient()
+        val url1 = "http://3.35.110.246:3306/getNicknameByEmail"
 
+        if (userEmail.isNullOrBlank()) {
+            continuation.resumeWith(Result.success(""))
+        } else {
+            val json = """{"email": "$userEmail"}"""
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            val requestBody = json.toRequestBody(mediaType)
+            val request = Request.Builder()
+                .url(url1)
+                .post(requestBody)
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.e("Home_gift_add_act", "Failed to get nickname from server")
+                    continuation.resumeWith(Result.success(""))
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        val responseData = response.body?.string()
+                        val nickname = responseData?.replace("\"", "") ?: ""
+                        continuation.resumeWith(Result.success(nickname))
+                    } else {
+                        Log.e("Home_gift_add_act", "Failed to get nickname from server")
+                        continuation.resumeWith(Result.success(""))
+                    }
+                }
+            })
+        }
+    }
+
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun giftAdd() {
         val sharedPreferences = this.getSharedPreferences("user_data", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("user_email", "") ?: ""
-
 
         var h_product_name = binding.textGiftName.text.toString()
         var h_effectiveDate = binding.textEffectiveDate.text.toString()
@@ -185,72 +227,87 @@ class Home_gift_add_activity : AppCompatActivity() {
         var h_brand = binding.spinnerBrand.selectedItem.toString()
         var h_product_description = binding.textProductDescription.text.toString()
 
-
         try {
-            if (h_product_name.isEmpty() || h_effectiveDate.isEmpty() || h_price.isEmpty() ||h_category.isEmpty()|| h_brand.isEmpty() || h_imageUrl.isEmpty() || h_product_description.isEmpty()) {
+            if (h_product_name.isEmpty() || h_effectiveDate.isEmpty() || h_price.isEmpty() || h_category.isEmpty() || h_brand.isEmpty() || h_imageUrl.isEmpty() || h_product_description.isEmpty()) {
                 Toast.makeText(this, "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
             } else {
-                val id = UUID.randomUUID().hashCode()
-                val homeGift =
-                    Home_gift(id, h_product_name, h_effectiveDate, h_price,h_category, h_brand, h_product_description, h_imageUrl, 0, 0,)
-
-
-                homeGift.h_state = Home_Utils.calState(homeGift)  // state 값에 calState의 결과를 할당
-                val resultIntent = Intent()
-                resultIntent.putExtra("gift", homeGift)
-                setResult(Activity.RESULT_OK, resultIntent)
-
-                val url = "http://3.35.110.246:3306/home_gift_add"
-                val json = JsonObject().apply {
-                    addProperty("h_product_name", h_product_name)
-                    addProperty("h_effectiveDate", h_effectiveDate)
-                    addProperty("h_price", h_price)
-                    addProperty("h_category", h_category)
-                    addProperty("h_brand", h_brand)
-                    addProperty("h_product_description", h_product_description)
-                    addProperty("h_imageUrl", h_imageUrl)
-                    addProperty("h_state", 0)
-                    addProperty("favorite", 0)
-                    if (userEmail != null && userEmail.isNotEmpty()) {
-                        Log.d("userEmail","$userEmail")
-                        addProperty("userEmail", userEmail)
-                    }
-                }
-
-                val mediaType = "application/json; charset=utf-8".toMediaType()
-                val requestBody = json.toString().toRequestBody(mediaType)
-                val request = Request.Builder()
-                    .url(url)
-                    .post(requestBody)
-                    .build()
-
-                CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.Main).launch {
                     try {
-                        val client = OkHttpClient()
-                        val response: Response = client.newCall(request).execute()
+                        val id = UUID.randomUUID().hashCode()
 
-                        if (response.isSuccessful) {
-                            runOnUiThread {
-                                Toast.makeText(
-                                    this@Home_gift_add_activity,
-                                    "DB 정보 입력 성공",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        val nickname = withContext(Dispatchers.IO) { getNicknameFromServer(userEmail) }
+                        Log.d("test", "$nickname")
+
+                        val homeGift = Home_gift(id, h_product_name, h_effectiveDate, h_price, h_category, h_brand, h_product_description, h_imageUrl, 0, 0, nickname)
+
+                        homeGift.h_state = Home_Utils.calState(homeGift)  // state 값에 calState의 결과를 할당
+                        val resultIntent = Intent()
+                        resultIntent.putExtra("gift", homeGift)
+                        setResult(Activity.RESULT_OK, resultIntent)
+
+                        val url = "http://3.35.110.246:3306/home_gift_add"
+                        val json = JsonObject().apply {
+                            addProperty("h_product_name", h_product_name)
+                            addProperty("h_effectiveDate", h_effectiveDate)
+                            addProperty("h_price", h_price)
+                            addProperty("h_category", h_category)
+                            addProperty("h_brand", h_brand)
+                            addProperty("h_product_description", h_product_description)
+                            addProperty("h_imageUrl", h_imageUrl)
+                            addProperty("h_state", 0)
+                            addProperty("favorite", 0)
+                            if (userEmail.isNotEmpty()) {
+                                Log.d("userEmail", "$userEmail")
+                                addProperty("userEmail", userEmail)
                             }
-                        } else {
+                            addProperty("nickname", nickname)
+                        }
+
+                        val mediaType = "application/json; charset=utf-8".toMediaType()
+                        val requestBody = json.toString().toRequestBody(mediaType)
+                        val request = Request.Builder()
+                            .url(url)
+                            .post(requestBody)
+                            .build()
+
+                        try {
+                            val client = OkHttpClient()
+                            val response: Response = withContext(Dispatchers.IO) { client.newCall(request).execute() }
+
+                            if (response.isSuccessful) {
+                                runOnUiThread {
+                                    Toast.makeText(
+                                        this@Home_gift_add_activity,
+                                        "DB 정보 입력 성공",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    finish()
+                                }
+                            } else {
+                                runOnUiThread {
+                                    val errorBody = response.body?.string()
+                                    Log.d("Home_gift_test:", "$errorBody")
+                                    Toast.makeText(
+                                        this@Home_gift_add_activity,
+                                        "DB 정보 입력 실패: $errorBody",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            Log.e("Home_gift_add_act", "DB 에러: ${e.message}", e)
                             runOnUiThread {
-                                val errorBody = response.body?.string()
-                                Log.d("Hoom_gift_test:", "$errorBody")
                                 Toast.makeText(
                                     this@Home_gift_add_activity,
-                                    "DB 정보 입력 실패: $errorBody",
+                                    "오류 발생: ${e.message}",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                         }
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                        Log.e("Home_gift_add_act", "DB 에러: ${e.message}", e)
+                        e.printStackTrace() // 로깅을 위해 사용하지 않음
+                        Log.e("Home_gift_add_act", "에러: ${e.message}", e)  // 예외 정보를 Log.e로 출력
                         runOnUiThread {
                             Toast.makeText(
                                 this@Home_gift_add_activity,
@@ -258,12 +315,12 @@ class Home_gift_add_activity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+                    } finally {
+                        finish()
                     }
                 }
-
-                finish()
             }
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace() // 로깅을 위해 사용하지 않음
             Log.e("Home_gift_add_act", "에러: ${e.message}", e)  // 예외 정보를 Log.e로 출력
             runOnUiThread {
@@ -273,6 +330,7 @@ class Home_gift_add_activity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            finish()
         }
     }
 

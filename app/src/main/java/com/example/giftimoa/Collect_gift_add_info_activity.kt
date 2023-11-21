@@ -36,6 +36,7 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
 
         gift = intent.getSerializableExtra("gift") as Collect_Gift
 
+
         binding.textGiftName.text = gift.giftName
         binding.textEffectiveDate.text = gift.effectiveDate
         binding.textBarcode.text = gift.barcode

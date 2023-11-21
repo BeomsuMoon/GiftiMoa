@@ -156,6 +156,7 @@ class GiftAddRepository(private val context: Context) {
                     val h_imageUrl = jsonObject.getString("h_imageUrl")
                     val h_state = jsonObject.getInt("h_state")
                     val favorite = jsonObject.getInt("favorite")
+                    val nickname = jsonObject.getString("username")
 
                     val homeGift = Home_gift(
                         h_id,
@@ -167,7 +168,8 @@ class GiftAddRepository(private val context: Context) {
                         h_product_description,
                         h_imageUrl,
                         h_state,
-                        favorite
+                        favorite,
+                        nickname
                     )
                     homeGiftList.add(homeGift)
                     Log.d("GiftAddRepository", "Parsed home gift: $homeGift")
