@@ -15,19 +15,25 @@ import java.io.IOException
 
 class GiftAddRepository(private val context: Context) {
 
+    // MutableLiveData를 사용하여 수집된 기프트 목록을 보관
     private val _giftList: MutableLiveData<List<Collect_Gift>> = MutableLiveData()
 
+    // MutableLiveData를 사용하여 홈 기프트 목록을 보관
     private val _homeGifts: MutableLiveData<List<Home_gift>> = MutableLiveData()
+
+    // LiveData를 통해 수집된 기프트 목록을 외부로 노출
     val giftList: LiveData<List<Collect_Gift>>
         get() = _giftList
 
-    val HomeGift: LiveData<List<Home_gift>>
+    // LiveData를 통해 홈 기프트 목록을 외부로 노출
+    val homeGifts: LiveData<List<Home_gift>>
         get() = _homeGifts
 
-
+    // 서버에서 수집된 기프트 목록을 가져오는 함수
     suspend fun fetchGiftListFromServer(userEmail: String): List<Collect_Gift> {
         var response: Response? = null
         try {
+            // 서버에서 수집된 기프트 목록을 가져오기 위한 URL 생성
             Log.d("GiftAddRepository", "fetchGiftListFromServer - userEmail: $userEmail")
             val url = "http://3.35.110.246:3306/getGiftList?email=$userEmail"
             val request = Request.Builder()
@@ -41,12 +47,14 @@ class GiftAddRepository(private val context: Context) {
             response = client.newCall(request).execute()
 
             if (response.isSuccessful) {
+                // 서버 응답을 처리하고 MutableLiveData를 업데이트
                 val jsonResponse = response.body?.string()
                 Log.d("GiftAddRepository", "Server response: $jsonResponse")
                 val giftList = parseGiftList(jsonResponse)
                 _giftList.postValue(giftList)
                 return giftList
             } else {
+                // 서버 오류 처리
                 val errorBody = response?.body?.string()
                 Log.e("GiftAddRepository", "Server error: $errorBody")
                 throw IOException("서버에서 데이터를 가져오지 못했습니다")
@@ -57,6 +65,7 @@ class GiftAddRepository(private val context: Context) {
         }
     }
 
+    // JSON 응답을 파싱하여 기프트 목록으로 변환하는 함수
     private fun parseGiftList(jsonResponse: String?): List<Collect_Gift> {
         val giftList = mutableListOf<Collect_Gift>()
         try {
@@ -92,11 +101,11 @@ class GiftAddRepository(private val context: Context) {
         return giftList
     }
 
-    // Hoom 기프티콘 추가
+    // 서버에서 홈 기프트 목록을 가져오는 함수
     suspend fun fetchHomeGiftsFromServer(userEmail: String): List<Home_gift> {
         var response: Response? = null
         try {
-            // Adjust the URL and other parameters according to your API
+            // API에 따라 URL 및 기타 매개변수 조정
             Log.d("GiftAddRepository", "fetchHomeGiftsFromServer - userEmail: $userEmail")
             val url = "http://3.35.110.246:3306/homeGifts"
             val request = Request.Builder()
@@ -110,12 +119,14 @@ class GiftAddRepository(private val context: Context) {
             response = client.newCall(request).execute()
 
             if (response.isSuccessful) {
+                // 서버 응답을 처리하고 MutableLiveData를 업데이트
                 val jsonResponse = response.body?.string()
                 Log.d("GiftAddRepository", "Server response: $jsonResponse")
                 val homeGiftsList = parseHomeGifts(jsonResponse)
                 _homeGifts.postValue(homeGiftsList)
                 return homeGiftsList
             } else {
+                // 서버 오류 처리
                 val errorBody = response?.body?.string()
                 Log.e("GiftAddRepository", "Server error: $errorBody")
                 throw IOException("Failed to fetch home gifts from the server")
@@ -125,10 +136,12 @@ class GiftAddRepository(private val context: Context) {
             throw IOException("Failed to fetch home gifts from the server")
         }
     }
+
+    // JSON 응답을 파싱하여 홈 기프트 목록으로 변환하는 함수
     private fun parseHomeGifts(jsonResponse: String?): List<Home_gift> {
-        val HomeGift = mutableListOf<Home_gift>()
+        val homeGiftList = mutableListOf<Home_gift>()
         try {
-            // Parse the JSON response for home gifts
+            // 홈 기프트를 위한 JSON 응답 파싱
             if (!jsonResponse.isNullOrBlank()) {
                 val jsonArray = JSONArray(jsonResponse)
                 for (i in 0 until jsonArray.length()) {
@@ -156,7 +169,7 @@ class GiftAddRepository(private val context: Context) {
                         h_state,
                         favorite
                     )
-                    HomeGift.add(homeGift)
+                    homeGiftList.add(homeGift)
                     Log.d("GiftAddRepository", "Parsed home gift: $homeGift")
                 }
             }
@@ -164,10 +177,13 @@ class GiftAddRepository(private val context: Context) {
             Log.e("GiftAddRepository", "Error parsing home gifts JSON: ${e.message}", e)
             throw IOException("Error parsing home gifts JSON: ${e.message}", e)
         }
-        return HomeGift
+        return homeGiftList
     }
+
+    // 서버에서 기프트 삭제
     suspend fun deleteGiftFromServer(ID: Int) {
         try {
+            // 기프트 삭제를 위한 URL 생성
             val url = "http://3.35.110.246:3306/deleteGift?ID=$ID"
             val request = Request.Builder()
                 .url(url)
@@ -180,12 +196,13 @@ class GiftAddRepository(private val context: Context) {
             val response = client.newCall(request).execute()
 
             if (!response.isSuccessful) {
+                // 서버 오류 처리
                 val errorBody = response.body?.string()
                 Log.e("GiftAddRepository", "Server error: $errorBody")
                 throw IOException("Failed to delete gift from the server")
-            }
-            else{
-                Log.d("tlqkf1","$ID")
+            } else {
+                // 성공적으로 삭제된 경우 로그 기록
+                Log.d("tlqkf1", "$ID")
             }
         } catch (e: Exception) {
             Log.e("GiftAddRepository", "Exception: ${e.message}", e)
@@ -193,4 +210,38 @@ class GiftAddRepository(private val context: Context) {
         }
     }
 
+    // 사용자 이메일을 기반으로 서버에서 기프트 목록을 가져오는 함수
+    suspend fun fetchGiftListByEmail(userEmail: String): List<Home_gift> {
+        var response: Response? = null
+        try {
+            // 사용자 이메일을 기반으로 홈 기프트 목록을 가져오기 위한 URL 생성
+            val url = "http://3.35.110.246:3306/homeGifts_my?email=$userEmail"
+            val request = Request.Builder()
+                .url(url)
+                .get()
+                .build()
+
+            val client = OkHttpClient.Builder()
+                .build()
+
+            response = client.newCall(request).execute()
+
+            if (response.isSuccessful) {
+                // 서버 응답을 처리하고 MutableLiveData를 업데이트
+                val jsonResponse = response.body?.string()
+                Log.d("GiftAddRepository", "Server response: $jsonResponse")
+                val homeGiftsList = parseHomeGifts(jsonResponse)
+                _homeGifts.postValue(homeGiftsList)
+                return homeGiftsList
+            } else {
+                // 서버 오류 처리
+                val errorBody = response?.body?.string()
+                Log.e("GiftAddRepository", "Server error: $errorBody")
+                throw IOException("서버에서 데이터를 가져오지 못했습니다")
+            }
+        } catch (e: Exception) {
+            Log.e("GiftAddRepository", "Exception: ${e.message}", e)
+            throw IOException("서버에서 데이터를 가져오지 못했습니다")
+        }
+    }
 }
