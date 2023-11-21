@@ -137,6 +137,7 @@ class GiftAddRepository(private val context: Context) {
                     val h_product_name = jsonObject.getString("h_product_name")
                     val h_effectiveDate = jsonObject.getString("h_effectiveDate")
                     val h_price = jsonObject.getString("h_price")
+                    val h_category = jsonObject.getString("h_category")
                     val h_brand = jsonObject.getString("h_brand")
                     val h_product_description = jsonObject.getString("h_product_description")
                     val h_imageUrl = jsonObject.getString("h_imageUrl")
@@ -148,6 +149,7 @@ class GiftAddRepository(private val context: Context) {
                         h_product_name,
                         h_effectiveDate,
                         h_price,
+                        h_category,
                         h_brand,
                         h_product_description,
                         h_imageUrl,

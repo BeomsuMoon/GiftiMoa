@@ -8,6 +8,7 @@ data class Home_gift(
     var h_product_name: String, //상품명
     var h_effectiveDate: String, //유효기간
     var h_price: String, //가격
+    var h_category: String, // 카테고리
     var h_brand: String, //사용처
     var h_product_description: String,
     var h_imageUrl: String, //이미지 URI

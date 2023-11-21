@@ -187,12 +187,12 @@ class Home_gift_add_activity : AppCompatActivity() {
 
 
         try {
-            if (h_product_name.isEmpty() || h_effectiveDate.isEmpty() || h_price.isEmpty() || h_brand.isEmpty() || h_imageUrl.isEmpty() || h_product_description.isEmpty()) {
+            if (h_product_name.isEmpty() || h_effectiveDate.isEmpty() || h_price.isEmpty() ||h_category.isEmpty()|| h_brand.isEmpty() || h_imageUrl.isEmpty() || h_product_description.isEmpty()) {
                 Toast.makeText(this, "모든 필드를 채워주세요.", Toast.LENGTH_SHORT).show()
             } else {
                 val id = UUID.randomUUID().hashCode()
                 val homeGift =
-                    Home_gift(id, h_product_name, h_effectiveDate, h_price, h_brand, h_product_description, h_imageUrl, 0, 0,)
+                    Home_gift(id, h_product_name, h_effectiveDate, h_price,h_category, h_brand, h_product_description, h_imageUrl, 0, 0,)
 
 
                 homeGift.h_state = Home_Utils.calState(homeGift)  // state 값에 calState의 결과를 할당
@@ -205,6 +205,7 @@ class Home_gift_add_activity : AppCompatActivity() {
                     addProperty("h_product_name", h_product_name)
                     addProperty("h_effectiveDate", h_effectiveDate)
                     addProperty("h_price", h_price)
+                    addProperty("h_category", h_category)
                     addProperty("h_brand", h_brand)
                     addProperty("h_product_description", h_product_description)
                     addProperty("h_imageUrl", h_imageUrl)
