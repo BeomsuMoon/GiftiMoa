@@ -18,17 +18,32 @@
 
 
     <TextView
-        android:id="@+id/tv_noGifticon"
+        android:id="@+id/tv_noGifticon1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="기프티콘을 등록해주세요!"
+        android:text="기프티콘을 등록해보세요!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/tv_noGifticon2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="내가 가진 기프티콘을 등록하여\n쉽게 관리할 수 있어요"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
         android:layout_gravity="center"/>
 
-    <androidx.recyclerview.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_Gift_Collect"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -69,7 +69,7 @@ class Home_gift_add_activity : AppCompatActivity() {
         supportActionBar?.title = "기프티콘 등록"
 
         // 카테고리와 브랜드 데이터
-        val categories = arrayOf("--선택하세요--","커피","치킨", "피자", "패스트푸드","편의점･마트","베이커리","아이스크림","외식･분식","영화","상품권")
+        val categories = arrayOf("--선택하세요--","커피","치킨", "피자", "패스트푸드","편의점･마트","베이커리","아이스크림","외식･분식","영화･엔터","기타")
         val brands = mapOf(
             "--선택하세요--" to arrayOf("-선택하세요-"),
             "커피" to arrayOf("스타벅스", "투썸플레이스", "메가커피", "이디야커피", "할리스커피", "빽다방", "컴포즈커피", "공차", "드롭탑", "커피빈"),

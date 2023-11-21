@@ -136,7 +136,7 @@
                         android:textColor="@color/black"
                         android:textSize="13dp"/>
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/text_usage"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"

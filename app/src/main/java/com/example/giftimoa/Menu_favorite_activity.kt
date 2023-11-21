@@ -28,7 +28,7 @@ class Menu_favorite_activity : AppCompatActivity() {
         setSupportActionBar(binding.myToolbar)
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "찜한 기프티콘"
+        supportActionBar?.title = "찜목록"
 
         setupRecyclerView()
 

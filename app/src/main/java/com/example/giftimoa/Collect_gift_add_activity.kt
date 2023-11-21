@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -55,6 +56,17 @@ class Collect_gift_add_activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = LayoutCollectGiftAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val brands = arrayOf("스타벅스", "투썸플레이스", "메가커피", "이디야커피", "할리스커피", "빽다방", "컴포즈커피", "공차", "드롭탑", "커피빈",
+            "BBQ", "BHC", "굽네치킨","60계치킨","교촌치킨","처갓집","바른치킨","또래오래","지코바","기영이숯불두마리치킨","페리카나","꾸브라꼬숯불두마리치킨","치킨플러스",
+            "피자헛", "도미노피자","미스터피자","청년피자","피자나라치킨공주","반올림피자","피자스쿨","빽보이피자","유로코피자","파파존스","피자마루","샐러디","에그드랍",
+            "맥도날드", "버거킹","KFC","롯데리아","프랭크버거","뉴욕버거","맘스터치","버거리","이삭토스트","테그42",
+            "GS25", "CU","세븐일레븐","미니스톱","이마트","이마트24","롯데마트","홈플러스","하이마트","GS슈퍼마켓(TheFRESH)",
+            "뚜레쥬르", "파리바게뜨","던킨도너츠","크리스피크림도넛","한스제과","파리크라상","CJ","해피콘","홍루이젠","와플대학","베스킨라빈스", "설빙","나뚜루",
+            "아웃백 스테이크하우스", "빕스","애슐리","샐러디","요기요","배달의민족","본죽","죽이야기","죠스떡볶이","청년다방","역전우동0410","뉴욕야시장","써브웨이","생활맥주","에그드랍",
+            "CGV","롯데시네마","메가박스","컬쳐랜드","해피머니","구글플레이","씨네큐","인생네컷","올리브영","CJ온스타일","따릉이","킥고일","알파카")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, brands)
+        binding.textUsage.setAdapter(adapter)
 
         giftViewModel = ViewModelProvider(this).get(Gificon_ViewModel::class.java)
 

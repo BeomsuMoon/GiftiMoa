@@ -15,6 +15,8 @@ import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.LayoutHomeGiftAddInfoBinding
 import com.example.giftimoa.dto.Home_gift
 import com.example.giftimoa.dto.favorite
+import java.text.NumberFormat
+import java.util.Locale
 
 class Home_gift_add_info_activity : AppCompatActivity() {
     private lateinit var binding : LayoutHomeGiftAddInfoBinding
@@ -37,11 +39,13 @@ class Home_gift_add_info_activity : AppCompatActivity() {
 
         gift = intent.getSerializableExtra("gift") as Home_gift
 
+        val numberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
+        val priceString = "${numberFormat.format(gift.h_price.toInt())}원"
         //뷰 시작시 생성 정보
         binding.userNickname.text = gift.nickname
         binding.textGiftName.text = gift.h_product_name
         binding.textEffectiveDate.text = gift.h_effectiveDate
-        binding.textPrice.text = gift.h_price
+        binding.textPrice.text = priceString
         binding.textExpiration.text = gift.h_brand
         binding.textProductDescription.text = gift.h_product_description
         Glide.with(this)
@@ -59,6 +63,9 @@ class Home_gift_add_info_activity : AppCompatActivity() {
             showFullscreenImageDialog(gift.h_imageUrl)
         }
 
+        binding.chatBtn.setOnClickListener {
+
+        }
     }
 
     fun toggleFavorite(homeGift: Home_gift) {

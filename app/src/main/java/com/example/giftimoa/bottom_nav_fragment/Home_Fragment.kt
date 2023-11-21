@@ -40,7 +40,7 @@ class Home_Fragment : Fragment() {
 
     private lateinit var mPager: ViewPager2
     private lateinit var pagerAdapter: FragmentStateAdapter
-    private val numPage = 4
+    private val numPage = 2
     private lateinit var mIndicator: CircleIndicator3
 
     private lateinit var giftViewModel: Gificon_ViewModel
@@ -76,7 +76,10 @@ class Home_Fragment : Fragment() {
 
         val toolbar = rootView.findViewById<Toolbar>(R.id.my_toolbar)
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-        (requireActivity() as AppCompatActivity).supportActionBar?.title = "GIFTIMOA"
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setLogo(R.drawable.gm_logo_120)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayUseLogoEnabled(true)
 
         //커피 아이콘 인텐트
         val Home_menu_list_coffee = rootView.findViewById<ImageView>(R.id.home_ic_coffee)
@@ -136,7 +139,7 @@ class Home_Fragment : Fragment() {
         mPager.setSaveEnabled(false)
 
         mPager.setCurrentItem(1000, true) // 시작 지점 (두 번째 인수로 부드러운 스크롤을 사용하려면 true로 설정)
-        mPager.offscreenPageLimit = 4 // 최대 이미지 수
+        mPager.offscreenPageLimit = 2 // 최대 이미지 수
 
         mPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrolled(
@@ -170,7 +173,7 @@ class Home_Fragment : Fragment() {
             override fun run() {
                 handler.post(update)
             }
-        }, 500, 6000)
+        }, 500, 20000)
 
         recyclerView = view.findViewById<RecyclerView>(R.id.rv_Gift_Home)
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireActivity(), 2)

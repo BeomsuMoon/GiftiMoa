@@ -37,9 +37,12 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
         gift = intent.getSerializableExtra("gift") as Collect_Gift
 
 
+        var barcode = gift.barcode
+        barcode = barcode.chunked(4).joinToString(" ")
+
         binding.textGiftName.text = gift.giftName
         binding.textEffectiveDate.text = gift.effectiveDate
-        binding.textBarcode.text = gift.barcode
+        binding.textBarcode.text = barcode
         binding.textUsage.text = gift.usage
 
 

@@ -25,7 +25,12 @@
 
     <receiver android:name=".AlarmReceiver" />
 
-
+    <activity
+        android:name=".Banner_Fragment.Banner_activity_2"
+        android:exported="true"/>
+    <activity
+        android:name=".Banner_Fragment.Banner_activity_1"
+        android:exported="true"/>
     <activity
         android:name=".Menu_Mygifticon_activity"
         android:exported="true"/>

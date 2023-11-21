@@ -33,7 +33,8 @@ class Collect_fragment : Fragment() {
 
     private lateinit var giftViewModel: Gificon_ViewModel
     private lateinit var recyclerViewCollectGiftAdapter: RecyclerViewCollectGiftAdapter
-    private lateinit var noGifticonTextView: TextView
+    private lateinit var noGifticonTextView1: TextView
+    private lateinit var noGifticonTextView2: TextView
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var activityResult: ActivityResultLauncher<Intent>
@@ -61,11 +62,15 @@ class Collect_fragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_collect, container, false)
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-        (requireActivity() as AppCompatActivity).supportActionBar?.title = "GIFTIMOA"
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setLogo(R.drawable.gm_logo_120)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayUseLogoEnabled(true)
+
         return view
     }
 
-    private fun startCollectGiftAddActivity() {
+        private fun startCollectGiftAddActivity() {
         val intent = Intent(requireContext(), Collect_gift_add_activity::class.java)
         activityResult.launch(intent)
     }
@@ -73,7 +78,8 @@ class Collect_fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        noGifticonTextView = view.findViewById<TextView>(R.id.tv_noGifticon)
+        noGifticonTextView1 = view.findViewById<TextView>(R.id.tv_noGifticon1)
+        noGifticonTextView2 = view.findViewById<TextView>(R.id.tv_noGifticon2)
         recyclerView = view.findViewById<RecyclerView>(R.id.rv_Gift_Collect)
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireActivity(), 2)
         recyclerView.layoutManager = layoutManager
@@ -106,9 +112,11 @@ class Collect_fragment : Fragment() {
             recyclerViewCollectGiftAdapter.notifyDataSetChanged()
 
             if (gifts.isEmpty()) {
-                noGifticonTextView.visibility = View.VISIBLE
+                noGifticonTextView1.visibility = View.VISIBLE
+                noGifticonTextView2.visibility = View.VISIBLE
             } else {
-                noGifticonTextView.visibility = View.GONE
+                noGifticonTextView1.visibility = View.GONE
+                noGifticonTextView2.visibility = View.GONE
             }
         })
 

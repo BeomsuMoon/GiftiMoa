@@ -41,7 +41,7 @@ class Search_gift_activity : AppCompatActivity() {
                 5 -> "베이커리"
                 6 -> "아이스크림"
                 7 -> "외식･분식"
-                8 -> "영화"
+                8 -> "영화･엔터"
                 else -> "상품권"
             }
         }.attach()
@@ -60,7 +60,7 @@ class Search_gift_activity : AppCompatActivity() {
                     5 -> "베이커리"
                     6 -> "아이스크림"
                     7 -> "외식･분식"
-                    8 -> "영화"
+                    8 -> "영화･엔터"
                     else -> "상품권"
                 }
             }

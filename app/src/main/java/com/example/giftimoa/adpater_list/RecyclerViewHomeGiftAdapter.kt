@@ -16,6 +16,8 @@ import com.example.giftimoa.Collect_Utils
 import com.example.giftimoa.Home_Utils
 import com.example.giftimoa.dto.Collect_Gift
 import com.example.giftimoa.dto.Home_gift
+import java.text.NumberFormat
+import java.util.Locale
 
 class RecyclerViewHomeGiftAdapter constructor(
     private var h_giftList: MutableList<Home_gift>,
@@ -42,7 +44,8 @@ class RecyclerViewHomeGiftAdapter constructor(
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
         val gift = h_giftList[position]
         val dateString = "${gift.h_effectiveDate}까지"
-        val priceString = "${gift.h_price}원"
+        val numberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
+        val priceString = "${numberFormat.format(gift.h_price.toInt())}원"
         val badge = Home_Utils.calDday(gift) //남은 기간 D-day
         holder.tv_price.text = priceString
         holder.tv_date.text = dateString

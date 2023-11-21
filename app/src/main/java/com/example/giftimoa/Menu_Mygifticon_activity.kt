@@ -23,6 +23,11 @@ class Menu_Mygifticon_activity : AppCompatActivity() {
         binding = LayoutMenuMygifticonBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 액션바 활성화
+        setSupportActionBar(binding.myToolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "내 기프티콘"
         // 사용자 이메일 가져오기
         val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("user_email", "")
