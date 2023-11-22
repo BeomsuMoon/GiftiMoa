@@ -98,15 +98,48 @@ class Menu_Fragment : Fragment() {
             setTextColor(isChecked)
         }
 
-        //프로필수정
+        //프로필수정 빈공간 눌렀을떄
         binding.lAccount.setOnClickListener {
             val intent = Intent(requireContext(), Menu_profile_edit::class.java)
-            //intent.putExtra("nickname", formattedNickname)
-            startActivity(intent)
+
+            // TextView에서 닉네임 가져오기
+            val fullNickname = binding.root.findViewById<TextView>(R.id.tv_title_account).text.toString()
+
+            // '님 환영합니다' 부분 제거
+            val nicknameWithoutGreeting = fullNickname.replace("님 환영합니다", "").trim()
+
+            // 수정된 닉네임이 비어있지 않은 경우에만 인텐트에 추가
+            if (nicknameWithoutGreeting.isNotEmpty()) {
+                // 인텐트에 수정된 닉네임 추가
+                intent.putExtra("nickname", nicknameWithoutGreeting)
+
+                // 액티비티 시작
+                startActivity(intent)
+            } else {
+                Log.d("test","$nicknameWithoutGreeting , $fullNickname")
+            }
         }
+
+        //프로필수정 버튼 눌렀을때
         binding.profileEditBtn.setOnClickListener {
             val intent = Intent(requireContext(), Menu_profile_edit::class.java)
-            startActivity(intent)
+
+            // TextView에서 닉네임 가져오기
+            val fullNickname = binding.root.findViewById<TextView>(R.id.tv_title_account).text.toString()
+
+            // '님 환영합니다' 부분 제거
+            val nicknameWithoutGreeting = fullNickname.replace("님 환영합니다", "").trim()
+
+            // 수정된 닉네임이 비어있지 않은 경우에만 인텐트에 추가
+            if (nicknameWithoutGreeting.isNotEmpty()) {
+                // 인텐트에 수정된 닉네임 추가
+                intent.putExtra("nickname", nicknameWithoutGreeting)
+
+                // 액티비티 시작
+                startActivity(intent)
+            } else {
+                Log.d("test","$nicknameWithoutGreeting , $fullNickname")
+            }
         }
 
         //나의 관심 기프티콘

@@ -18,6 +18,7 @@ class Menu_profile_edit : AppCompatActivity() {
     private lateinit var binding: LayoutMenuProfileEditBinding
     private val REQUEST_READ_EXTERNAL_STORAGE = 1003
     private var imageUrl: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,6 +30,12 @@ class Menu_profile_edit : AppCompatActivity() {
         setSupportActionBar(binding.myToolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // 닉네임을 인텐트에서 가져와 TextInputLayout에 설정
+        val nicknameWithDot = intent.getStringExtra("nickname")
+        val nickname = nicknameWithDot?.removeSuffix(".") ?: ""
+
+        binding.textInputLayout.editText?.setText(nickname)
 
         setUpProfileImageClickEvent()
     }
