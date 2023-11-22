@@ -26,6 +26,9 @@
     <receiver android:name=".AlarmReceiver" />
 
     <activity
+        android:name=".Menu_profile_edit"
+        android:exported="true"/>
+    <activity
         android:name=".Banner_Fragment.Banner_activity_2"
         android:exported="true"/>
     <activity

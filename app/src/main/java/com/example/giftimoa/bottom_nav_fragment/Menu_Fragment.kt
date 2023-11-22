@@ -19,6 +19,7 @@ import com.example.giftimoa.AlarmReceiver
 import com.example.giftimoa.Login_activity
 import com.example.giftimoa.Menu_Mygifticon_activity
 import com.example.giftimoa.Menu_favorite_activity
+import com.example.giftimoa.Menu_profile_edit
 import com.example.giftimoa.R
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.DialogNumpickBinding
@@ -97,7 +98,15 @@ class Menu_Fragment : Fragment() {
             setTextColor(isChecked)
         }
 
-
+        //프로필수정
+        binding.lAccount.setOnClickListener {
+            val intent = Intent(requireContext(), Menu_profile_edit::class.java)
+            startActivity(intent)
+        }
+        binding.profileEditBtn.setOnClickListener {
+            val intent = Intent(requireContext(), Menu_profile_edit::class.java)
+            startActivity(intent)
+        }
 
         //나의 관심 기프티콘
         binding.tvFavorite.setOnClickListener {
