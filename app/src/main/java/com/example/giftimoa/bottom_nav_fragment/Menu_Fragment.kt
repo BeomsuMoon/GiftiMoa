@@ -101,6 +101,7 @@ class Menu_Fragment : Fragment() {
         //프로필수정
         binding.lAccount.setOnClickListener {
             val intent = Intent(requireContext(), Menu_profile_edit::class.java)
+            //intent.putExtra("nickname", formattedNickname)
             startActivity(intent)
         }
         binding.profileEditBtn.setOnClickListener {

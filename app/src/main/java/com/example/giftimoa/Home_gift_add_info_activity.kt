@@ -88,17 +88,6 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         }
     }
 
-    fun updateFavoriteList(homeGift: Home_gift, favoriteGiftsList: MutableList<Home_gift>) {
-        // 관심 상품 리스트에 추가 또는 제거합니다.
-        if (homeGift.favorite == 1) {
-            // 관심 상품 리스트에 추가합니다.
-            favoriteGiftsList.add(homeGift)
-        } else {
-            // 관심 상품 리스트에서 제거합니다.
-            favoriteGiftsList.remove(homeGift)
-        }
-    }
-
     private val editActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->

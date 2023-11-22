@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.giftimoa"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"

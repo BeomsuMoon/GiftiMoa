@@ -33,7 +33,7 @@
                     android:adjustViewBounds="true"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    android:src="@drawable/join_id"/>
+                    android:src="@drawable/profile52x52_purple"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/profile_edit_btn"
@@ -61,7 +61,7 @@
                         android:id="@+id/tv_title_account"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="7dp"
                         android:text="닉네임님 환영합니다."
                         style="@style/Bold"
                         app:layout_constraintTop_toTopOf="parent"
