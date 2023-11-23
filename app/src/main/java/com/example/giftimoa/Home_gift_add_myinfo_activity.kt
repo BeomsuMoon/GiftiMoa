@@ -1,10 +1,12 @@
 package com.example.giftimoa
 
+import android.view.MenuItem
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -13,19 +15,20 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.LayoutHomeGiftAddInfoBinding
+import com.example.giftimoa.databinding.LayoutHomeMygiftEditBinding
 import com.example.giftimoa.dto.Home_gift
 import com.example.giftimoa.dto.favorite
 import java.text.NumberFormat
 import java.util.Locale
 
-class Home_gift_add_info_activity : AppCompatActivity() {
-    private lateinit var binding : LayoutHomeGiftAddInfoBinding
+class Home_gift_add_myinfo_activity : AppCompatActivity() {
+    private lateinit var binding : LayoutHomeMygiftEditBinding
     private lateinit var gift: Home_gift
     private lateinit var giftViewModel: Gificon_ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = LayoutHomeGiftAddInfoBinding.inflate(layoutInflater)
+        binding = LayoutHomeMygiftEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
@@ -52,40 +55,9 @@ class Home_gift_add_info_activity : AppCompatActivity() {
             .load(gift.h_imageUrl)
             .into(binding.uploadImage)
 
-        // 좋아요 클릭 시
-        binding.favoriteClk.setOnClickListener {
-            Log.d("로그","찜 추가 클릭")
-            toggleFavorite(gift)
-            updateFavoriteImage(gift)
-        }
 
         binding.uploadImage.setOnClickListener {
             showFullscreenImageDialog(gift.h_imageUrl)
-        }
-
-        binding.chatBtn.setOnClickListener {
-            val intent = Intent(this@Home_gift_add_info_activity, Chatting_room_activity::class.java)
-            startActivity(intent)
-        }
-    }
-
-    fun toggleFavorite(homeGift: Home_gift) {
-        homeGift.favorite = if (homeGift.favorite == 0) 1 else 0
-        if (homeGift.favorite == 1) {
-            // 찜한 목록에 추가
-            favorite.FavoriteGifts.list.add(homeGift)
-        } else {
-            // 찜한 목록에서 제거
-            favorite.FavoriteGifts.list.remove(homeGift)
-        }
-        updateFavoriteImage(homeGift)
-    }
-
-    fun updateFavoriteImage(homeGift: Home_gift) {
-        if (homeGift.favorite == 1) {
-            binding.favoriteClk.setImageResource(R.drawable.ic_favorite)
-        } else {
-            binding.favoriteClk.setImageResource(R.drawable.ic_favorite_outline)
         }
     }
 
@@ -134,4 +106,32 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         return true
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.home_info_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.home_info_edit -> {
+                val intent = Intent(this, Home_gift_edit::class.java)
+                intent.putExtra("gift", gift)
+                editActivityResultLauncher.launch(intent)
+                true
+            }
+
+            R.id.home_info_delete -> {
+                AlertDialog.Builder(this)
+                    .setMessage("기프티콘을 삭제하시겠습니까?")
+                    .setPositiveButton("확인") { _, _ ->
+                        //giftViewModel.deleteGift(gift)
+                        finish()
+                    }
+                    .setNegativeButton("취소", null)
+                    .show()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

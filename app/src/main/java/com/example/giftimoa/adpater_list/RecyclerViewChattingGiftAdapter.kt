@@ -7,30 +7,51 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.giftimoa.R
+import com.example.giftimoa.databinding.ItemChattingMessageBinding
 import com.example.giftimoa.dto.ChatItem
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class RecyclerViewChattingGiftAdapter(private val chatList: List<ChatItem>) :
-    RecyclerView.Adapter<RecyclerViewChattingGiftAdapter.ChatViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_chatting_cardview, parent, false)
-        return ChatViewHolder(view)
+class RecyclerViewChattingGiftAdapter : RecyclerView.Adapter<RecyclerViewChattingGiftAdapter.ChatMessageViewHolder>() {
+    private val messageList: MutableList<ChatItem> = mutableListOf()
+
+    // ViewHolder 클래스
+    inner class ChatMessageViewHolder(private val binding: ItemChattingMessageBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(message: ChatItem) {
+            binding.txtMessage.text = message.message
+            binding.txtDate.text = formatTimestamp(message.timestamp)
+        }
+
+        private fun formatTimestamp(timestamp: Long): String {
+            val dateFormat = SimpleDateFormat("a hh:mm", Locale.getDefault())
+            val date = Date(timestamp)
+            return dateFormat.format(date)
+        }
+
     }
 
-    override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        val chatItem = chatList[position]
-        holder.username.text = chatItem.username
-        holder.userMessage.text = chatItem.message
-        holder.timestamp.text = chatItem.timestamp
-        // Glide.with(holder.view.context).load(chatItem.profileImageUrl).into(holder.userProfile)
+    // ViewHolder 생성
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatMessageViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemChattingMessageBinding.inflate(inflater, parent, false)
+        return ChatMessageViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = chatList.size
+    // ViewHolder와 데이터 바인딩
+    override fun onBindViewHolder(holder: ChatMessageViewHolder, position: Int) {
+        val message = messageList[position]
+        holder.bind(message)
+    }
 
-    class ChatViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val userProfile: ImageView = view.findViewById(R.id.user_profile)
-        val username: TextView = view.findViewById(R.id.user_nickname)
-        val userMessage: TextView = view.findViewById(R.id.message)
-        val timestamp: TextView = view.findViewById(R.id.timestamp)
+    // 아이템 개수 반환
+    override fun getItemCount(): Int {
+        return messageList.size
+    }
+
+    // 메시지 추가
+    fun addMessage(message: ChatItem) {
+        messageList.add(message)
+        notifyItemInserted(messageList.size - 1)
     }
 }

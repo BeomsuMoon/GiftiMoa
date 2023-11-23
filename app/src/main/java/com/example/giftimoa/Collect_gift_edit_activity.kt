@@ -5,6 +5,8 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -96,8 +98,28 @@ class Collect_gift_edit_activity : AppCompatActivity() {
         DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
             val selectedDate = Calendar.getInstance()
             selectedDate.set(selectedYear, selectedMonth, selectedDay)
-            val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate.time)
-            binding.editEffectiveDate.setText(date)
+
+            // 현재 날짜와 선택한 날짜를 비교
+            if (selectedDate.before(calendar)) {
+                // 선택한 날짜가 현재 날짜보다 이전이면 다이얼로그를 표시하고 effectiveDate를 비웁니다.
+                val builder = AlertDialog.Builder(this)
+                val inflater = layoutInflater
+                val dialogLayout = inflater.inflate(com.example.giftimoa.R.layout.dialog_gifticon_date_cancle, null)
+                builder.setView(dialogLayout)
+                val dialog = builder.create()
+                dialog.setOnShowListener {
+                    val okButton = dialog.findViewById<TextView>(com.example.giftimoa.R.id.btn_ok)
+                    okButton?.setOnClickListener {
+                        dialog.dismiss()
+                        binding.editEffectiveDate.setText("")
+                    }
+                }
+                dialog.show()
+            } else {
+                // 선택한 날짜가 현재 날짜보다 이후이면 effectiveDate를 설정합니다.
+                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate.time)
+                binding.editEffectiveDate.setText(date)
+            }
         }, year, month, day).show()
     }
 }

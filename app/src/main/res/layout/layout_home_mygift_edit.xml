@@ -127,28 +127,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <View
-            android:layout_width="0.1dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="44dp"
-            android:layout_marginTop="15dp"
-            android:background="@color/black" />
-        <!--상품 찜 -->
-        <ImageView
-            android:id="@+id/favorite_clk"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="14dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_favorite_outline" />
 
         <!--기프티콘 가격-->
         <TextView
             android:id="@+id/text_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="53dp"
+            android:layout_marginLeft="13dp"
             android:layout_marginTop="8dp"
             android:text="99,000원"
             android:textColor="@color/black"
@@ -159,7 +144,7 @@
             android:id="@+id/text_expiration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="53dp"
+            android:layout_marginLeft="13dp"
             android:layout_marginTop="29dp"
             android:text="스타벅스"
             android:textColor="@color/black"
