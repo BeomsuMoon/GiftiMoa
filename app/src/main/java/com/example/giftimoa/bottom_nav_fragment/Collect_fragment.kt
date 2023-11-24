@@ -107,6 +107,10 @@ class Collect_fragment : Fragment() {
             }
         }
 
+        // GiftViewModel 초기화
+        giftViewModel = ViewModelProvider(requireActivity()).get(Gificon_ViewModel::class.java)
+
+            // GiftViewModel의 giftList를 관찰하여 데이터가 변경될 때마다 화면 갱신
         giftViewModel.collectGifts.observe(viewLifecycleOwner, { gifts ->
             recyclerViewCollectGiftAdapter.setGiftList(gifts.toMutableList())
             recyclerViewCollectGiftAdapter.notifyDataSetChanged()

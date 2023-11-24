@@ -11,61 +11,14 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.giftimoa.R
 import com.example.giftimoa.Collect_Utils
+import com.example.giftimoa.R
 import com.example.giftimoa.dto.Collect_Gift
 
-class RecyclerViewCollectGiftAdapter constructor(
+class UpdateAndRefreshAdapter(
     private var giftList: MutableList<Collect_Gift>,
-    private val itemClickListener: (Collect_Gift) -> Unit
-) : RecyclerView.Adapter<RecyclerViewCollectGiftAdapter.MyViewHolder>() {
-
-
-    fun setGiftList(newList: List<Collect_Gift>) {
-        giftList.clear()
-        giftList.addAll(newList)
-        notifyDataSetChanged()
-    }
-
-    fun addGift(collectGift: Collect_Gift) {
-        giftList.add(collectGift)
-        notifyItemInserted(giftList.size - 1)
-    }
-
-    fun updateGift(updatedGift: Collect_Gift) {
-        val existingGift = giftList.find { it.ID == updatedGift.ID }
-
-        if (existingGift != null) {
-            // 아이템이 이미 목록에 있는 경우
-            val position = giftList.indexOf(existingGift)
-            giftList[position] = updatedGift
-            notifyItemChanged(position)
-        } else {
-            // 아이템이 목록에 없는 경우
-            // 추가할지 여부를 물어본 후 추가하거나 무시할 수 있습니다.
-            // 여기서는 추가하도록 하였습니다.
-            addGift(updatedGift)
-        }
-    }
-
-    fun deleteGift(gift: Collect_Gift) {
-        val position = giftList.indexOf(gift)
-        if (position != -1) {
-            giftList.removeAt(position)
-            notifyItemRemoved(position)
-        } else {
-
-        }
-    }
-
-
-
-    // 새로운 데이터를 설정하는 메서드 추가
-    fun setGiftListFromExternalDB(gifts: List<Collect_Gift>) {
-        this.giftList.clear() // 기존 목록 비우기
-        this.giftList.addAll(gifts) // 외부 DB에서 가져온 목록으로 채우기
-        notifyDataSetChanged() // 어댑터에 데이터가 변경되었음을 알림
-    }
+    private val updateListener: (Collect_Gift) -> Unit
+) : RecyclerView.Adapter<UpdateAndRefreshAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -90,15 +43,25 @@ class RecyclerViewCollectGiftAdapter constructor(
             .into(holder.giftImageView)
 
         holder.cardView.setOnClickListener {
-            itemClickListener(gift)  // 클릭 이벤트가 발생하면 itemClickListener를 호출
+            updateListener(gift)  // 업데이트 이벤트가 발생하면 itemClickListener를 호출
         }
     }
+
 
     override fun getItemCount(): Int {
         return giftList.size
     }
 
+    fun updateGift(updatedGift: Collect_Gift) {
+        val position = giftList.indexOfFirst { it.ID == updatedGift.ID }
+        if (position != -1) {
+            giftList[position] = updatedGift
+            notifyItemChanged(position)
 
+            // 업데이트된 기프트를 처리하는 로직을 여기에 추가
+            updateListener(updatedGift)
+        }
+    }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tv_brand: TextView = itemView.findViewById(R.id.tv_brand)

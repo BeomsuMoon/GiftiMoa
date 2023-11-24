@@ -23,6 +23,7 @@ class Gificon_ViewModel(application: Application) : AndroidViewModel(application
     val collectGifts: LiveData<List<Collect_Gift>> get() = _collectGifts
 
     private val _homeGifts = MutableLiveData<List<Home_gift>>(emptyList())
+
     val homeGifts: LiveData<List<Home_gift>> get() = _homeGifts
 
     // 새로운 기프트 추가
@@ -32,13 +33,20 @@ class Gificon_ViewModel(application: Application) : AndroidViewModel(application
         _collectGifts.value = currentGifts
     }
 
-    // 기프트 업데이트
-    fun updateGift(gift: Collect_Gift) {
-        val currentGifts = _collectGifts.value?.toMutableList() ?: mutableListOf()
-        val index = currentGifts.indexOfFirst { it.ID == gift.ID }
-        if (index != -1) {
-            currentGifts[index] = gift
-            _collectGifts.value = currentGifts
+    private val _giftList = MutableLiveData<List<Collect_Gift>>()
+    val giftList: LiveData<List<Collect_Gift>> get() = _giftList
+
+    fun setGiftList(gifts: List<Collect_Gift>) {
+        _giftList.value = gifts
+    }
+
+    fun updateGift(updatedGift: Collect_Gift) {
+        val currentList = _giftList.value.orEmpty().toMutableList()
+        val position = currentList.indexOfFirst { it.ID == updatedGift.ID }
+        if (position != -1) {
+            currentList[position] = updatedGift
+            _giftList.value = currentList
+
         }
     }
 
@@ -112,14 +120,14 @@ class Gificon_ViewModel(application: Application) : AndroidViewModel(application
     }
 
     // 홈 기프트 업데이트
-    fun updateGift(gift: Home_gift) {
+  /*  fun updateGift(gift: Home_gift) {
         val currentGifts = _homeGifts.value?.toMutableList() ?: mutableListOf()
         val index = currentGifts.indexOfFirst { it.h_id == gift.h_id }
         if (index != -1) {
             currentGifts[index] = gift
             _homeGifts.value = currentGifts
         }
-    }
+    }*/
 
     // 홈 기프트 삭제
 /*    fun deleteGift(gift: Home_gift) {
