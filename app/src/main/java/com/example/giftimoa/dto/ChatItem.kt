@@ -6,5 +6,6 @@ data class ChatItem(
     //val profileImageUrl: String,
     //val nickname: String,
     val message: String,
-    val timestamp: Long
+    val timestamp: Long,
+    val isDate: Boolean = false
 )

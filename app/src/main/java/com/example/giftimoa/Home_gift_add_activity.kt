@@ -103,6 +103,9 @@ class Home_gift_add_activity : AppCompatActivity() {
 
         galleryClickEvent()
 
+        binding.fullscreenBtn.setOnClickListener {
+            showFullscreenImageDialog(h_imageUrl)
+        }
         binding.textEffectiveDate.setOnClickListener {
             showDatePickerDialog()
         }
@@ -146,11 +149,7 @@ class Home_gift_add_activity : AppCompatActivity() {
                 }
             } else {
                 // If imageUrl is not empty show the image in fullscreen, else load image
-                if (h_imageUrl.isNotEmpty()) {
-                    showFullscreenImageDialog(h_imageUrl)
-                } else {
-                    loadImage()
-                }
+                loadImage()
             }
         })
     }

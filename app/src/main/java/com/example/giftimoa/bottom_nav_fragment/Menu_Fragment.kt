@@ -268,11 +268,12 @@ class Menu_Fragment : Fragment() {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("giftName", gifticon.giftName)
         }
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE or 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, gifticon.ID, intent, PendingIntent.FLAG_IMMUTABLE or 0)
 
         // String 형식의 effectiveDate를 Date 형식으로 변환합니다.
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val gifticonEffectiveDate: Date = sdf.parse(gifticon.effectiveDate)
+
 
         // SharedPreferences에서 알림 시간과 주기를 불러옵니다.
         val alarmHour = time?.split(":")?.get(0)?.toInt() ?: 0
@@ -300,7 +301,7 @@ class Menu_Fragment : Fragment() {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("giftName", gifticon.giftName)
         }
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE or 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, gifticon.ID, intent, PendingIntent.FLAG_IMMUTABLE or 0)
 
         // String 형식의 effectiveDate를 Date 형식으로 변환합니다.
         val sdf = SimpleDateFormat("yyyy-MM-dd")

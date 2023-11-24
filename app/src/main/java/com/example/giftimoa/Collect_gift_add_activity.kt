@@ -79,6 +79,10 @@ class Collect_gift_add_activity : AppCompatActivity() {
         // 갤러리 이미지 클릭 이벤트 설정
         galleryClickEvent()
 
+        binding.fullscreenBtn.setOnClickListener {
+            showFullscreenImageDialog(imageUrl)
+        }
+
         // 효력 날짜 선택 다이얼로그 표시
         binding.textEffectiveDate.setOnClickListener {
             showDatePickerDialog()
@@ -125,11 +129,7 @@ class Collect_gift_add_activity : AppCompatActivity() {
                 }
             } else {
                 // 이미지 URL이 비어 있지 않으면 이미지를 풀 스크린으로 표시하고, 그렇지 않으면 이미지를 로드합니다.
-                if (imageUrl.isNotEmpty()) {
-                    showFullscreenImageDialog(imageUrl)
-                } else {
-                    loadImage()
-                }
+                loadImage()
             }
         }
     }

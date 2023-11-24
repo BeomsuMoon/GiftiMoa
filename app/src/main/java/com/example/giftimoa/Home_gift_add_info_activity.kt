@@ -65,6 +65,8 @@ class Home_gift_add_info_activity : AppCompatActivity() {
 
         binding.chatBtn.setOnClickListener {
             val intent = Intent(this@Home_gift_add_info_activity, Chatting_room_activity::class.java)
+            intent.putExtra("nickname", gift.nickname)  // 닉네임을 인텐트에 추가
+            intent.putExtra("brand", gift.h_brand)
             startActivity(intent)
         }
     }
