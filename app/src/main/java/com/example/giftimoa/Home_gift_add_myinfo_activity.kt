@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,10 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
-import com.example.giftimoa.databinding.LayoutHomeGiftAddInfoBinding
 import com.example.giftimoa.databinding.LayoutHomeMygiftEditBinding
 import com.example.giftimoa.dto.Home_gift
-import com.example.giftimoa.dto.favorite
 import java.text.NumberFormat
 import java.util.Locale
 

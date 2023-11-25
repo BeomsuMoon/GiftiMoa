@@ -1,12 +1,16 @@
 package com.example.giftimoa
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.adpater_list.MyGifticonAdapter
 import com.example.giftimoa.adpater_list.RecyclerViewCollectGiftAdapter
 import com.example.giftimoa.adpater_list.RecyclerViewHomeGiftAdapter
@@ -19,11 +23,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class Menu_Mygifticon_activity : AppCompatActivity() {
-
     private lateinit var binding: LayoutMenuMygifticonBinding
-    private lateinit var gift: Home_gift
     private lateinit var giftAdapter: MyGifticonAdapter
 
+    // ViewModel 초기화
+    private val giftViewModel: Gificon_ViewModel by lazy {
+        ViewModelProvider(this).get(Gificon_ViewModel::class.java)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 바인딩 초기화
@@ -35,6 +41,7 @@ class Menu_Mygifticon_activity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "내 기프티콘"
+
         // 사용자 이메일 가져오기
         val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("user_email", "")
@@ -52,7 +59,26 @@ class Menu_Mygifticon_activity : AppCompatActivity() {
         getUserGifts(userEmail)
     }
 
-    private fun getUserGifts(userEmail: String?) {
+    override fun onResume() {
+        super.onResume()
+
+        // 코루틴을 사용하여 fetchGiftListFromRepository 호출
+        lifecycleScope.launch {
+            val sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+            val userEmail = sharedPreferences.getString("user_email", null)
+            if (userEmail != null && userEmail.isNotEmpty()) {
+                // giftViewModel 사용
+                giftViewModel.fetchHomeGiftListFromRepository(applicationContext, userEmail)
+                // 데이터 가져오고 나서 RecyclerView 업데이트
+                getUserGifts(userEmail)
+            } else {
+                Log.d("tests", "tests : $userEmail")
+            }
+        }
+    }
+
+    // 외부에서 직접 호출할 수 있도록 합니다.
+    fun getUserGifts(userEmail: String?) {
         // 코루틴을 사용하여 백그라운드에서 데이터 가져오기
         lifecycleScope.launch(Dispatchers.IO) {
             try {
