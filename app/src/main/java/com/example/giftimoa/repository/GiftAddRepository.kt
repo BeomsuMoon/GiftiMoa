@@ -194,7 +194,7 @@ class GiftAddRepository(private val context: Context) {
     suspend fun deleteGiftFromServer(ID: Int) {
         try {
             // 기프트 삭제를 위한 URL 생성
-            val url = "http://3.35.110.246:3306/deleteGift?ID=$ID"
+            val url = "http://3.35.110.246:3306/deletehomeGift?ID=$ID"
             val request = Request.Builder()
                 .url(url)
                 .delete()
@@ -216,6 +216,38 @@ class GiftAddRepository(private val context: Context) {
                 val currentList = _giftList.value.orEmpty()
                 val newList = currentList.filter { it.ID != ID }
                 _giftList.postValue(newList)
+            }
+        } catch (e: Exception) {
+            Log.e("GiftAddRepository", "Exception: ${e.message}", e)
+            throw IOException("Failed to delete gift from the server")
+        }
+    }
+
+    suspend fun deletehomeGiftFromServer(h_id: Int) {
+        try {
+            // 기프트 삭제를 위한 URL 생성
+            val url = "http://3.35.110.246:3306/deletehomeGift/$h_id"
+            val request = Request.Builder()
+                .url(url)
+                .delete()
+                .build()
+
+            val client = OkHttpClient.Builder()
+                .build()
+
+            val response = client.newCall(request).execute()
+
+            if (!response.isSuccessful) {
+                // 서버 오류 처리
+                val errorBody = response.body?.string()
+                Log.e("GiftAddRepository", "Server error: $errorBody")
+                throw IOException("Failed to delete gift from the server")
+            } else {
+                // 성공적으로 삭제된 경우 로그 기록
+                Log.d("tlqkf1", "$h_id")
+                val currentList = _homeGifts.value.orEmpty()
+                val newList = currentList.filter { it.h_id != h_id }
+                _homeGifts.postValue(newList)
             }
         } catch (e: Exception) {
             Log.e("GiftAddRepository", "Exception: ${e.message}", e)

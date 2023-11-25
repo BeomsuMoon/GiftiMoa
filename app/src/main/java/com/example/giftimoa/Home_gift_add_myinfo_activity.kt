@@ -120,7 +120,7 @@ class Home_gift_add_myinfo_activity : AppCompatActivity() {
                 AlertDialog.Builder(this)
                     .setMessage("기프티콘을 삭제하시겠습니까?")
                     .setPositiveButton("확인") { _, _ ->
-                        //giftViewModel.deleteGift(gift)
+                        giftViewModel.deletehomeGift(gift)
                         finish()
                     }
                     .setNegativeButton("취소", null)

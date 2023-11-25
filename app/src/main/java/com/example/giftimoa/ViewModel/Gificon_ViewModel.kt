@@ -126,6 +126,30 @@ class Gificon_ViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun deletehomeGift(homeGift: Home_gift) {
+        viewModelScope.launch {
+            try {
+                // 서버에서 기프트 삭제
+                withContext(Dispatchers.IO) {
+                    GiftAddRepository(context).deletehomeGiftFromServer(homeGift.h_id)
+                }
+
+                // 로컬 LiveData에서도 삭제
+                val currentGifts = _homeGifts.value?.toMutableList() ?: mutableListOf()
+                currentGifts.removeIf { it.h_id == homeGift.h_id }
+
+                _homeGifts.value = currentGifts
+
+            } catch (e: Exception) {
+                Log.e("Gificon_ViewModel", "Error deleting gift: ${e.message}", e)
+                // 오류 처리
+            }
+        }
+    }
+
+
     // 새로운 홈 기프트 추가
     fun addGift(gift: Home_gift) {
         val currentGifts = _homeGifts.value?.toMutableList() ?: mutableListOf()
