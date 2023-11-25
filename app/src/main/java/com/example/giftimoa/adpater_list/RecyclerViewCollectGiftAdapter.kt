@@ -2,6 +2,7 @@ package com.example.giftimoa.adpater_list
 
 import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,16 +21,55 @@ class RecyclerViewCollectGiftAdapter constructor(
     private val itemClickListener: (Collect_Gift) -> Unit
 ) : RecyclerView.Adapter<RecyclerViewCollectGiftAdapter.MyViewHolder>() {
 
+/*    fun removeLastGift() {
+        if (giftList.isNotEmpty()) {
+            giftList.removeAt(giftList.size - 1)
+            notifyItemRemoved(giftList.size)
+        }
+    }*/
 
     fun setGiftList(newList: List<Collect_Gift>) {
         giftList.clear()
         giftList.addAll(newList)
         notifyDataSetChanged()
     }
-
     fun addGift(collectGift: Collect_Gift) {
         giftList.add(collectGift)
         notifyItemInserted(giftList.size - 1)
+    }
+
+
+    fun removeLastGift() {
+        if (giftList.isNotEmpty()) {
+            val lastGift = giftList.last()
+            val lastIndex = giftList.indexOf(lastGift)
+            giftList.removeAt(lastIndex)
+            notifyItemRemoved(lastIndex)
+        }
+    }
+    /*fun removeLastGift() {
+        if (giftList.isNotEmpty()) {
+            val lastPosition = giftList.size - 1
+            giftList.removeAt(lastPosition)
+            notifyItemRemoved(lastPosition)
+        }
+    }*/
+
+/*
+    fun addGift(collectGift: Collect_Gift) {
+        if (giftList.isEmpty()) {
+            giftList.clear()
+            notifyDataSetChanged()
+            return
+        }else{
+        giftList.add(collectGift)
+        notifyItemInserted(giftList.size - 1)
+        }
+    }
+*/
+
+    fun contains(gift: Collect_Gift): Boolean {
+        return giftList.contains(gift)
     }
 
     fun updateGift(updatedGift: Collect_Gift) {
@@ -97,7 +137,6 @@ class RecyclerViewCollectGiftAdapter constructor(
     override fun getItemCount(): Int {
         return giftList.size
     }
-
 
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

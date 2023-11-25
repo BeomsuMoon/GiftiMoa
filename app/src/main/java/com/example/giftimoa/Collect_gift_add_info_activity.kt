@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -82,6 +83,8 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean { // 액션바 뒤로가기
         onBackPressed()
+        Log.d("kimjyeongki2 : ","$gift")
+
         return true
     }
 

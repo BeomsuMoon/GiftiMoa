@@ -21,6 +21,11 @@ data class Collect_Gift(
         return ID == other.ID
     }
 
+    fun isEmpty(): Boolean {
+        return ID == 0 && giftName.isEmpty() && effectiveDate.isEmpty() && barcode.isEmpty()
+                && usage.isEmpty() && imageUrl.isEmpty() && state == 0
+    }
+
 }
 data class Badge(
     val content: String,

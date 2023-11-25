@@ -267,7 +267,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_solid"
                         android:layout_marginTop="20dp"
-                        android:text="사 용 완 료"/>
+                        android:text="수 정 완 료"/>
                 </LinearLayout>
 
             </LinearLayout>

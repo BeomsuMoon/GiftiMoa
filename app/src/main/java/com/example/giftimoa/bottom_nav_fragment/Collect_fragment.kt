@@ -49,6 +49,21 @@ class Collect_fragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // 코루틴을 사용하여 fetchGiftListFromRepository 호출
+        viewLifecycleOwner.lifecycleScope.launch {
+            val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+            val userEmail = sharedPreferences.getString("user_email", null)
+            if (userEmail != null && userEmail.isNotEmpty()) {
+                giftViewModel.fetchGiftListFromRepository(requireContext(), userEmail)
+            } else {
+                Log.d("tests", "tests : $userEmail")
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -104,26 +119,42 @@ class Collect_fragment : Fragment() {
                 giftViewModel.fetchGiftListFromRepository(requireContext(), userEmail)
             } else {
                 Log.d("test", "test : $userEmail")
+                noGifticonTextView1.visibility = View.VISIBLE
+                noGifticonTextView2.visibility = View.VISIBLE
             }
         }
-
         // GiftViewModel 초기화
         giftViewModel = ViewModelProvider(requireActivity()).get(Gificon_ViewModel::class.java)
 
-            // GiftViewModel의 giftList를 관찰하여 데이터가 변경될 때마다 화면 갱신
+        // GiftViewModel의 giftList를 관찰하여 데이터가 변경될 때마다 화면 갱신
+        // GiftViewModel의 giftList를 관찰하여 데이터가 변경될 때마다 화면 갱신
         giftViewModel.collectGifts.observe(viewLifecycleOwner, { gifts ->
             recyclerViewCollectGiftAdapter.setGiftList(gifts.toMutableList())
             recyclerViewCollectGiftAdapter.notifyDataSetChanged()
 
-            if (gifts.isEmpty()) {
+            if (gifts.isNullOrEmpty()) {
                 noGifticonTextView1.visibility = View.VISIBLE
                 noGifticonTextView2.visibility = View.VISIBLE
             } else {
                 noGifticonTextView1.visibility = View.GONE
                 noGifticonTextView2.visibility = View.GONE
             }
-        })
 
+            // 마지막으로 삭제된 경우를 체크
+            val lastGift = gifts.lastOrNull()
+            val lastIndex = if (lastGift != null) gifts.indexOf(lastGift) +1 else 0
+
+            if (lastGift != null) {
+                if (lastIndex == 0 || !recyclerViewCollectGiftAdapter.contains(lastGift)) {
+
+                    recyclerViewCollectGiftAdapter.removeLastGift()
+                    noGifticonTextView1.visibility = View.VISIBLE
+                    noGifticonTextView2.visibility = View.VISIBLE
+                }
+                    //recyclerViewCollectGiftAdapter.removeLastGift()
+
+            }
+        })
     }
 
     private fun setupRecyclerView() {
@@ -132,7 +163,6 @@ class Collect_fragment : Fragment() {
             intent.putExtra("gift", gift)
             startActivity(intent)
         }
-        recyclerView.adapter = recyclerViewCollectGiftAdapter
     }
 
 

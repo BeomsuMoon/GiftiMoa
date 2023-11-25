@@ -213,6 +213,9 @@ class GiftAddRepository(private val context: Context) {
             } else {
                 // 성공적으로 삭제된 경우 로그 기록
                 Log.d("tlqkf1", "$ID")
+                val currentList = _giftList.value.orEmpty()
+                val newList = currentList.filter { it.ID != ID }
+                _giftList.postValue(newList)
             }
         } catch (e: Exception) {
             Log.e("GiftAddRepository", "Exception: ${e.message}", e)

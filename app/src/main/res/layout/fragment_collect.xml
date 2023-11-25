@@ -43,7 +43,7 @@
         android:textStyle="bold"
         android:layout_gravity="center"/>
 
-        <androidx.recyclerview.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_Gift_Collect"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -52,7 +52,7 @@
         android:paddingEnd="8dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
-        tools:listitem="@layout/item_collect_giticard"/>
+        tools:listitem="@layout/item_collect_giticard" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_btn"

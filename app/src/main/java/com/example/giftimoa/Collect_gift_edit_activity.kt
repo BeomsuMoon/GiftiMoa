@@ -140,12 +140,12 @@ class Collect_gift_edit_activity : AppCompatActivity() {
                 // 서버 업데이트 요청
                 val requestBody = json.toRequestBody("application/json".toMediaType())
                 val request = Request.Builder()
-                    .url("http://3.35.110.246:3306/update_gift?id=${updatedGift.ID}")
+                    .url("http://3.35.110.246:3306/update_gift/${updatedGift.ID}")
                     .put(requestBody)
                     .build()
 
                 val response = client.newCall(request).execute()
-                Log.d("kimjyeongki1","${updatedGift.ID}")
+                Log.d("kimjyeongki1", "${updatedGift.ID}")
 
                 if (response.isSuccessful) {
                     // 서버 업데이트 성공
@@ -160,6 +160,7 @@ class Collect_gift_edit_activity : AppCompatActivity() {
             }
         }
     }
+
 
 
     private fun showDatePickerDialog() {

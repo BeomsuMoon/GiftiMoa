@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -38,6 +39,9 @@ class Gificon_ViewModel(application: Application) : AndroidViewModel(application
 
     fun setGiftList(gifts: List<Collect_Gift>) {
         _giftList.value = gifts
+    }
+    fun updateGiftList(newGiftList: List<Collect_Gift>) {
+        _collectGifts.value = newGiftList
     }
 
     fun updateGift(updatedGift: Collect_Gift) {
@@ -81,10 +85,13 @@ class Gificon_ViewModel(application: Application) : AndroidViewModel(application
                 _collectGifts.postValue(gifts)
             } catch (e: Exception) {
                 Log.e("Gificon_ViewModel", "Error fetching data: ${e.message}", e)
+                //recyclerViewCollectGiftAdapter.removeLastGift()
                 // 오류 처리
             }
         }
     }
+
+
 
     // 기프트 삭제
     @RequiresApi(Build.VERSION_CODES.N)
