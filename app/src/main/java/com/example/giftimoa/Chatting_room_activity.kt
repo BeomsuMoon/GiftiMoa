@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -13,16 +14,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.giftimoa.adpater_list.RecyclerViewChattingRoomAdapter
 import com.example.giftimoa.databinding.LayoutChattingRoomBinding
-import com.example.giftimoa.dto.ChatItem
-import com.google.android.material.internal.ViewUtils.hideKeyboard
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import io.socket.client.IO
+import io.socket.client.Socket
+
+import io.socket.emitter.Emitter
+
+import java.net.URISyntaxException
+
 
 class Chatting_room_activity : AppCompatActivity() {
 
     private lateinit var binding: LayoutChattingRoomBinding
-
+    private lateinit var socket: Socket
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,12 +44,20 @@ class Chatting_room_activity : AppCompatActivity() {
             hideKeyboard()
             false
         }
+
+        try{
+            socket = IO.socket(SOCKET_URL)
+            initMain()
+        }catch (e: URISyntaxException){
+            e.printStackTrace()
+        }
+
         // 어댑터 초기화
         val adapter = RecyclerViewChattingRoomAdapter()
         binding.rvChattingRoom.adapter = adapter
 
         // 보내기 버튼 클릭 이벤트
-        binding.button.setOnClickListener {
+       /* binding.button.setOnClickListener {
             val messageText = binding.messageText.text.toString()
 
             // 메시지가 비어있지 않은 경우에만 메시지를 추가
@@ -65,7 +76,22 @@ class Chatting_room_activity : AppCompatActivity() {
                 // 입력 필드 초기화
                 binding.messageText.text.clear()
             }
+        }*/
+    }
+
+    private fun initMain() {
+        socket.on(CHAT_KEYS.NEW_MESSAGE, object : Emitter.Listener {
+            override fun call(vararg args: Any?){
+                Log.d("OnNewMessageDebug","${args[0]}")
+            }
+        })
+
+        binding.button.setOnClickListener {
+            socket.emit(CHAT_KEYS.NEW_MESSAGE,"Hello")
         }
+    }
+    private object CHAT_KEYS {
+        const val NEW_MESSAGE = "new_message"
     }
 
     private fun hideKeyboard() {
@@ -102,5 +128,17 @@ class Chatting_room_activity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean { // 액션바 뒤로가기
         onBackPressed()
         return true
+    }
+
+    companion object{
+        private const val SOCKET_URL = "http://10.0.2.2:3000/"
+    }
+
+    override fun onDestroy() {
+        if(this::socket.isInitialized){
+            socket.disconnect()
+            socket.off(CHAT_KEYS.NEW_MESSAGE)
+        }
+        super.onDestroy()
     }
 }

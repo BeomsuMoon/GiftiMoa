@@ -23,6 +23,7 @@ class Menu_Mygifticon_activity : AppCompatActivity() {
     private lateinit var binding: LayoutMenuMygifticonBinding
     private lateinit var gift: Home_gift
     private lateinit var giftAdapter: MyGifticonAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 바인딩 초기화
@@ -44,7 +45,6 @@ class Menu_Mygifticon_activity : AppCompatActivity() {
             intent.putExtra("gift", gift) // 선택한 기프트 정보를 인텐트에 추가
             startActivity(intent)
         }
-        binding.rvFavorite.layoutManager = LinearLayoutManager(this)
         binding.rvFavorite.layoutManager = GridLayoutManager(this, 2)
         binding.rvFavorite.adapter = giftAdapter
 

@@ -26,13 +26,16 @@
     <receiver android:name=".AlarmReceiver" />
 
         <activity
+            android:name=".Home_category_brand_list"
+            android:exported="true"/>
+        <activity
+            android:name=".Chatting_room_activity"
+            android:exported="true"/>
+        <activity
             android:name=".Home_gift_edit"
             android:exported="true"/>
         <activity
             android:name=".Home_gift_add_myinfo_activity"
-            android:exported="true"/>
-        <activity
-            android:name=".Chatting_room_activity"
             android:exported="true"/>
         <activity
             android:name=".Menu_profile_edit"

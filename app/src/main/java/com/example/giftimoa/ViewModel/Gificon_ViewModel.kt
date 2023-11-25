@@ -133,4 +133,18 @@ class Gificon_ViewModel(application: Application) : AndroidViewModel(application
     fun getFavoriteGifts(): LiveData<List<Home_gift>> {
         return homeGifts
     }
+
+    fun fetchBrandGifts(brandName: String) {
+        viewModelScope.launch {
+            try {
+                val gifts = withContext(Dispatchers.IO) {
+                    GiftAddRepository(context).fetchBrandGifts(brandName)
+                }
+
+                _homeGifts.postValue(gifts)
+            } catch (e: Exception) {
+                Log.e("Gificon_ViewModel", "Error fetching brand gifts: ${e.message}", e)
+            }
+        }
+    }
 }

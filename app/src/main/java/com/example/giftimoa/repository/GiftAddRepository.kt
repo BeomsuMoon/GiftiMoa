@@ -6,12 +6,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.giftimoa.dto.Collect_Gift
 import com.example.giftimoa.dto.Home_gift
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
+import java.io.BufferedReader
 import java.io.IOException
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 class GiftAddRepository(private val context: Context) {
 
@@ -246,4 +254,22 @@ class GiftAddRepository(private val context: Context) {
             throw IOException("서버에서 데이터를 가져오지 못했습니다")
         }
     }
+
+    suspend fun fetchBrandGifts(brandName: String): List<Home_gift> = withContext(Dispatchers.IO) {
+        val url = URL("http://3.35.110.246:3306/Categorybrand?brand=$brandName")
+        val connection = url.openConnection() as HttpURLConnection
+
+        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+            val inputStream = connection.inputStream
+            val reader = BufferedReader(InputStreamReader(inputStream))
+
+            val response = reader.use { it.readText() }
+            val gson = Gson()
+            val giftType = object : TypeToken<List<Home_gift>>() {}.type
+            gson.fromJson<List<Home_gift>>(response, giftType)
+        } else {
+            emptyList()
+        }
+    }
+
 }

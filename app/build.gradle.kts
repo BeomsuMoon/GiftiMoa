@@ -53,6 +53,7 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.8.8")
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    implementation("androidx.fragment:fragment-ktx:1.5.5")
 
     //갤러리 사진 가져오는 라이브러리 기타 등등..
     implementation("com.github.bumptech.glide:glide:4.16.0")
