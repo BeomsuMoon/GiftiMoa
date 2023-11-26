@@ -19,6 +19,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import com.google.gson.JsonParser
+import java.sql.Types.NULL
 
 class SignUp_activity : AppCompatActivity() {
     private lateinit var emailEditText: TextInputEditText
@@ -28,8 +29,6 @@ class SignUp_activity : AppCompatActivity() {
     private lateinit var phoneNumberEditText: TextInputEditText
     private lateinit var nicknameEditText: TextInputEditText
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_sign_up)
@@ -38,7 +37,6 @@ class SignUp_activity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.title = "회원가입"
-
 
         val signUpButton: Button = findViewById(R.id.signup_button)
         emailEditText = findViewById(R.id.ID_textField_editText)
@@ -73,7 +71,6 @@ class SignUp_activity : AppCompatActivity() {
                     val response: Response = withContext(Dispatchers.IO) {
                         OkHttpClient().newCall(request).execute()
                     }
-
                     if (response.isSuccessful) {
                         val responseData = response.body?.string()
                         val jsonObject = JsonParser().parse(responseData).asJsonObject
@@ -102,7 +99,6 @@ class SignUp_activity : AppCompatActivity() {
                 }
             }
         }
-
 
         val phoneDoubleCheckButton: Button = findViewById(R.id.phone_double_check)
         phoneDoubleCheckButton.setOnClickListener {
@@ -154,9 +150,6 @@ class SignUp_activity : AppCompatActivity() {
             }
         }
 
-
-
-
         //이메일 값 전달받기ㅁㄴ
         val receivedEmail = intent.getStringExtra("email_text")
         if (receivedEmail != null) {
@@ -170,13 +163,14 @@ class SignUp_activity : AppCompatActivity() {
                 val name = nameEditText.text.toString()
                 val phoneNumber = phoneNumberEditText.text.toString()
                 val username = nicknameEditText.text.toString()
-                val url = "http://3.35.110.246:3306/signup3"
+                val url = "http://3.35.110.246:3306/signup_node"
                 val json = JsonObject().apply {
                     addProperty("email", email)
                     addProperty("password", password)
                     addProperty("phone_number", phoneNumber)
                     addProperty("name", name)
                     addProperty("username", username)
+                    addProperty("Profile_picture" , NULL)
                 }
                 val mediaType = "application/json; charset=utf-8".toMediaType()
                 val requestBody = json.toString().toRequestBody(mediaType)
@@ -211,9 +205,6 @@ class SignUp_activity : AppCompatActivity() {
             }
         }
     }
-
-
-
 
     private fun setUseableEditText(et: EditText, useable: Boolean) {
         et.isClickable = useable
@@ -258,7 +249,6 @@ class SignUp_activity : AppCompatActivity() {
         }
         return true
     }
-
 
     private fun isValidEmail(email: String): Boolean {
         val emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}"

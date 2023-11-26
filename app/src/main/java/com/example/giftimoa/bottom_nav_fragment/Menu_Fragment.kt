@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,10 +27,13 @@ import com.example.giftimoa.databinding.DialogNumpickBinding
 import com.example.giftimoa.databinding.DialogYcBtnBinding
 import com.example.giftimoa.databinding.FragmentMenuBinding
 import com.example.giftimoa.dto.Collect_Gift
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -184,9 +188,81 @@ class Menu_Fragment : Fragment() {
         }
         //회원탈퇴
         binding.tvWithdraw.setOnClickListener {
+            // 탈퇴 버튼 클릭 시 수행될 내용
+            val userEmail = getUserEmailFromSharedPreferences()
 
+            if (userEmail != null) {
+                getemailFromServerandDeleteMember(userEmail)
+            } else {
+                Toast.makeText(requireContext(), "이메일 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+    // SharedPreferences에서 이메일을 가져오는 함수
+    private fun getUserEmailFromSharedPreferences(): String? {
+        val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("user_email", null)
+    }
 
+    // 서버에서 이메일 확인 및 회원 탈퇴 요청을 보내는 함수
+    private fun getemailFromServerandDeleteMember(userEmail: String?) {
+        val client = OkHttpClient()
+        val url = "http://3.35.110.246:3306/delete_member_user"
+
+        if (!userEmail.isNullOrBlank()) {
+            val json = """{"email": "$userEmail"}"""
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            val requestBody = json.toRequestBody(mediaType)
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    activity?.runOnUiThread {
+                        Toast.makeText(requireContext(), "회원탈퇴 실패", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                    val responseText = response.body?.string()
+                    val jsonResponse = JSONObject(responseText)
+
+                    if (response.isSuccessful) {
+                        val message = jsonResponse.getString("message")
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
+                            if (message == "회원탈퇴가 성공적으로 처리되었습니다.") {
+                                // 인증 성공 시, 다음 단계로 이동 (예: Login_activity)
+                                val intent = Intent(requireContext(), Login_activity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
+
+                                // SharedPreferences에서 이메일 삭제
+                                removeUserEmailFromSharedPreferences()
+
+                                // 현재 액티비티를 종료하고 SignUp_activity로 이동
+                                requireActivity().finish()
+                            }
+                        }
+                    } else {
+                        val error = jsonResponse.getString("error")
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            })
+        }
+    }
+    // SharedPreferences에서 이메일을 삭제하는 함수
+    private fun removeUserEmailFromSharedPreferences() {
+        val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove("user_email")
+        editor.apply()
     }
 
     private fun getNicknameFromServer(userEmail: String?) {
