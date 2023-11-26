@@ -42,7 +42,7 @@ class Search_gift_activity : AppCompatActivity() {
                 6 -> "아이스크림"
                 7 -> "외식･분식"
                 8 -> "영화･엔터"
-                else -> "상품권"
+                else -> "기타"
             }
         }.attach()
 
@@ -61,7 +61,7 @@ class Search_gift_activity : AppCompatActivity() {
                     6 -> "아이스크림"
                     7 -> "외식･분식"
                     8 -> "영화･엔터"
-                    else -> "상품권"
+                    else -> "기타"
                 }
             }
         })

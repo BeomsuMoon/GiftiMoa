@@ -43,7 +43,7 @@ class Home_Fragment_List_Snack : Fragment() {
     }
 
     private fun prepareGiftListData() {
-        var gift = Search_Gift("에슐리", R.drawable.img_brand_ashley)
+        var gift = Search_Gift("애슐리", R.drawable.img_brand_ashley)
         giftList.add(gift)
         gift = Search_Gift("배달의민족", R.drawable.img_brand_bedalminjok)
         giftList.add(gift)
@@ -63,7 +63,26 @@ class Home_Fragment_List_Snack : Fragment() {
         giftList.add(gift)
         gift = Search_Gift("요기요", R.drawable.img_brand_yogiyo)
         giftList.add(gift)
-
+        gift = Search_Gift("VIPS", R.drawable.img_vips)
+        giftList.add(gift)
+        gift = Search_Gift("샐러디", R.drawable.img_salady)
+        giftList.add(gift)
+        gift = Search_Gift("죽이야기", R.drawable.img_zukstory)
+        giftList.add(gift)
+        gift = Search_Gift("죠스떡볶이", R.drawable.img_jawsfood)
+        giftList.add(gift)
+        gift = Search_Gift("청년다방", R.drawable.img_youngdabang)
+        giftList.add(gift)
+        gift = Search_Gift("역전우동0410", R.drawable.img_yuckjunnoddle)
+        giftList.add(gift)
+        gift = Search_Gift("뉴욕야시장", R.drawable.img_newyorkyasijang)
+        giftList.add(gift)
+        gift = Search_Gift("써브웨이", R.drawable.img_subway)
+        giftList.add(gift)
+        gift = Search_Gift("생활맥주", R.drawable.img_ssang_bir)
+        giftList.add(gift)
+        gift = Search_Gift("에그드랍", R.drawable.img_eggdrop)
+        giftList.add(gift)
 
         recyclerViewSearchGiftAdapter!!.notifyDataSetChanged()
     }

@@ -158,6 +158,7 @@ class Gificon_ViewModel(application: Application) : AndroidViewModel(application
     }
 
 
+    //카테고리
     fun fetchBrandGifts(brandName: String) {
         viewModelScope.launch {
             try {

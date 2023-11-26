@@ -247,7 +247,7 @@
                 android:layout_marginLeft="255dp"
                 android:layout_marginTop="133dp"
                 android:gravity="center"
-                android:text="영화"
+                android:text="영화･엔터"
                 android:textSize="10dp"
                 android:textStyle="bold" />
 
@@ -257,7 +257,7 @@
                 android:layout_marginLeft="330dp"
                 android:layout_marginTop="133dp"
                 android:gravity="center"
-                android:text="상품권"
+                android:text="기타"
                 android:textSize="10dp"
                 android:textStyle="bold" />
         </RelativeLayout>

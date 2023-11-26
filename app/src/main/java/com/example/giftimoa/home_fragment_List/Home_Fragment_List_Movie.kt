@@ -43,7 +43,7 @@ class Home_Fragment_List_Movie : Fragment() {
     }
 
     private fun prepareGiftListData() {
-        var gift = Search_Gift("CGV", R.drawable.img_brand_cgv)
+        var gift = Search_Gift("CGV", R.drawable.img_cgv)
         giftList.add(gift)
         gift = Search_Gift("교보문고", R.drawable.img_brand_gyubo)
         giftList.add(gift)
@@ -52,6 +52,16 @@ class Home_Fragment_List_Movie : Fragment() {
         gift = Search_Gift("메가박스", R.drawable.img_brand_megabox)
         giftList.add(gift)
         gift = Search_Gift("영풍문고", R.drawable.img_brand_yp_books)
+        giftList.add(gift)
+        gift = Search_Gift("컬쳐랜드", R.drawable.img_brand_cultureland)
+        giftList.add(gift)
+        gift = Search_Gift("해피머니", R.drawable.img_happymoney)
+        giftList.add(gift)
+        gift = Search_Gift("구글플레이", R.drawable.img_brand_google_giftcard)
+        giftList.add(gift)
+        gift = Search_Gift("씨네큐", R.drawable.img_cineq)
+        giftList.add(gift)
+        gift = Search_Gift("인생네컷", R.drawable.img_selfstudio)
         giftList.add(gift)
 
 

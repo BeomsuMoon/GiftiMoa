@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.example.giftimoa.Home_Utils
 import com.example.giftimoa.R
 import com.example.giftimoa.dto.Home_gift
+import java.text.NumberFormat
+import java.util.Locale
 
 class MyGifticonAdapter(
     private var myGiftList: MutableList<Home_gift>,
@@ -46,7 +48,8 @@ class MyGifticonAdapter(
 
         // 날짜 및 가격 문자열 생성
         val dateString = "${gift.h_effectiveDate}까지"
-        val priceString = "${gift.h_price}원"
+        val numberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
+        val priceString = "${numberFormat.format(gift.h_price.toInt())}원"
 
         // D-day 계산 및 배지 색상 설정
         val badge = Home_Utils.calDday(gift)

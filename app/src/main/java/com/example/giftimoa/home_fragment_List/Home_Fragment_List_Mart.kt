@@ -43,10 +43,27 @@ class Home_Fragment_List_Mart : Fragment() {
     }
 
     private fun prepareGiftListData() {
-        var gift = Search_Gift("공차", R.drawable.img_brand_gongcha)
+        var gift = Search_Gift("GS25", R.drawable.img_brand_gs25)
         giftList.add(gift)
-        gift = Search_Gift("공차", R.drawable.img_brand_gongcha)
+        gift = Search_Gift("CU", R.drawable.img_brand_cu)
         giftList.add(gift)
+        gift = Search_Gift("세븐일레븐", R.drawable.img_brand_seveneleven)
+        giftList.add(gift)
+        gift = Search_Gift("미니스톱", R.drawable.img_ministop)
+        giftList.add(gift)
+        gift = Search_Gift("이마트", R.drawable.img_brand_emart)
+        giftList.add(gift)
+        gift = Search_Gift("이마트24", R.drawable.img_emart24)
+        giftList.add(gift)
+        gift = Search_Gift("롯데마트", R.drawable.img_lottemart)
+        giftList.add(gift)
+        gift = Search_Gift("홈플러스", R.drawable.img_homeplus)
+        giftList.add(gift)
+        gift = Search_Gift("하이마트", R.drawable.img_himart)
+        giftList.add(gift)
+        gift = Search_Gift("GS슈퍼마켓(TheFRESH)", R.drawable.img_brand_gs_the_fresh)
+        giftList.add(gift)
+
 
 
         recyclerViewSearchGiftAdapter!!.notifyDataSetChanged()

@@ -43,19 +43,14 @@ class Home_Fragment_List_Giftcard : Fragment() {
     }
 
     private fun prepareGiftListData() {
-        var gift = Search_Gift("CJ ONE GIFTCARD", R.drawable.img_brand_cjgiftcard)
+        var gift = Search_Gift("CJ온스타일", R.drawable.img_brand_cjgiftcard)
         giftList.add(gift)
-        gift = Search_Gift("컬쳐랜드", R.drawable.img_brand_cultureland)
+        gift = Search_Gift("올리브영", R.drawable.img_oliveyoung)
         giftList.add(gift)
-        gift = Search_Gift("구글 기프트카드", R.drawable.img_brand_google_giftcard)
+        gift = Search_Gift("따릉이", R.drawable.img_ddarng)
         giftList.add(gift)
-        gift = Search_Gift("해피머니", R.drawable.img_brand_happy_money)
+        gift = Search_Gift("킥고잉", R.drawable.img_kickgoing)
         giftList.add(gift)
-        gift = Search_Gift("카카오페이지", R.drawable.img_brand_kakaopage)
-        giftList.add(gift)
-        gift = Search_Gift("네이버페이", R.drawable.img_brand_naver_pay)
-        giftList.add(gift)
-
 
         recyclerViewSearchGiftAdapter!!.notifyDataSetChanged()
     }

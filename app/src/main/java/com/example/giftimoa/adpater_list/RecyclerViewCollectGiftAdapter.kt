@@ -21,13 +21,6 @@ class RecyclerViewCollectGiftAdapter constructor(
     private val itemClickListener: (Collect_Gift) -> Unit
 ) : RecyclerView.Adapter<RecyclerViewCollectGiftAdapter.MyViewHolder>() {
 
-/*    fun removeLastGift() {
-        if (giftList.isNotEmpty()) {
-            giftList.removeAt(giftList.size - 1)
-            notifyItemRemoved(giftList.size)
-        }
-    }*/
-
     fun setGiftList(newList: List<Collect_Gift>) {
         giftList.clear()
         giftList.addAll(newList)
@@ -47,13 +40,6 @@ class RecyclerViewCollectGiftAdapter constructor(
             notifyItemRemoved(lastIndex)
         }
     }
-    /*fun removeLastGift() {
-        if (giftList.isNotEmpty()) {
-            val lastPosition = giftList.size - 1
-            giftList.removeAt(lastPosition)
-            notifyItemRemoved(lastPosition)
-        }
-    }*/
 
 /*
     fun addGift(collectGift: Collect_Gift) {
@@ -93,12 +79,16 @@ class RecyclerViewCollectGiftAdapter constructor(
         if (position != -1) {
             giftList.removeAt(position)
             notifyItemRemoved(position)
-        } else {
+        }
 
+        // 마지막 기프티콘이 남아있을 때도 삭제할 수 있도록 조건 추가
+        if (position == giftList.size && giftList.isNotEmpty()) {
+            val lastGift = giftList.last()
+            val lastIndex = giftList.indexOf(lastGift)
+            giftList.removeAt(lastIndex)
+            notifyItemRemoved(lastIndex)
         }
     }
-
-
 
     // 새로운 데이터를 설정하는 메서드 추가
     fun setGiftListFromExternalDB(gifts: List<Collect_Gift>) {
@@ -137,7 +127,6 @@ class RecyclerViewCollectGiftAdapter constructor(
     override fun getItemCount(): Int {
         return giftList.size
     }
-
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tv_brand: TextView = itemView.findViewById(R.id.tv_brand)

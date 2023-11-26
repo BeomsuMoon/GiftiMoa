@@ -1,6 +1,7 @@
 package com.example.giftimoa
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -48,6 +49,7 @@ class Home_category_brand_list : AppCompatActivity() {
         giftViewModel.homeGifts.observe(this) { gifts ->
             // 어댑터에 데이터 업데이트
             adapter.setMyGiftList(gifts)
+            binding.tvNoGifticon1.visibility = if (gifts.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
