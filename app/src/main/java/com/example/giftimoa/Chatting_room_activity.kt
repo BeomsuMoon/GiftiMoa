@@ -34,7 +34,7 @@ class Chatting_room_activity : AppCompatActivity() {
         recyclerViewChattingRoomAdapter = RecyclerViewChattingRoomAdapter()
 
         binding.rvChattingRoom.apply {
-            LinearLayoutManager(this@Chatting_room_activity)
+            binding.rvChattingRoom.layoutManager = LinearLayoutManager(this@Chatting_room_activity)
             adapter = recyclerViewChattingRoomAdapter
         }
 
@@ -52,17 +52,14 @@ class Chatting_room_activity : AppCompatActivity() {
         }
         socketHandler.onNewChatItem.observe(this){
             chatList.add(it)
-            recyclerViewChattingRoomAdapter.submitData(chatList)
-            binding.rvChattingRoom.scrollToPosition(chatList.size -1)
+            recyclerViewChattingRoomAdapter.submitData(chatList.toList())
+            binding.rvChattingRoom.scrollToPosition(chatList.size - 1)
         }
-
         //키보드 내리기
         binding.rvChattingRoom.setOnTouchListener { _, _ -> //리사이클러뷰 영역 터치 시 키보드 내리기
             hideKeyboard()
             false
         }
-
-
 
 
         // 보내기 버튼 클릭 이벤트
