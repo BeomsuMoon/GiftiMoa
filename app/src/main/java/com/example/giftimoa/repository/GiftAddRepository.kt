@@ -194,7 +194,7 @@ class GiftAddRepository(private val context: Context) {
     suspend fun deleteGiftFromServer(ID: Int) {
         try {
             // 기프트 삭제를 위한 URL 생성
-            val url = "http://3.35.110.246:3306/deletehomeGift?ID=$ID"
+            val url = "http://3.35.110.246:3306/deleteGift?ID=$ID"
             val request = Request.Builder()
                 .url(url)
                 .delete()
