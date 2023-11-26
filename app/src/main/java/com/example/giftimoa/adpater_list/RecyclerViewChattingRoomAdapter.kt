@@ -2,29 +2,36 @@ package com.example.giftimoa.adpater_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.giftimoa.databinding.ItemChattingDateBinding
 import com.example.giftimoa.databinding.ItemChattingMessageBinding
+import com.example.giftimoa.databinding.ItemChattingMessageOtherBinding
 import com.example.giftimoa.dto.ChatItem
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class RecyclerViewChattingRoomAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val messageList: MutableList<ChatItem> = mutableListOf()
 
-    // ViewHolder 클래스
-    inner class ChatMessageViewHolder(private val binding: ItemChattingMessageBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(message: ChatItem) {
-            binding.txtMessage.text = message.message
-            binding.txtDate.text = formatTimestamp(message.timestamp)
+    private val ITEM_SELF = 1
+    private val ITEM_OTHER = 2
+
+    private val diffcallback = object :DiffUtil.ItemCallback<ChatItem>(){
+        override fun areItemsTheSame(oldItem: ChatItem, newItem: ChatItem): Boolean {
+            return oldItem == newItem
         }
 
-        private fun formatTimestamp(timestamp: Long): String {
-            val dateFormat = SimpleDateFormat("a hh:mm", Locale.getDefault())
-            val date = Date(timestamp)
-            return dateFormat.format(date)
+        override fun areContentsTheSame(oldItem: ChatItem, newItem: ChatItem): Boolean {
+            return oldItem == newItem
         }
+    }
+
+    private val differ = AsyncListDiffer(this,diffcallback)
+
+    fun submitData(chats: List<ChatItem>) {
+        differ.submitList(chats)
     }
 
     inner class DateViewHolder(private val binding: ItemChattingDateBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -32,48 +39,64 @@ class RecyclerViewChattingRoomAdapter : RecyclerView.Adapter<RecyclerView.ViewHo
             binding.chattingDate.text = message.message
         }
     }
+    inner class OtherChatItemViewHolder(val binding: ItemChattingMessageOtherBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(chat:ChatItem){
+            binding.apply {
+                txtNickname.text = chat.nickname
+                txtMessage.text = chat.message
+                txtDate.text = formatTimestamp(chat.timestamp)
+            }
 
-    // ViewHolder 생성
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return if (viewType == TYPE_DATE) {
-            val dateBinding = ItemChattingDateBinding.inflate(inflater, parent, false)
-            DateViewHolder(dateBinding)
-        } else {
-            val messageBinding = ItemChattingMessageBinding.inflate(inflater, parent, false)
-            ChatMessageViewHolder(messageBinding)
+        }
+        private fun formatTimestamp(timestamp: Long): String {
+            val dateFormat = SimpleDateFormat("a hh:mm", Locale.getDefault())
+            val date = Date(timestamp)
+            return dateFormat.format(date)
         }
     }
+    inner class SelfChatItemViewHolder(val binding: ItemChattingMessageBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(chat:ChatItem){
+            binding.apply {
+                txtMessage.text = chat.message
+                txtDate.text = formatTimestamp(chat.timestamp)
+            }
+        }
+        private fun formatTimestamp(timestamp: Long): String {
+            val dateFormat = SimpleDateFormat("a hh:mm", Locale.getDefault())
+            val date = Date(timestamp)
+            return dateFormat.format(date)
+        }
+    }
+    // ViewHolder 생성
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+       return if(viewType == ITEM_SELF) {
+           val binding = ItemChattingMessageBinding.inflate(LayoutInflater.from(parent.context), parent,false)
+            SelfChatItemViewHolder(binding)
+       }else{
+           val binding = ItemChattingMessageOtherBinding.inflate(LayoutInflater.from(parent.context), parent,false)
+           OtherChatItemViewHolder(binding)
+           }
+       }
 
     // ViewHolder와 데이터 바인딩
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val message = messageList[position]
-        if (holder is ChatMessageViewHolder) {
-            holder.bind(message)
-        } else if (holder is DateViewHolder) {
-            holder.bind(message)
+       val chat = differ.currentList[position]
+        if(chat.isSelf){
+            (holder as SelfChatItemViewHolder).bind(chat)
+        }else{
+            (holder as OtherChatItemViewHolder).bind(chat)
         }
     }
 
-    // 아이템 타입 반환
-    override fun getItemViewType(position: Int): Int {
-        return if (messageList[position].isDate) TYPE_DATE else TYPE_MESSAGE
+     override fun getItemViewType(position: Int): Int {
+        val chat = differ.currentList[position]
+        return if (chat.isSelf) ITEM_SELF else ITEM_OTHER
     }
 
     // 아이템 개수 반환
     override fun getItemCount(): Int {
-        return messageList.size
+        return differ.currentList.size
     }
 
-    // 메시지 추가
-    fun addMessage(message: ChatItem) {
-        messageList.add(message)
-        notifyItemInserted(messageList.size - 1)
-    }
-
-    companion object {
-        private const val TYPE_MESSAGE = 0
-        private const val TYPE_DATE = 1
-    }
 }
 

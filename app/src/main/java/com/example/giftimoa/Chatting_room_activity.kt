@@ -2,34 +2,26 @@ package com.example.giftimoa
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.giftimoa.adpater_list.RecyclerViewChattingRoomAdapter
 import com.example.giftimoa.databinding.LayoutChattingRoomBinding
-import io.socket.client.IO
-import io.socket.client.Socket
+import com.example.giftimoa.dto.ChatItem
 
-import io.socket.emitter.Emitter
-
-import java.net.URISyntaxException
 
 
 class Chatting_room_activity : AppCompatActivity() {
 
     private lateinit var binding: LayoutChattingRoomBinding
-    private lateinit var socket: Socket
+    private lateinit var socketHandler: SocketHandler
+    private lateinit var recyclerViewChattingRoomAdapter: RecyclerViewChattingRoomAdapter
+    private val chatList = mutableListOf<ChatItem>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // ViewBinding 사용
         binding = LayoutChattingRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -37,27 +29,44 @@ class Chatting_room_activity : AppCompatActivity() {
         val nickname = intent.getStringExtra("nickname")  // 인텐트에서 닉네임 읽기
         val brand = intent.getStringExtra("brand")
         setupActionBarTitle(nickname, brand)
-        
-        // RecyclerView 초기화
-        binding.rvChattingRoom.layoutManager = LinearLayoutManager(this)
+
+        socketHandler = SocketHandler()
+        recyclerViewChattingRoomAdapter = RecyclerViewChattingRoomAdapter()
+
+        binding.rvChattingRoom.apply {
+            LinearLayoutManager(this@Chatting_room_activity)
+            adapter = recyclerViewChattingRoomAdapter
+        }
+
+        binding.sendBtn.setOnClickListener {
+            val messageText = binding.messageText.text.toString()
+            if (messageText.isNotEmpty()){
+                val chat = ChatItem(
+                    nickname = "you",
+                    message = messageText,
+                    timestamp = System.currentTimeMillis()
+                )
+                socketHandler.emitChat(chat)
+                binding.messageText.text.clear()
+            }
+        }
+        socketHandler.onNewChatItem.observe(this){
+            chatList.add(it)
+            recyclerViewChattingRoomAdapter.submitData(chatList)
+            binding.rvChattingRoom.scrollToPosition(chatList.size -1)
+        }
+
+        //키보드 내리기
         binding.rvChattingRoom.setOnTouchListener { _, _ -> //리사이클러뷰 영역 터치 시 키보드 내리기
             hideKeyboard()
             false
         }
 
-        try{
-            socket = IO.socket(SOCKET_URL)
-            initMain()
-        }catch (e: URISyntaxException){
-            e.printStackTrace()
-        }
 
-        // 어댑터 초기화
-        val adapter = RecyclerViewChattingRoomAdapter()
-        binding.rvChattingRoom.adapter = adapter
+
 
         // 보내기 버튼 클릭 이벤트
-       /* binding.button.setOnClickListener {
+       /* binding.sendBtn.setOnClickListener {
             val messageText = binding.messageText.text.toString()
 
             // 메시지가 비어있지 않은 경우에만 메시지를 추가
@@ -77,21 +86,6 @@ class Chatting_room_activity : AppCompatActivity() {
                 binding.messageText.text.clear()
             }
         }*/
-    }
-
-    private fun initMain() {
-        socket.on(CHAT_KEYS.NEW_MESSAGE, object : Emitter.Listener {
-            override fun call(vararg args: Any?){
-                Log.d("OnNewMessageDebug","${args[0]}")
-            }
-        })
-
-        binding.button.setOnClickListener {
-            socket.emit(CHAT_KEYS.NEW_MESSAGE,"Hello")
-        }
-    }
-    private object CHAT_KEYS {
-        const val NEW_MESSAGE = "new_message"
     }
 
     private fun hideKeyboard() {
@@ -130,15 +124,8 @@ class Chatting_room_activity : AppCompatActivity() {
         return true
     }
 
-    companion object{
-        private const val SOCKET_URL = "http://10.0.2.2:3000/"
-    }
-
     override fun onDestroy() {
-        if(this::socket.isInitialized){
-            socket.disconnect()
-            socket.off(CHAT_KEYS.NEW_MESSAGE)
-        }
+        socketHandler.disconnectSocket()
         super.onDestroy()
     }
 }

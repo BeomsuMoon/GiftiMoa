@@ -45,7 +45,7 @@ class Home_Fragment_List_Giftcard : Fragment() {
     private fun prepareGiftListData() {
         var gift = Search_Gift("CJ온스타일", R.drawable.img_brand_cjgiftcard)
         giftList.add(gift)
-        gift = Search_Gift("올리브영", R.drawable.img_oliveyoung)
+        gift = Search_Gift("올리브영", R.drawable.img_brand_oliveyoung)
         giftList.add(gift)
         gift = Search_Gift("따릉이", R.drawable.img_ddarng)
         giftList.add(gift)

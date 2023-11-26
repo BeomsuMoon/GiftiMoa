@@ -90,6 +90,7 @@ class RecyclerViewCollectGiftAdapter constructor(
         }
     }
 
+
     // 새로운 데이터를 설정하는 메서드 추가
     fun setGiftListFromExternalDB(gifts: List<Collect_Gift>) {
         this.giftList.clear() // 기존 목록 비우기
