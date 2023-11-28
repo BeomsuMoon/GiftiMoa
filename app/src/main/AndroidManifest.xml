@@ -25,10 +25,13 @@
 
     <receiver android:name=".AlarmReceiver" />
 
+
+        <activity
+            android:name=".Chatting_room_activity"
+            android:exported="true"/>
         <activity
             android:name=".Home_category_brand_list"
             android:exported="true"/>
-
         <activity
             android:name=".Home_gift_edit"
             android:exported="true"/>
@@ -87,15 +90,11 @@
             android:name=".MainActivity"
             android:exported="true"/>
         <activity
-            android:name=".Splash_activity"
-            android:exported="true"/>
-        <activity
-            android:name=".Chatting_room_activity"
-            android:exported="true"/>
-        <activity
             android:name=".Login_activity"
+            android:exported="true"/>
+        <activity
+            android:name=".Splash_activity"
             android:exported="true">
-
 
 
 

@@ -18,6 +18,9 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <!--닉네임 -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,16 +36,48 @@
             android:gravity="center"
             android:text="GIFTI MOA"
             android:textColor="#8b00ff"
-
             android:textSize="30dp"
             android:textStyle="bold" />
 
+        <!--프로필설정-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/user_profile"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile52x52_purple"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.11" />
+
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="27dp"
+                android:src="@drawable/img_camera_black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.603"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <!--이메일 -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ID_textField"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginBottom="10dp"
@@ -204,20 +239,23 @@
                 android:background="@drawable/border_icon_solid"
                 android:textColor="@color/blackshadow"/>
         </RelativeLayout>
+
+        <Button
+            android:id="@+id/signup_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:text="회 원 가 입"
+            android:background="@drawable/button_solid"
+            android:textStyle="bold"
+            android:textSize="15dp"
+
+            />
     </LinearLayout>
+    </ScrollView>
 
 
-    <Button
-        android:id="@+id/signup_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="회 원 가 입"
-        android:background="@drawable/button_solid"
-        android:textStyle="bold"
-        android:textSize="15dp"
-
-        />
 
 </LinearLayout>
