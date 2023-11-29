@@ -9,12 +9,14 @@ import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.LayoutHomeGiftAddInfoBinding
 import com.example.giftimoa.dto.Home_gift
 import com.example.giftimoa.dto.favorite
+import okhttp3.internal.userAgent
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -63,10 +65,18 @@ class Home_gift_add_info_activity : AppCompatActivity() {
             showFullscreenImageDialog(gift.h_imageUrl)
         }
 
+        binding.userNickname.doAfterTextChanged {
+            val nickname = it.toString()
+            binding.chatBtn.isEnabled = nickname.isNotEmpty()
+        }
+
         binding.chatBtn.setOnClickListener {
+            val nickname = binding.userNickname.text.toString()
             val intent = Intent(this@Home_gift_add_info_activity, Chatting_room_activity::class.java)
             intent.putExtra("nickname", gift.nickname)  // 닉네임을 인텐트에 추가
             intent.putExtra("brand", gift.h_brand)
+            intent.putExtra(Chatting_room_activity.USERNAME, nickname)
+            //intent.putExtra(Chatting_room_activity.CHATROOM_ID, chatroomId)
             startActivity(intent)
         }
     }

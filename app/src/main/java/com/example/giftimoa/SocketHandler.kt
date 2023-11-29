@@ -13,6 +13,10 @@ class SocketHandler {
     private var socket: Socket? = null
     private var _onNewChat = MutableLiveData<ChatItem>()
     val onNewChatItem:LiveData<ChatItem> get() = _onNewChat
+
+    private val _onChatroomCreated = MutableLiveData<Int>()
+    val onChatroomCreated: LiveData<Int> get() = _onChatroomCreated
+
     init{
         try {
             socket = IO.socket(SOCKET_URL)
@@ -52,6 +56,6 @@ class SocketHandler {
         const val BROADCAST = "broadcast"
     }
     companion object{
-        private const val SOCKET_URL = "http://10.0.2.2:3000/"
+        private const val SOCKET_URL = "http://3.35.110.246:3306/"
     }
 }

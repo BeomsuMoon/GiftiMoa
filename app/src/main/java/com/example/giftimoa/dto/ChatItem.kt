@@ -6,5 +6,6 @@ data class ChatItem(
     val message: String,
     val timestamp: Long,
     val isSelf: Boolean = false,
-    val isDate: Boolean = false
+    val isDate: Boolean = false,
+    val chatroom_id: Int? = null
 )
