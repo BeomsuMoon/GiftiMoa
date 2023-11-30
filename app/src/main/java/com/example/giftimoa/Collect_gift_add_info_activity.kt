@@ -57,6 +57,13 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
             showFullscreenImageDialog(gift.imageUrl)
         }
 
+        binding.mapBtn.setOnClickListener {
+
+            val intent = Intent(this, Collect_gift_MapView::class.java)
+            startActivity(intent)
+
+        }
+
     }
         //이미지 클릭시 이미지 전체 화면 보기
         fun showFullscreenImageDialog(imageUrl: String) {

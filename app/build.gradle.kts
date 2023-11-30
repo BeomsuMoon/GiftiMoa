@@ -42,7 +42,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
 }
+
+
 
 dependencies {
     implementation ("me.relex:circleindicator:2.1.6")
@@ -54,6 +57,11 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     implementation("androidx.fragment:fragment-ktx:1.5.5")
+    implementation(fileTree("libs") {
+        include("*.jar")
+    })
+    implementation(files("libs/libDaumMapAndroid.jar"))
+    implementation ("com.kakao.maps.open:android:2.6.0")
 
     //갤러리 사진 가져오는 라이브러리 기타 등등..
     implementation("com.github.bumptech.glide:glide:4.16.0")
@@ -70,9 +78,12 @@ dependencies {
         exclude("org.json","json")
     }
 
-    
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+
+
 
 }

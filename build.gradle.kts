@@ -4,6 +4,8 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.9.0" apply false
     kotlin("js") version "1.5.21"
 }
+
+
 /*
 
 allprojects{

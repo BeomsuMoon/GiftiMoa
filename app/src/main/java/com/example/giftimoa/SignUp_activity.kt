@@ -28,7 +28,6 @@ class SignUp_activity : AppCompatActivity() {
     private lateinit var nameEditText: TextInputEditText
     private lateinit var phoneNumberEditText: TextInputEditText
     private lateinit var nicknameEditText: TextInputEditText
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_sign_up)
@@ -57,7 +56,6 @@ class SignUp_activity : AppCompatActivity() {
             val json = JsonObject().apply {
                 addProperty("username", nickname) // "nickname" 대신 "username"으로 변경
             }
-
             val mediaType = "application/json; charset=utf-8".toMediaType()
             val requestBody = json.toString().toRequestBody(mediaType)
 
@@ -100,6 +98,7 @@ class SignUp_activity : AppCompatActivity() {
             }
         }
 
+        // 핸드폰 번호 중복체크
         val phoneDoubleCheckButton: Button = findViewById(R.id.phone_double_check)
         phoneDoubleCheckButton.setOnClickListener {
             val phoneNumber = (findViewById<TextInputEditText>(R.id.user_phone_number_editText)).text.toString()
@@ -150,7 +149,7 @@ class SignUp_activity : AppCompatActivity() {
             }
         }
 
-        //이메일 값 전달받기ㅁㄴ
+        // 이메일값을 통해서 json 파일로 작성후 서버 전송
         val receivedEmail = intent.getStringExtra("email_text")
         if (receivedEmail != null) {
             emailEditText.setText(receivedEmail)
@@ -163,6 +162,7 @@ class SignUp_activity : AppCompatActivity() {
                 val name = nameEditText.text.toString()
                 val phoneNumber = phoneNumberEditText.text.toString()
                 val username = nicknameEditText.text.toString()
+
                 val url = "http://3.35.110.246:3306/signup_node"
                 val json = JsonObject().apply {
                     addProperty("email", email)
@@ -170,7 +170,8 @@ class SignUp_activity : AppCompatActivity() {
                     addProperty("phone_number", phoneNumber)
                     addProperty("name", name)
                     addProperty("username", username)
-                    addProperty("Profile_picture" , NULL)
+                    addProperty("Profile_picture", NULL)
+
                 }
                 val mediaType = "application/json; charset=utf-8".toMediaType()
                 val requestBody = json.toString().toRequestBody(mediaType)
@@ -205,7 +206,6 @@ class SignUp_activity : AppCompatActivity() {
             }
         }
     }
-
     private fun setUseableEditText(et: EditText, useable: Boolean) {
         et.isClickable = useable
         et.isEnabled = useable
