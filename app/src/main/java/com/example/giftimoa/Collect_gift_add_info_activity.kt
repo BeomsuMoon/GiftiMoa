@@ -1,6 +1,8 @@
 package com.example.giftimoa
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -13,6 +15,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
@@ -23,6 +27,7 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
     private lateinit var binding : LayoutCollectGiftAddInfoBinding
     private lateinit var gift: Collect_Gift
     private lateinit var giftViewModel: Gificon_ViewModel
+    val PERMISSIONS_REQUEST_CODE = 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,11 +63,17 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
         }
 
         binding.mapBtn.setOnClickListener {
-
-            val intent = Intent(this, Collect_gift_MapView::class.java)
-            startActivity(intent)
-
+            val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            if(permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                // 위치 권한이 허용된 경우
+                val intent = Intent(this, Collect_gift_MapView::class.java)
+                startActivity(intent)
+            } else {
+                // 위치 권한이 없는 경우
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSIONS_REQUEST_CODE)
+            }
         }
+
 
     }
         //이미지 클릭시 이미지 전체 화면 보기
