@@ -1,5 +1,6 @@
 package com.example.giftimoa
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -16,7 +17,12 @@ import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.LayoutHomeGiftAddInfoBinding
 import com.example.giftimoa.dto.Home_gift
 import com.example.giftimoa.dto.favorite
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.internal.userAgent
+import java.io.IOException
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -65,19 +71,85 @@ class Home_gift_add_info_activity : AppCompatActivity() {
             showFullscreenImageDialog(gift.h_imageUrl)
         }
 
-        binding.userNickname.doAfterTextChanged {
-            val nickname = it.toString()
-            binding.chatBtn.isEnabled = nickname.isNotEmpty()
-        }
+        val sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("user_email", "")
 
         binding.chatBtn.setOnClickListener {
             val nickname = binding.userNickname.text.toString()
-            val intent = Intent(this@Home_gift_add_info_activity, Chatting_room_activity::class.java)
-            intent.putExtra("nickname", gift.nickname)  // 닉네임을 인텐트에 추가
-            intent.putExtra("brand", gift.h_brand)
-            intent.putExtra(Chatting_room_activity.USERNAME, nickname)
-            //intent.putExtra(Chatting_room_activity.CHATROOM_ID, chatroomId)
-            startActivity(intent)
+
+            val client = OkHttpClient()
+            val url = "http://3.35.110.246:3306/getNicknameByEmail" // 서버의 닉네임 확인 엔드포인트
+
+            // 이메일이 null이 아니면 서버에 요청을 보냄
+            if (!userEmail.isNullOrBlank()) {
+                val json = """{"email": "$userEmail"}"""
+                val mediaType = "application/json; charset=utf-8".toMediaType()
+                val requestBody = json.toRequestBody(mediaType)
+                val request = Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .build()
+
+                client.newCall(request).enqueue(object : okhttp3.Callback {
+                    override fun onFailure(call: okhttp3.Call, e: IOException) {
+                        e.printStackTrace()
+                    }
+
+                    override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                        val responseData = response.body?.string()
+                        runOnUiThread {
+                            // responseData에 있는 데이터를 mynickname 변수에 저장
+                            val mynickname = responseData?.takeIf { it.isNotBlank() } ?: ""
+                            val formattedNickname = mynickname.replace("\"", "")
+
+                            // 이후의 동작은 이 안에서 수행
+                            val intent = Intent(this@Home_gift_add_info_activity, Chatting_room_activity::class.java)
+                            intent.putExtra("nickname", gift.nickname)
+                            intent.putExtra("brand", gift.h_brand)
+                            intent.putExtra(Chatting_room_activity.USERNAME, gift.nickname)
+                            intent.putExtra(Chatting_room_activity.USERNAME, formattedNickname)
+
+                            //intent.putExtra(Chatting_room_activity.CHATROOM_ID, chatroomId)
+
+                            startActivity(intent)
+                        }
+                    }
+                })
+            }
+        }
+
+
+
+    }
+
+    private fun getNicknameFromServer(userEmail: String?) {
+        val client = OkHttpClient()
+        val url = "http://3.35.110.246:3306/getNicknameByEmail" // 서버의 닉네임 확인 엔드포인트
+
+        // 이메일이 null이 아니면 서버에 요청을 보냄
+        if (!userEmail.isNullOrBlank()) {
+            val json = """{"email": "$userEmail"}"""
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            val requestBody = json.toRequestBody(mediaType)
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+
+            client.newCall(request).enqueue(object : okhttp3.Callback {
+                override fun onFailure(call: okhttp3.Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                    val responseData = response.body?.string()
+                    runOnUiThread {
+                        val intent = Intent(this@Home_gift_add_info_activity, Chatting_room_activity::class.java)
+                        intent.putExtra("nickname", responseData)
+
+                    }
+                }
+            })
         }
     }
 

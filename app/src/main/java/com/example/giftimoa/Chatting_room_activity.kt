@@ -24,14 +24,12 @@ class Chatting_room_activity : AppCompatActivity() {
     private lateinit var recyclerViewChattingRoomAdapter: RecyclerViewChattingMessageAdapter
     private val chatList = mutableListOf<ChatItem>()
     private var user_nickname = ""
-    private var chatroom_id: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = LayoutChattingRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         user_nickname = intent.getStringExtra(USERNAME) ?: ""
-        chatroom_id = intent.getIntExtra(CHATROOM_ID, -1)
 
         if(user_nickname.isEmpty()){
             finish()
@@ -66,9 +64,7 @@ class Chatting_room_activity : AppCompatActivity() {
                         nickname = user_nickname,
                         message = dateFormatter.format(currentDate),
                         timestamp = currentTimestamp,
-                        isDate = true,
-                        chatroom_id = chatroom_id
-
+                        isDate = true
                     )
                     chatList.add(dateMessage)
                     recyclerViewChattingRoomAdapter.addMessage(dateMessage)
@@ -84,7 +80,6 @@ class Chatting_room_activity : AppCompatActivity() {
             }
         }
 
-
         socketHandler.onNewChatItem.observe(this){
             val chat = it.copy(isSelf = it.nickname == user_nickname)
             chatList.add(chat)
@@ -97,28 +92,6 @@ class Chatting_room_activity : AppCompatActivity() {
             false
         }
 
-
-        // 보내기 버튼 클릭 이벤트
-       /* binding.sendBtn.setOnClickListener {
-            val messageText = binding.messageText.text.toString()
-
-            // 메시지가 비어있지 않은 경우에만 메시지를 추가
-            if (messageText.isNotEmpty()) {
-                // 채팅 메시지가 처음으로 추가되는 경우 현재 날짜를 추가
-                if (adapter.itemCount == 0) {
-                    val currentDate = Calendar.getInstance().time
-                    val dateFormatter = SimpleDateFormat("yyyy년 MM월 dd일 E요일", Locale.KOREA)
-                    val dateMessage = ChatItem(message = dateFormatter.format(currentDate), timestamp = System.currentTimeMillis(), isDate = true)
-                    adapter.addMessage(dateMessage)
-                }
-
-                val chatMessage = ChatItem(message = messageText, timestamp = System.currentTimeMillis())
-                adapter.addMessage(chatMessage)
-
-                // 입력 필드 초기화
-                binding.messageText.text.clear()
-            }
-        }*/
     }
     private fun hideKeyboard() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
