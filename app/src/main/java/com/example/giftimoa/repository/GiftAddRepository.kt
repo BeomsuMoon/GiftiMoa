@@ -110,7 +110,7 @@ class GiftAddRepository(private val context: Context) {
     }
 
     // 서버에서 홈 기프트 목록을 가져오는 함수
-    suspend fun fetchHomeGiftsFromServer(userEmail: String): List<Home_gift> {
+    suspend fun r(userEmail: String): List<Home_gift> {
         var response: Response? = null
         try {
             // API에 따라 URL 및 기타 매개변수 조정

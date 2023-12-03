@@ -24,12 +24,15 @@ class Chatting_room_activity : AppCompatActivity() {
     private lateinit var recyclerViewChattingRoomAdapter: RecyclerViewChattingMessageAdapter
     private val chatList = mutableListOf<ChatItem>()
     private var user_nickname = ""
+    private var receiver_user_nickname = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = LayoutChattingRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         user_nickname = intent.getStringExtra(USERNAME) ?: ""
+
+        receiver_user_nickname = intent.getStringExtra(RECIVER_USERNAME) ?: ""
 
         if(user_nickname.isEmpty()){
             finish()
@@ -62,6 +65,7 @@ class Chatting_room_activity : AppCompatActivity() {
 
                     val dateMessage = ChatItem(
                         nickname = user_nickname,
+                        reciver_nickname = nickname,
                         message = dateFormatter.format(currentDate),
                         timestamp = currentTimestamp,
                         isDate = true
@@ -72,6 +76,7 @@ class Chatting_room_activity : AppCompatActivity() {
 
                 val chat = ChatItem(
                     nickname = user_nickname,
+                    reciver_nickname = nickname,
                     message = messageText,
                     timestamp = currentTimestamp
                 )
@@ -146,6 +151,6 @@ class Chatting_room_activity : AppCompatActivity() {
 
     companion object{
         const val USERNAME = "username"
-        const val CHATROOM_ID = "chatroom_id"
+        const val RECIVER_USERNAME = "reciver_username"
     }
 }

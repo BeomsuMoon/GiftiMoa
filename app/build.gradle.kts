@@ -60,7 +60,7 @@ dependencies {
     implementation(fileTree("libs") {
         include("*.jar")
     })
-    implementation(files("libs/libDaumMapAndroid.jar"))
+
     implementation ("com.kakao.maps.open:android:2.6.0")
 
     //갤러리 사진 가져오는 라이브러리 기타 등등..
@@ -78,6 +78,8 @@ dependencies {
         exclude("org.json","json")
     }
 
+    implementation(files("libs/libDaumMapAndroid.jar"))
+    implementation(files("app/src/main/jniLibs"))
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

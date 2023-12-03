@@ -11,6 +11,7 @@ import com.example.giftimoa.databinding.FragmentChatBinding
 
 class Chat_Fragment : Fragment() {
     private lateinit var binding: FragmentChatBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -23,12 +24,17 @@ class Chat_Fragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 액션바 설정
-        (activity as AppCompatActivity).setSupportActionBar(binding.myToolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false) // 타이틀 비활성화
-        (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.setLogo(R.drawable.gm_logo_120)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayUseLogoEnabled(true)
-
-
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(binding.myToolbar)
+            supportActionBar?.apply {
+                setDisplayShowTitleEnabled(false) // 타이틀 비활성화
+                setDisplayShowHomeEnabled(true)
+                setLogo(R.drawable.gm_logo_120)
+                setDisplayUseLogoEnabled(true)
+            }
+        }
     }
 }
+
+
+
