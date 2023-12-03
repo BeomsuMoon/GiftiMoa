@@ -10,7 +10,6 @@ import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
@@ -21,7 +20,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.internal.userAgent
 import java.io.IOException
 import java.text.NumberFormat
 import java.util.Locale
@@ -35,8 +33,6 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = LayoutHomeGiftAddInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
         giftViewModel = ViewModelProvider(this).get(Gificon_ViewModel::class.java)
 
         //액션바 활성화
@@ -44,7 +40,6 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "기프티콘 정보"
-
         gift = intent.getSerializableExtra("gift") as Home_gift
 
         val numberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
@@ -109,17 +104,12 @@ class Home_gift_add_info_activity : AppCompatActivity() {
                             intent.putExtra(Chatting_room_activity.USERNAME, gift.nickname)
                             intent.putExtra(Chatting_room_activity.USERNAME, formattedNickname)
 
-                            //intent.putExtra(Chatting_room_activity.CHATROOM_ID, chatroomId)
-
                             startActivity(intent)
                         }
                     }
                 })
             }
         }
-
-
-
     }
 
     private fun getNicknameFromServer(userEmail: String?) {
@@ -217,5 +207,4 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
 }

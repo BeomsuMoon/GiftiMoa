@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -74,7 +75,18 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
             }
         }
 
-
+        binding.useBtn.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setMessage("확인을 누르시면 기프티콘 정보가 삭제됩니다." +
+                        " 삭제 하시겠습니까?")
+                .setPositiveButton("확인") { _, _ ->
+                    giftViewModel.deleteGift(gift)
+                    finish()
+                }
+                .setNegativeButton("취소", null)
+                .show()
+            true
+        }
     }
         //이미지 클릭시 이미지 전체 화면 보기
         fun showFullscreenImageDialog(imageUrl: String) {
@@ -102,7 +114,6 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean { // 액션바 뒤로가기
         onBackPressed()
         Log.d("kimjyeongki2 : ","$gift")
-
         return true
     }
 
@@ -127,18 +138,20 @@ class Collect_gift_add_info_activity : AppCompatActivity() {
                     .setMessage("기프티콘을 삭제하시겠습니까?")
                     .setPositiveButton("확인") { _, _ ->
                         giftViewModel.deleteGift(gift)
+                        showToast("기프티콘이 성공적으로 삭제되었습니다.")
                         finish()
                     }
                     .setNegativeButton("취소", null)
                     .show()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
     private val editActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()

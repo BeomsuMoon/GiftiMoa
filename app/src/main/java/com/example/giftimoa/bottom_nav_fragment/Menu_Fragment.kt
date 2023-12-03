@@ -20,7 +20,6 @@ import com.example.giftimoa.AlarmReceiver
 import com.example.giftimoa.Login_activity
 import com.example.giftimoa.Menu_Mygifticon_activity
 import com.example.giftimoa.Menu_favorite_activity
-import com.example.giftimoa.Menu_profile_edit
 import com.example.giftimoa.R
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.DialogNumpickBinding
@@ -49,15 +48,13 @@ class Menu_Fragment : Fragment() {
         val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("user_email", "")
 
-        // 서버에서 닉네임 가져오기
-        getNicknameFromServer(userEmail)
+        getNicknameFromServer(userEmail) // 서버에서 닉네임 가져오기
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
 
         binding = FragmentMenuBinding.inflate(inflater, container, false)
         return binding.root
@@ -70,10 +67,6 @@ class Menu_Fragment : Fragment() {
         val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("user_email", "")
         binding.root.findViewById<TextView>(R.id.tv_account).text = userEmail
-
-        // userEmail 값을 tv_account에 설정
-        binding.root.findViewById<TextView>(R.id.tv_account).text = userEmail
-
 
         //나중에 DB로 대체 되어야 함
         val sharedPreferencesFirst = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
@@ -98,11 +91,10 @@ class Menu_Fragment : Fragment() {
             } else {
                 cancelAlarms()
             }
-
             setTextColor(isChecked)
         }
 
-        //프로필수정 빈공간 눌렀을떄
+       /* //프로필수정 빈공간 눌렀을떄
         binding.lAccount.setOnClickListener {
             val intent = Intent(requireContext(), Menu_profile_edit::class.java)
 
@@ -144,7 +136,7 @@ class Menu_Fragment : Fragment() {
             } else {
                 Log.d("test","$nicknameWithoutGreeting , $fullNickname")
             }
-        }
+        }*/
 
         //나의 관심 기프티콘
         binding.tvFavorite.setOnClickListener {
@@ -176,15 +168,18 @@ class Menu_Fragment : Fragment() {
                 val intent = Intent(requireContext(), Login_activity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
-                requireActivity().finish()
 
+                requireActivity().finish()
                 alertDialog.dismiss()
+
+                showToast("로그아웃이 성공적으로 처리되었습니다.")
             }
 
             // '아니요' 버튼 클릭 시 다이얼로그 닫기
             dialogBinding.btnNo.setOnClickListener {
                 alertDialog.dismiss()
             }
+
         }
         //회원탈퇴
         binding.tvWithdraw.setOnClickListener {
@@ -197,6 +192,9 @@ class Menu_Fragment : Fragment() {
                 Toast.makeText(requireContext(), "이메일 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
     // SharedPreferences에서 이메일을 가져오는 함수
     private fun getUserEmailFromSharedPreferences(): String? {
@@ -316,8 +314,7 @@ class Menu_Fragment : Fragment() {
             }
         }
     }
-    
-    
+
     //기프티콘 알림 비활성화
     fun cancelAlarms() {
         // ViewModel을 통해 기프티콘 리스트를 가져옵니다.
@@ -370,7 +367,6 @@ class Menu_Fragment : Fragment() {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, intervalMillis, pendingIntent)
     }
 
-
     //등록한 기프티콘의 유효기간 만료 안내 알림
     fun setAlarm(daysBefore: Int, gifticon: Collect_Gift) {
         val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -414,7 +410,6 @@ class Menu_Fragment : Fragment() {
         }
     }
 
-
     //마감임박 최초 알림 다이얼로그
     fun showNumberPickerFirstDialog() {
         val dialogBinding = DialogNumpickBinding.inflate(LayoutInflater.from(requireContext()))
@@ -446,7 +441,6 @@ class Menu_Fragment : Fragment() {
                     setAlarm(selectedDay, gifticon)
                 }
             }
-
             // SharedPreferences에 알림 설정 정보를 저장합니다. 나중에 DB로 대체
             val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
@@ -456,7 +450,6 @@ class Menu_Fragment : Fragment() {
             binding.tvNotiSettingFirst.text = selectedDay.toString()
             alertDialog.dismiss()
         }
-
     }
 
     //마감 주기 알림 다이얼로그
@@ -539,7 +532,6 @@ class Menu_Fragment : Fragment() {
         }
     }
 
-
     fun setTextColor(isChecked: Boolean) {
         val color = if (isChecked) "#000000" else "#939393"
 
@@ -564,7 +556,6 @@ class Menu_Fragment : Fragment() {
         setTextColor(true)  // 위에서 정의한 색깔 변경 함수 호출
     }
 
-
     private fun updateNicknameInView(nickname: String?) {
         if (!nickname.isNullOrBlank()) {
             val welcomeMessage = "$nickname" + "님 환영합니다."
@@ -573,5 +564,4 @@ class Menu_Fragment : Fragment() {
             binding.root.findViewById<TextView>(R.id.tv_title_account).text = formattedNickname
         }
     }
-
 }

@@ -15,7 +15,6 @@ object Home_Utils {
         return when (gifticon.h_state) {
             1 -> {
                 Badge("사용완료", "#5f5f69")
-
             }
             2 -> {
                 Badge("기간만료", "#5f5f69")

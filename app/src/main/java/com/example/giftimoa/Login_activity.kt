@@ -138,7 +138,7 @@ class Login_activity : AppCompatActivity() {
     override fun onBackPressed() {
         val currentTime = System.currentTimeMillis()
         if (currentTime - backPressedTime > 2000) {
-            Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다..", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "'뒤로' 버튼을 한 번 더 누르시면 " + '\n' +"앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
             backPressedTime = currentTime
         } else {
             exitApp() // 앱 종료 함수 호출

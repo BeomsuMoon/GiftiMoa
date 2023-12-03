@@ -27,8 +27,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import androidx.fragment.app.Fragment
-
 
 class Menu_profile_edit : AppCompatActivity() {
 
@@ -189,25 +187,16 @@ class Menu_profile_edit : AppCompatActivity() {
                     dlg.setTitle("권한이 필요한 이유")
                     dlg.setMessage("프로필 이미지를 변경하기 위해서는 외부 저장소 권한이 필수로 필요합니다.")
                     dlg.setPositiveButton("확인") { _, _ ->
-                        ActivityCompat.requestPermissions(
-                            this@Menu_profile_edit,
-                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                            REQUEST_READ_EXTERNAL_STORAGE
-                        )
+                        ActivityCompat.requestPermissions(this@Menu_profile_edit, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_EXTERNAL_STORAGE)
                     }
                     dlg.setNegativeButton("취소", null)
                     dlg.show()
                 } else {
                     // 권한 요청
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                        REQUEST_READ_EXTERNAL_STORAGE
-                    )
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_EXTERNAL_STORAGE)
                 }
             } else {
                 loadImage()
-
             }
         }
     }

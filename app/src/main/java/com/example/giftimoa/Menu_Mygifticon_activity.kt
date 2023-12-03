@@ -8,15 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.adpater_list.MyGifticonAdapter
-import com.example.giftimoa.adpater_list.RecyclerViewCollectGiftAdapter
-import com.example.giftimoa.adpater_list.RecyclerViewHomeGiftAdapter
 import com.example.giftimoa.databinding.LayoutMenuMygifticonBinding
-import com.example.giftimoa.dto.Collect_Gift
-import com.example.giftimoa.dto.Home_gift
 import com.example.giftimoa.repository.GiftAddRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

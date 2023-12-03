@@ -49,7 +49,6 @@ class PW_Find_Result_activity : AppCompatActivity() {
     private fun nextPwBtn() {
         binding.nextViewBtn.setOnClickListener {
             // 사용자 입력에서 새 비밀번호 가져오기
-            // 사용자 입력에서 새 비밀번호 가져오기
             val newPassword = binding.passwordEditText.text.toString()
             val confirmPassword = binding.certificationNum.text.toString()
 
@@ -129,7 +128,7 @@ class PW_Find_Result_activity : AppCompatActivity() {
         if (message == "비밀번호가 성공적으로 업데이트되었습니다.") {
             Toast.makeText(
                 this@PW_Find_Result_activity,
-                "비밀번호가 성공적으로 업데이트되었습니다.",
+                "비밀번호가 성공적으로 변경 되었습니다.",
                 Toast.LENGTH_SHORT
             ).show()
             val intent = Intent(this@PW_Find_Result_activity, Login_activity::class.java)

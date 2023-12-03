@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -78,7 +79,6 @@ class Home_gift_edit : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
             }
         }
 
@@ -156,9 +156,8 @@ class Home_gift_edit : AppCompatActivity() {
             val intent = Intent()
             intent.putExtra("updatedGift", updatedGift)
             setResult(Activity.RESULT_OK, intent)
-
-            // 이전 화면으로 돌아가기
-            finish()
+            Toast.makeText(this@Home_gift_edit, "기프티콘 정보가 수정되었습니다.", Toast.LENGTH_SHORT).show()
+            finish() // 이전 화면으로 돌아가기
         }
     }
 

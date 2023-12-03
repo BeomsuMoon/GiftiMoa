@@ -36,19 +36,23 @@ class Collect_fragment : Fragment() {
     private lateinit var noGifticonTextView1: TextView
     private lateinit var noGifticonTextView2: TextView
     private lateinit var recyclerView: RecyclerView
-
     private lateinit var activityResult: ActivityResultLauncher<Intent>
 
+    // 활동과 연결되면서 ActivityResult를 처리하는 런처
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        // ActivityResult를 처리하기 위한 런처 등록
         activityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                // 결과에서 gift를 가져와서 ViewModel에 추가하고 RecyclerView에 추가
                 val collectGift = result.data!!.extras!!.get("gift") as Collect_Gift
                 giftViewModel.addGift(collectGift)
+                recyclerViewCollectGiftAdapter.addGift(collectGift) // 아이템을 목록의 맨 앞에 추가
             }
         }
     }
 
+    // Fragment가 활성화될 때 호출되는 메서드
     override fun onResume() {
         super.onResume()
 
@@ -57,6 +61,7 @@ class Collect_fragment : Fragment() {
             val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
             val userEmail = sharedPreferences.getString("user_email", null)
             if (userEmail != null && userEmail.isNotEmpty()) {
+                // 사용자 이메일이 있으면 Repository에서 선물 목록을 가져옴
                 giftViewModel.fetchGiftListFromRepository(requireContext(), userEmail)
             } else {
                 Log.d("tests", "tests : $userEmail")
@@ -64,12 +69,15 @@ class Collect_fragment : Fragment() {
         }
     }
 
+    // Fragment가 생성될 때 호출되는 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        // ViewModel 초기화
         giftViewModel = ViewModelProvider(requireActivity()).get(Gificon_ViewModel::class.java)
     }
 
+    // Fragment가 뷰를 생성할 때 호출되는 메서드
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,25 +89,27 @@ class Collect_fragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
         (requireActivity() as AppCompatActivity).supportActionBar?.setLogo(R.drawable.gm_logo_120)
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayUseLogoEnabled(true)
-
         return view
     }
 
-        private fun startCollectGiftAddActivity() {
+    // 새로운 선물을 추가하는 화면으로 이동하는 메서드
+    private fun startCollectGiftAddActivity() {
         val intent = Intent(requireContext(), Collect_gift_add_activity::class.java)
         activityResult.launch(intent)
     }
 
+    // 뷰가 생성된 후 호출되는 메서드
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         noGifticonTextView1 = view.findViewById<TextView>(R.id.tv_noGifticon1)
         noGifticonTextView2 = view.findViewById<TextView>(R.id.tv_noGifticon2)
         recyclerView = view.findViewById<RecyclerView>(R.id.rv_Gift_Collect)
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireActivity(), 2)
         recyclerView.layoutManager = layoutManager
 
+        // RecyclerView 어댑터 초기화
         recyclerViewCollectGiftAdapter = RecyclerViewCollectGiftAdapter(mutableListOf()) { gift ->
+            // 아이템 클릭 시 상세 정보 화면으로 이동
             val intent = Intent(requireContext(), Collect_gift_add_info_activity::class.java)
             intent.putExtra("gift", gift)
             startActivity(intent)
@@ -107,6 +117,7 @@ class Collect_fragment : Fragment() {
 
         recyclerView.adapter = recyclerViewCollectGiftAdapter
 
+        // FloatingActionButton 클릭 시 새로운 선물 추가 화면으로 이동
         view.findViewById<FloatingActionButton>(R.id.fab_btn).setOnClickListener {
             startCollectGiftAddActivity()
         }
@@ -116,6 +127,7 @@ class Collect_fragment : Fragment() {
             val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
             val userEmail = sharedPreferences.getString("user_email", null)
             if (userEmail != null && userEmail.isNotEmpty()) {
+                // 사용자 이메일이 있으면 Repository에서 선물 목록을 가져옴
                 giftViewModel.fetchGiftListFromRepository(requireContext(), userEmail)
             } else {
                 Log.d("test", "test : $userEmail")
@@ -123,10 +135,10 @@ class Collect_fragment : Fragment() {
                 noGifticonTextView2.visibility = View.VISIBLE
             }
         }
+
         // GiftViewModel 초기화
         giftViewModel = ViewModelProvider(requireActivity()).get(Gificon_ViewModel::class.java)
 
-        // GiftViewModel의 giftList를 관찰하여 데이터가 변경될 때마다 화면 갱신
         // GiftViewModel의 giftList를 관찰하여 데이터가 변경될 때마다 화면 갱신
         giftViewModel.collectGifts.observe(viewLifecycleOwner, { gifts ->
             recyclerViewCollectGiftAdapter.setGiftList(gifts.toMutableList())
@@ -142,35 +154,39 @@ class Collect_fragment : Fragment() {
 
             // 마지막으로 삭제된 경우를 체크
             val lastGift = gifts.lastOrNull()
-            val lastIndex = if (lastGift != null) gifts.indexOf(lastGift) +1 else 0
+            val lastIndex = if (lastGift != null) gifts.indexOf(lastGift) + 1 else 0
 
             if (lastGift != null) {
                 if (lastIndex == 0 || !recyclerViewCollectGiftAdapter.contains(lastGift)) {
-
                     recyclerViewCollectGiftAdapter.removeLastGift()
                     noGifticonTextView1.visibility = View.VISIBLE
                     noGifticonTextView2.visibility = View.VISIBLE
                 }
-                    //recyclerViewCollectGiftAdapter.removeLastGift()
-
             }
         })
     }
+    // 새로운 기프티콘이 추가되었을 때 호출되는 메서드
+    private fun onNewGiftAdded(gift: Collect_Gift) {
+        recyclerViewCollectGiftAdapter.addGift(gift)
+        recyclerView.scrollToPosition(0)  // 목록의 맨 위로 스크롤
+        noGifticonTextView1.visibility = View.GONE
+        noGifticonTextView2.visibility = View.GONE
+    }
 
-    private fun setupRecyclerView() {
-        recyclerViewCollectGiftAdapter = RecyclerViewCollectGiftAdapter(mutableListOf()) { gift ->
-            val intent = Intent(requireContext(), Collect_gift_add_info_activity::class.java)
-            intent.putExtra("gift", gift)
-            startActivity(intent)
+    // 활동 결과 처리 런처에서 호출되는 메서드
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            data?.let {
+                val collectGift = it.getSerializableExtra("gift") as? Collect_Gift
+                collectGift?.let { onNewGiftAdded(it) }
+            }
         }
     }
 
-
+    // 메뉴를 생성하는 메서드
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.collect_fragment_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }
-
-
-

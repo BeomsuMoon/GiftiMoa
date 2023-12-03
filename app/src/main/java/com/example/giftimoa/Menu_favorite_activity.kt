@@ -2,7 +2,6 @@ package com.example.giftimoa
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.giftimoa.adpater_list.RecyclerViewHomeGiftAdapter
@@ -11,13 +10,11 @@ import com.example.giftimoa.dto.favorite
 
 class Menu_favorite_activity : AppCompatActivity() {
     private lateinit var binding: LayoutMenuFavoriteListBinding
-
     private val giftAdapter = RecyclerViewHomeGiftAdapter(mutableListOf()) { gift ->
         val intent = Intent(this, Home_gift_add_info_activity::class.java)
         intent.putExtra("gift", gift)
         startActivity(intent)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +39,6 @@ class Menu_favorite_activity : AppCompatActivity() {
         binding.rvFavorite.layoutManager = layoutManager
         binding.rvFavorite.adapter = giftAdapter
     }
-
 
     override fun onSupportNavigateUp(): Boolean { // 액션바 뒤로가기
         onBackPressed()

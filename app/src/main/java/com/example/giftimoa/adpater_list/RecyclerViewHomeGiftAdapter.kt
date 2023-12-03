@@ -12,9 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.giftimoa.R
-import com.example.giftimoa.Collect_Utils
 import com.example.giftimoa.Home_Utils
-import com.example.giftimoa.dto.Collect_Gift
 import com.example.giftimoa.dto.Home_gift
 import java.text.NumberFormat
 import java.util.Locale
@@ -25,14 +23,15 @@ class RecyclerViewHomeGiftAdapter constructor(
 ) : RecyclerView.Adapter<RecyclerViewHomeGiftAdapter.HomeViewHolder>() {
 
     fun setGiftList(h_gifts: MutableList<Home_gift>) {
-        this.h_giftList = h_gifts
+        h_giftList.clear()
+        h_giftList.addAll(h_gifts)
+        notifyDataSetChanged()
     }
-
     fun addGift(collectGift: Home_gift) {
-        h_giftList.add(collectGift)
-        notifyItemInserted(h_giftList.size - 1)
+        // 새로운 기프티콘을 목록의 맨 앞에 추가
+        h_giftList.add(0, collectGift)
+        notifyItemInserted(0)
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val view = LayoutInflater.from(parent.context)

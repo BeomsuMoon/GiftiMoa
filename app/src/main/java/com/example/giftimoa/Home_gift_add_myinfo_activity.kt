@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +28,6 @@ class Home_gift_add_myinfo_activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = LayoutHomeMygiftEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         giftViewModel = ViewModelProvider(this).get(Gificon_ViewModel::class.java)
 
@@ -51,7 +51,6 @@ class Home_gift_add_myinfo_activity : AppCompatActivity() {
         Glide.with(this)
             .load(gift.h_imageUrl)
             .into(binding.uploadImage)
-
 
         binding.uploadImage.setOnClickListener {
             showFullscreenImageDialog(gift.h_imageUrl)
@@ -93,7 +92,6 @@ class Home_gift_add_myinfo_activity : AppCompatActivity() {
         dialogImage.setOnClickListener {
             dialog.dismiss()
         }
-
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.BLACK))
         dialog.show()
     }
@@ -121,13 +119,13 @@ class Home_gift_add_myinfo_activity : AppCompatActivity() {
                     .setMessage("기프티콘을 삭제하시겠습니까?")
                     .setPositiveButton("확인") { _, _ ->
                         giftViewModel.deletehomeGift(gift)
+                        Toast.makeText(this@Home_gift_add_myinfo_activity, "기프티콘이 성공적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                         finish()
                     }
                     .setNegativeButton("취소", null)
                     .show()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }

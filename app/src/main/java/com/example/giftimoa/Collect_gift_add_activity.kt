@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -32,13 +31,11 @@ import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -67,7 +64,6 @@ class Collect_gift_add_activity : AppCompatActivity() {
             "CGV","롯데시네마","메가박스","컬쳐랜드","해피머니","구글플레이","씨네큐","인생네컷","올리브영","CJ온스타일","따릉이","킥고일","알파카")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, brands)
         binding.textUsage.setAdapter(adapter)
-
         giftViewModel = ViewModelProvider(this).get(Gificon_ViewModel::class.java)
 
         // 액션바 활성화
@@ -95,37 +91,21 @@ class Collect_gift_add_activity : AppCompatActivity() {
     // 이미지 클릭시 갤러리 권한 요청 및 처리
     private fun galleryClickEvent() {
         binding.uploadImage.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 허용되지 않음
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    )
-                ) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     // 이전에 이미 권한이 거부되었을 때 설명
                     var dlg = AlertDialog.Builder(this)
                     dlg.setTitle("권한이 필요한 이유")
                     dlg.setMessage("사진 정보를 얻기 위해서는 외부 저장소 권한이 필수로 필요합니다.")
                     dlg.setPositiveButton("확인") { dialog, which ->
-                        ActivityCompat.requestPermissions(
-                            this@Collect_gift_add_activity,
-                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                            REQUEST_READ_EXTERNAL_STORAGE
-                        )
+                        ActivityCompat.requestPermissions(this@Collect_gift_add_activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_EXTERNAL_STORAGE)
                     }
                     dlg.setNegativeButton("취소", null)
                     dlg.show()
                 } else {
                     // 권한 요청
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                        REQUEST_READ_EXTERNAL_STORAGE
-                    )
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_EXTERNAL_STORAGE)
                 }
             } else {
                 // 이미지 URL이 비어 있지 않으면 이미지를 풀 스크린으로 표시하고, 그렇지 않으면 이미지를 로드합니다.
@@ -212,46 +192,29 @@ class Collect_gift_add_activity : AppCompatActivity() {
 
                         if (response.isSuccessful) {
                             runOnUiThread {
-                                Toast.makeText(
-                                    this@Collect_gift_add_activity,
-                                    "DB 정보 입력 성공",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(this@Collect_gift_add_activity, "기프티콘 정보가 성공적으로 등록 되었습니다.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             runOnUiThread {
                                 val errorBody = response.body?.string()
-                                Toast.makeText(
-                                    this@Collect_gift_add_activity,
-                                    "DB 정보 입력 실패: $errorBody",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(this@Collect_gift_add_activity, "기프티콘 정보 등록을 실패하였습니다: $errorBody", Toast.LENGTH_SHORT).show()
                             }
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
                         Log.e("Collect_gift_add_act", "DB 에러: ${e.message}", e)
                         runOnUiThread {
-                            Toast.makeText(
-                                this@Collect_gift_add_activity,
-                                "오류 발생: ${e.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this@Collect_gift_add_activity, "오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
-
                 finish()
             }
         } catch (e: Exception) {
             e.printStackTrace() // 로깅을 위해 사용하지 않음
             Log.e("Collect_gift_add_act", "에러: ${e.message}", e)  // 예외 정보를 Log.e로 출력
             runOnUiThread {
-                Toast.makeText(
-                    this@Collect_gift_add_activity,
-                    "오류 발생: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@Collect_gift_add_activity, "오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -296,7 +259,6 @@ class Collect_gift_add_activity : AppCompatActivity() {
             giftAdd()
         }
     }
-
 
     private fun showFullscreenImageDialog(imageUrl: String) {
         // AlertDialog.Builder 인스턴스 생성

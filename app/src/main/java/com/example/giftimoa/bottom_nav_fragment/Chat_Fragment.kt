@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.giftimoa.R
 import com.example.giftimoa.databinding.FragmentChatBinding
-import com.example.giftimoa.databinding.FragmentMenuBinding
 
 class Chat_Fragment : Fragment() {
     private lateinit var binding: FragmentChatBinding

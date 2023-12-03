@@ -1,5 +1,6 @@
 package com.example.giftimoa
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -7,10 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.adpater_list.RecyclerViewCategoryBrandAdapter
-import com.example.giftimoa.adpater_list.RecyclerViewHomeGiftAdapter
-import com.example.giftimoa.databinding.BannerGuide1Binding
 import com.example.giftimoa.databinding.LayoutCategoryBrandBinding
-import com.example.giftimoa.dto.Home_gift
 
 class Home_category_brand_list : AppCompatActivity() {
 
@@ -38,9 +36,11 @@ class Home_category_brand_list : AppCompatActivity() {
         giftViewModel.fetchBrandGifts(brandName)
 
         // 어댑터 초기화
-        adapter = RecyclerViewCategoryBrandAdapter(mutableListOf()) {
+        adapter = RecyclerViewCategoryBrandAdapter(mutableListOf()) { gift ->
             // 아이템 클릭 시 동작을 정의하는 부분
-            // 예) startActivity, showDialog 등
+            val intent = Intent(this, Home_gift_add_info_activity::class.java)
+            intent.putExtra("gift", gift)
+            startActivity(intent)
         }
         binding.rvCategoryBrand.adapter = adapter
         binding.rvCategoryBrand.layoutManager = GridLayoutManager(this, 2)

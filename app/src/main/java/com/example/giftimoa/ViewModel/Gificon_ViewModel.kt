@@ -118,6 +118,7 @@ class Gificon_ViewModel(application: Application) : AndroidViewModel(application
                 currentGifts.removeIf { it.ID == gift.ID }
                 Log.d("tlqkf", "$gift.ID")
 
+                // 어댑터의 deleteGift 메서드 호출
                 _collectGifts.value = currentGifts
 
             } catch (e: Exception) {
@@ -149,14 +150,12 @@ class Gificon_ViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-
     // 새로운 홈 기프트 추가
     fun addGift(gift: Home_gift) {
         val currentGifts = _homeGifts.value?.toMutableList() ?: mutableListOf()
         currentGifts.add(gift)
         _homeGifts.value = currentGifts
     }
-
 
     //카테고리
     fun fetchBrandGifts(brandName: String) {

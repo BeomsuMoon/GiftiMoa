@@ -83,34 +83,22 @@ class Collect_gift_edit_activity : AppCompatActivity() {
             // ViewModel에 Collect_Gift 객체 업데이트
             giftViewModel.updateGift(updatedGift)
 
-
-
             // 수정된 결과를 액티비티에 전달
             val intent = Intent()
             intent.putExtra("modifiedGift", updatedGift)
             setResult(Activity.RESULT_OK, intent)
 
-            // 서버에 수정된 정보 업데이트
-
-
             // UpdateAndRefreshAdapter 초기화
             val adapter = UpdateAndRefreshAdapter(mutableListOf(updatedGift)) { _ ->
 
-                Toast.makeText(this@Collect_gift_edit_activity, "tlqkf기프트가 업데이트되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Collect_gift_edit_activity, "기프티콘 정보가 수정되었습니다.", Toast.LENGTH_SHORT).show()
             }
             lifecycleScope.launch {
                 Log.d("kimjyeongki" , "$updatedGift")
                 updateGiftOnServer(updatedGift)
             }
 
-            // recyclerView가 어디에 있는지 확인 후 설정
-            // RecyclerViewCollectGiftAdapter.adapter = adapter
-
-
-            //val updatedGift = getUpdatedGiftInfo() // 수정된 기프트 정보를 가져오는 메서드
             adapter.updateGift(updatedGift)
-
-            // 이전 화면으로 돌아가기
             finish()
         }
     }
@@ -160,8 +148,6 @@ class Collect_gift_edit_activity : AppCompatActivity() {
             }
         }
     }
-
-
 
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()

@@ -25,7 +25,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.LayoutHomeGiftAddBinding
@@ -95,12 +94,9 @@ class Home_gift_add_activity : AppCompatActivity() {
                 val brandAdapter = ArrayAdapter(this@Home_gift_add_activity, android.R.layout.simple_spinner_item, brands[selectedCategory]!!)
                 binding.spinnerBrand.adapter = brandAdapter
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
             }
         }
-
         galleryClickEvent()
 
         binding.fullscreenBtn.setOnClickListener {
@@ -109,46 +105,27 @@ class Home_gift_add_activity : AppCompatActivity() {
         binding.textEffectiveDate.setOnClickListener {
             showDatePickerDialog()
         }
-
         giftAdd_Btn()
     }
     private fun galleryClickEvent(){
         binding.uploadImage.setOnClickListener ({
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 //권한이 허용되지 않음
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    )
-                ){
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
                     //이전에 이미 권한이 거부되었을 때 설명
                     var dlg = AlertDialog.Builder(this)
                     dlg.setTitle("권한이 필요한 이유")
                     dlg.setMessage("사진 정보를 얻기 위해서는 외부 저장소 권한이 필수로 필요합니다.")
                     dlg.setPositiveButton("확인") { dialog, which ->
-                        ActivityCompat.requestPermissions(
-                            this@Home_gift_add_activity,
-                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                            REQUEST_READ_EXTERNAL_STORAGE
-                        )
+                        ActivityCompat.requestPermissions(this@Home_gift_add_activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_EXTERNAL_STORAGE)
                     }
                     dlg.setNegativeButton("취소", null)
                     dlg.show()
                 }else {
                     //권한 요청
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                        REQUEST_READ_EXTERNAL_STORAGE
-                    )
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_EXTERNAL_STORAGE)
                 }
             } else {
-                // If imageUrl is not empty show the image in fullscreen, else load image
                 loadImage()
             }
         })
@@ -174,7 +151,6 @@ class Home_gift_add_activity : AppCompatActivity() {
             h_imageUrl = uri.toString()
         }
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getNicknameFromServer(userEmail: String?): String = suspendCoroutine { continuation ->
@@ -212,13 +188,10 @@ class Home_gift_add_activity : AppCompatActivity() {
         }
     }
 
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun giftAdd() {
         val sharedPreferences = this.getSharedPreferences("user_data", Context.MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("user_email", "") ?: ""
-
         var h_product_name = binding.textGiftName.text.toString()
         var h_effectiveDate = binding.textEffectiveDate.text.toString()
         var h_price = binding.textPrice.text.toString()
@@ -233,12 +206,9 @@ class Home_gift_add_activity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
                         val id = UUID.randomUUID().hashCode()
-
                         val nickname = withContext(Dispatchers.IO) { getNicknameFromServer(userEmail) }
                         Log.d("test", "$nickname")
-
                         val homeGift = Home_gift(id, h_product_name, h_effectiveDate, h_price, h_category, h_brand, h_product_description, h_imageUrl, 0, 0, nickname)
-
                         homeGift.h_state = Home_Utils.calState(homeGift)  // state 값에 calState의 결과를 할당
                         val resultIntent = Intent()
                         resultIntent.putExtra("gift", homeGift)
@@ -275,44 +245,28 @@ class Home_gift_add_activity : AppCompatActivity() {
 
                             if (response.isSuccessful) {
                                 runOnUiThread {
-                                    Toast.makeText(
-                                        this@Home_gift_add_activity,
-                                        "DB 정보 입력 성공",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    Toast.makeText(this@Home_gift_add_activity, "성공적으로 기프티콘이 등록되었습니다.", Toast.LENGTH_SHORT).show()
                                     finish()
                                 }
                             } else {
                                 runOnUiThread {
                                     val errorBody = response.body?.string()
                                     Log.d("Home_gift_test:", "$errorBody")
-                                    Toast.makeText(
-                                        this@Home_gift_add_activity,
-                                        "DB 정보 입력 실패: $errorBody",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    Toast.makeText(this@Home_gift_add_activity, "기프티콘 등록에 실패 하였습니다 : $errorBody", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
                             Log.e("Home_gift_add_act", "DB 에러: ${e.message}", e)
                             runOnUiThread {
-                                Toast.makeText(
-                                    this@Home_gift_add_activity,
-                                    "오류 발생: ${e.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(this@Home_gift_add_activity, "오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
                             }
                         }
                     } catch (e: Exception) {
                         e.printStackTrace() // 로깅을 위해 사용하지 않음
                         Log.e("Home_gift_add_act", "에러: ${e.message}", e)  // 예외 정보를 Log.e로 출력
                         runOnUiThread {
-                            Toast.makeText(
-                                this@Home_gift_add_activity,
-                                "오류 발생: ${e.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this@Home_gift_add_activity, "오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
                         }
                     } finally {
                         finish()
@@ -323,17 +277,11 @@ class Home_gift_add_activity : AppCompatActivity() {
             e.printStackTrace() // 로깅을 위해 사용하지 않음
             Log.e("Home_gift_add_act", "에러: ${e.message}", e)  // 예외 정보를 Log.e로 출력
             runOnUiThread {
-                Toast.makeText(
-                    this@Home_gift_add_activity,
-                    "오류 발생: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@Home_gift_add_activity, "오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
             }
             finish()
         }
     }
-
-
 
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
@@ -389,7 +337,6 @@ class Home_gift_add_activity : AppCompatActivity() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.BLACK))
         dialog.show()
     }
-
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()

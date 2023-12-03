@@ -23,12 +23,10 @@ class RecyclerViewChattingMessageAdapter : RecyclerView.Adapter<RecyclerView.Vie
         override fun areItemsTheSame(oldItem: ChatItem, newItem: ChatItem): Boolean {
             return oldItem == newItem
         }
-
         override fun areContentsTheSame(oldItem: ChatItem, newItem: ChatItem): Boolean {
             return oldItem == newItem
         }
     }
-
     private val differ = AsyncListDiffer(this,diffcallback)
 
     fun submitData(chats: List<ChatItem>) {
@@ -82,7 +80,6 @@ class RecyclerViewChattingMessageAdapter : RecyclerView.Adapter<RecyclerView.Vie
                 txtMessage.text = chat.message
                 txtDate.text = formatTimestamp(chat.timestamp)
             }
-
         }
         private fun formatTimestamp(timestamp: Long): String {
             val dateFormat = SimpleDateFormat("a hh:mm", Locale.getDefault())
@@ -116,4 +113,3 @@ class RecyclerViewChattingMessageAdapter : RecyclerView.Adapter<RecyclerView.Vie
         differ.submitList(differ.currentList + chatItem)
     }
 }
-

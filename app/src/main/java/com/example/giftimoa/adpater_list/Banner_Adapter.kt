@@ -26,7 +26,6 @@ class Banner_Adapter(private val fa: FragmentActivity, private val count: Int) :
                 setOnClickListener(fragment.requireView(), index)
             }
         })
-
         return fragment
     }
 

@@ -47,7 +47,6 @@ class UpdateAndRefreshAdapter(
         }
     }
 
-
     override fun getItemCount(): Int {
         return giftList.size
     }

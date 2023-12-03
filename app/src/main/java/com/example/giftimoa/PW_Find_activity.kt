@@ -120,7 +120,7 @@ class PW_Find_activity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val message = jsonResponse.getString("message")
                     runOnUiThread {
-                        Toast.makeText(this@PW_Find_activity, message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@PW_Find_activity, "성공적으로 인증 되었습니다.", Toast.LENGTH_SHORT).show()
 
                         if (message == "Verification successful") {
                             // 인증 성공 시, 다음 단계로 이동 (예: PasswordResetActivity)

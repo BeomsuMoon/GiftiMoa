@@ -102,7 +102,6 @@ class SignUp_activity : AppCompatActivity() {
         val phoneDoubleCheckButton: Button = findViewById(R.id.phone_double_check)
         phoneDoubleCheckButton.setOnClickListener {
             val phoneNumber = (findViewById<TextInputEditText>(R.id.user_phone_number_editText)).text.toString()
-
             val url = "http://3.35.110.246:3306/checkPhoneNumber" // 핸드폰 번호 중복 체크
             val json = JsonObject().apply {
                 addProperty("phone_number", phoneNumber)
@@ -126,13 +125,17 @@ class SignUp_activity : AppCompatActivity() {
                         val status = jsonObject.get("status").asString
 
                         runOnUiThread {
-                            if (status == "중복") {
-                                Toast.makeText(this@SignUp_activity, "이 번호는 이미 사용 중입니다.", Toast.LENGTH_SHORT).show()
-                            } else if (status == "중복 아님") {
-                                Toast.makeText(this@SignUp_activity, "사용 가능한 번호입니다.", Toast.LENGTH_SHORT).show()
-                                phoneNumberEditText.isEnabled = false
-                                phoneNumberEditText.isFocusable = false
-                                phoneNumberEditText.isFocusableInTouchMode = false
+                            if (!isValidPhoneNumber(phoneNumber)){
+                                Toast.makeText(this@SignUp_activity, "올바른 핸드폰 번호를 입력하세요.", Toast.LENGTH_SHORT).show()
+                            }else{
+                                if (status == "중복") {
+                                    Toast.makeText(this@SignUp_activity, "이 번호는 이미 사용 중입니다.", Toast.LENGTH_SHORT).show()
+                                } else if (status == "중복 아님") {
+                                    Toast.makeText(this@SignUp_activity, "사용 가능한 번호입니다.", Toast.LENGTH_SHORT).show()
+                                    phoneNumberEditText.isEnabled = false
+                                    phoneNumberEditText.isFocusable = false
+                                    phoneNumberEditText.isFocusableInTouchMode = false
+                                }
                             }
                         }
                     } else {
@@ -189,11 +192,11 @@ class SignUp_activity : AppCompatActivity() {
                             val intent = Intent(this@SignUp_activity, Login_activity::class.java)
                             startActivity(intent)
                             runOnUiThread {
-                                Toast.makeText(this@SignUp_activity, "회원가입 성공!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@SignUp_activity, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             runOnUiThread {
-                                Toast.makeText(this@SignUp_activity, "회원가입 실패", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@SignUp_activity, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     } catch (e: Exception) {

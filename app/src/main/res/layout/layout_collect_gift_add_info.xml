@@ -237,7 +237,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="이용매장"
+                                android:text="지도"
                                 android:textColor="@color/black"
                                 android:textSize="14dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -250,7 +250,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="4dp"
-                                android:text="지도로 매장찾기"
+                                android:text="현재위치 보기"
                                 android:textColor="@color/black"
                                 android:textSize="12dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -267,7 +267,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_solid"
                         android:layout_marginTop="20dp"
-                        android:text="수 정 완 료"/>
+                        android:text="사 용 완 료"/>
                 </LinearLayout>
 
             </LinearLayout>

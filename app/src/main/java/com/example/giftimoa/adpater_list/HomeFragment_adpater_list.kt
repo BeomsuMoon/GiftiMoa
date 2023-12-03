@@ -14,7 +14,6 @@ import com.example.giftimoa.home_fragment_List.Home_Fragment_List_Movie
 import com.example.giftimoa.home_fragment_List.Home_Fragment_List_Pizza
 import com.example.giftimoa.home_fragment_List.Home_Fragment_List_Snack
 
-
 class HomeFragment_adpater_list(activity: FragmentActivity) : FragmentStateAdapter(activity) {
     override fun getItemCount(): Int = 10 // 탭 개수
 

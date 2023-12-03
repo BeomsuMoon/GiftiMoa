@@ -29,6 +29,7 @@ import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.home_fragment_List.Search_gift_activity
 import com.example.giftimoa.adpater_list.Banner_Adapter
 import com.example.giftimoa.adpater_list.RecyclerViewHomeGiftAdapter
+import com.example.giftimoa.dto.Collect_Gift
 import com.example.giftimoa.dto.Home_gift
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
@@ -42,7 +43,6 @@ class Home_Fragment : Fragment() {
     private lateinit var pagerAdapter: FragmentStateAdapter
     private val numPage = 2
     private lateinit var mIndicator: CircleIndicator3
-
     private lateinit var giftViewModel: Gificon_ViewModel
     private lateinit var RecyclerViewHomeGiftAdapter: RecyclerViewHomeGiftAdapter
     private lateinit var recyclerView: RecyclerView
@@ -63,8 +63,6 @@ class Home_Fragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true) // 프래그먼트에서 옵션 메뉴 사용을 활성화
         giftViewModel = ViewModelProvider(requireActivity()).get(Gificon_ViewModel::class.java)
-
-
     }
 
     //홈 메뉴 및 배너 생성
@@ -137,7 +135,6 @@ class Home_Fragment : Fragment() {
         // ViewPager 설정
         mPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         mPager.setSaveEnabled(false)
-
         mPager.setCurrentItem(1000, true) // 시작 지점 (두 번째 인수로 부드러운 스크롤을 사용하려면 true로 설정)
         mPager.offscreenPageLimit = 2 // 최대 이미지 수
 
@@ -201,15 +198,39 @@ class Home_Fragment : Fragment() {
             } else {
                 Log.d("test","test : $userEmail")
             }
-
         }
 
         giftViewModel.homeGifts.observe(viewLifecycleOwner, { gifts ->
+            // 마지막으로 추가된 아이템이 첫 번째로 보이도록 리스트를 역순으로 정렬
+            val reversedGifts = gifts.sortedByDescending { it.h_id }
+
             // 어댑터에 데이터 업데이트
-            RecyclerViewHomeGiftAdapter.setGiftList(gifts.toMutableList())
+            RecyclerViewHomeGiftAdapter.setGiftList(reversedGifts.toMutableList())
             RecyclerViewHomeGiftAdapter.notifyDataSetChanged()
-            Log.d("로그", "기프티콘: $gifts")
+
+            // 아이템이 추가될 때마다 첫 번째 아이템으로 스크롤
+            if (reversedGifts.isNotEmpty()) {
+                recyclerView.scrollToPosition(0)
+            }
+
+            Log.d("로그", "기프티콘: $reversedGifts")
         })
+    }
+
+    private fun onNewGiftAdded(h_gift: Home_gift) {
+        RecyclerViewHomeGiftAdapter.addGift(h_gift)
+        recyclerView.scrollToPosition(0)  // 목록의 맨 위로 스크롤
+    }
+
+    // 활동 결과 처리 런처에서 호출되는 메서드
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            data?.let {
+                val homeGift = it.getSerializableExtra("gift") as? Home_gift
+                homeGift?.let { onNewGiftAdded(it) }
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -220,5 +241,4 @@ class Home_Fragment : Fragment() {
         val intent = Intent(requireContext(), Home_gift_add_activity::class.java)
         activityResult.launch(intent)
     }
-
 }
