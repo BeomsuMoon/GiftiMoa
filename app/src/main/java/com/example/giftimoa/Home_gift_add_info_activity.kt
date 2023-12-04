@@ -44,10 +44,11 @@ class Home_gift_add_info_activity : AppCompatActivity() {
 
         val numberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
         val priceString = "${numberFormat.format(gift.h_price.toInt())}원"
+        val effectiveDate = "${gift.h_effectiveDate}까지"
         //뷰 시작시 생성 정보
         binding.userNickname.text = gift.nickname
         binding.textGiftName.text = gift.h_product_name
-        binding.textEffectiveDate.text = gift.h_effectiveDate
+        binding.textEffectiveDate.text = effectiveDate
         binding.textPrice.text = priceString
         binding.textExpiration.text = gift.h_brand
         binding.textProductDescription.text = gift.h_product_description

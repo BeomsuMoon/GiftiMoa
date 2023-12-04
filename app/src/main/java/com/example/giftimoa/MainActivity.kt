@@ -19,7 +19,6 @@ import java.security.MessageDigest
 
 
 private val home_Fragment = Home_Fragment()
-private val search_Fragment = Search_Fragment()
 private val collect_fragment = Collect_fragment()
 private val chat_Fragment = Chat_Fragment()
 private val menu_Fragment = Menu_Fragment()
@@ -59,7 +58,6 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.ic_home -> replaceFragment(home_Fragment)
-                R.id.ic_search -> replaceFragment(search_Fragment)
                 R.id.ic_collect -> replaceFragment(collect_fragment)
                 R.id.ic_chat -> replaceFragment(chat_Fragment)
                 R.id.ic_usermenu -> replaceFragment(menu_Fragment)

@@ -23,6 +23,7 @@ import com.example.giftimoa.Menu_favorite_activity
 import com.example.giftimoa.R
 import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.databinding.DialogNumpickBinding
+import com.example.giftimoa.databinding.DialogWithdrawBtnBinding
 import com.example.giftimoa.databinding.DialogYcBtnBinding
 import com.example.giftimoa.databinding.FragmentMenuBinding
 import com.example.giftimoa.dto.Collect_Gift
@@ -183,15 +184,34 @@ class Menu_Fragment : Fragment() {
         }
         //회원탈퇴
         binding.tvWithdraw.setOnClickListener {
-            // 탈퇴 버튼 클릭 시 수행될 내용
-            val userEmail = getUserEmailFromSharedPreferences()
+            val drawdialogBinding =
+                DialogWithdrawBtnBinding.inflate(LayoutInflater.from(requireContext()))
+            val builder = AlertDialog.Builder(requireContext()).setView(drawdialogBinding.root)
 
-            if (userEmail != null) {
-                getemailFromServerandDeleteMember(userEmail)
-            } else {
-                Toast.makeText(requireContext(), "이메일 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+            val alertDialog = builder.show()
+
+            drawdialogBinding.btnYes.setOnClickListener {
+                // 탈퇴 버튼 클릭 시 수행될 내용
+                val userEmail = getUserEmailFromSharedPreferences()
+
+                if (userEmail != null) {
+                    getemailFromServerandDeleteMember(userEmail)
+                } else {
+                    Toast.makeText(requireContext(), "이메일 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                requireActivity().finish()
+                alertDialog.dismiss()
+
+                showToast("성공적으로 회원탈퇴 처리되었습니다.")
+            }
+
+            // '아니요' 버튼 클릭 시 다이얼로그 닫기
+            drawdialogBinding.btnNo.setOnClickListener {
+                alertDialog.dismiss()
             }
         }
+
     }
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()

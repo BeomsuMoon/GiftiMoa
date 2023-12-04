@@ -59,7 +59,7 @@
                         android:id="@+id/user_profile"
                         android:layout_width="40dp"
                         android:layout_height="36dp"
-                        android:src="@drawable/join_id" />
+                        android:src="@drawable/profile52x52_purple" />
 
                     <!--유저 닉네임-->
                     <TextView
