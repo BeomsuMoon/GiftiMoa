@@ -56,4 +56,8 @@ class RecyclerViewChattingRoomAdapter : RecyclerView.Adapter<RecyclerViewChattin
         this.chatRooms.addAll(chatRooms)
         notifyDataSetChanged()
     }
+
+    fun submitList(chatRooms: List<ChatRoom>) {
+        setChatRooms(chatRooms)
+    }
 }

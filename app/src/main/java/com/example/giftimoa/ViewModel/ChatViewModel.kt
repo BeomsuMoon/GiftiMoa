@@ -10,34 +10,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.giftimoa.dto.ChatRoom
 import com.example.giftimoa.dto.Collect_Gift
+import com.example.giftimoa.repository.ChatRepository
 import com.example.giftimoa.repository.GiftAddRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/*
-class ChatViewModel(application: Application) : AndroidViewModel(application){
-    private val context: Context = application
-    private val _chatroomList = MutableLiveData<List<ChatRoom>>(emptyList())
-    val chatroomList: LiveData<List<ChatRoom>> get() = _chatroomList
 
+class ChatViewModel : ViewModel() {
+    private val repository = ChatRepository()
+    private val _chatRooms = MutableLiveData<List<ChatRoom>?>()
+    val chatRooms: LiveData<List<ChatRoom>?> get() = _chatRooms
 
-    // GiftAddRepository를 통해 데이터를 가져오는 함수 추가
-    fun fetchHomeGiftsFromRepository(context: Context, userEmail: String) {
+    fun fetchChatRooms(nickname: String) {
+        Log.d("ChatViewModel", "fetchChatRooms is called with nickname: $nickname")
         viewModelScope.launch {
             try {
-                // 백그라운드 스레드에서 GiftAddRepository를 통해 데이터를 가져오기
-                val homeGifts = withContext(Dispatchers.IO) {
-                    GiftAddRepository(context).fetchHomeGiftsFromServer(userEmail)
-                }
-
-                // LiveData에 업데이트
-                _homeGifts.postValue(homeGifts)
+                val chatRooms = repository.getChatRooms(nickname)
+                _chatRooms.postValue(chatRooms)
             } catch (e: Exception) {
-                Log.e("Gificon_ViewModel", "Error fetching home gifts: ${e.message}", e)
-                // 오류 처리
+                Log.e("Chat_ViewModel", "Error fetching data: ${e.message}", e)
             }
         }
     }
+
 }
-*/
