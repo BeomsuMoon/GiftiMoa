@@ -3,6 +3,7 @@ package com.example.giftimoa
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -11,6 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.giftimoa.adpater_list.RecyclerViewChattingMessageAdapter
 import com.example.giftimoa.databinding.LayoutChattingRoomBinding
 import com.example.giftimoa.dto.ChatItem
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -29,15 +38,12 @@ class Chatting_room_activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = LayoutChattingRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         user_nickname = intent.getStringExtra(USERNAME) ?: ""
-
         receiver_user_nickname = intent.getStringExtra(RECIVER_USERNAME) ?: ""
 
-        if(user_nickname.isEmpty()){
-            finish()
-        }else{
-
+        val chatRoomId = intent.getIntExtra("chatroom_id", -1)
+        if (chatRoomId != -1) {
+            fetchChatMessages(chatRoomId)
         }
 
         // Toolbar 설정
@@ -68,7 +74,8 @@ class Chatting_room_activity : AppCompatActivity() {
                         reciver_nickname = nickname,
                         message = dateFormatter.format(currentDate),
                         timestamp = currentTimestamp,
-                        isDate = true
+                        isDate = true,
+                        chatroom_id = chatRoomId
                     )
                     chatList.add(dateMessage)
                     recyclerViewChattingRoomAdapter.addMessage(dateMessage)
@@ -78,7 +85,9 @@ class Chatting_room_activity : AppCompatActivity() {
                     nickname = user_nickname,
                     reciver_nickname = nickname,
                     message = messageText,
-                    timestamp = currentTimestamp
+                    timestamp = currentTimestamp,
+                    chatroom_id = chatRoomId
+
                 )
                 socketHandler.emitChat(chat)
                 binding.messageText.text.clear()
@@ -102,6 +111,50 @@ class Chatting_room_activity : AppCompatActivity() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
+
+    private fun fetchChatMessages(chatRoomId: Int) {
+        val url = "http://3.35.110.246:3306/chatroom/$chatRoomId/messages"
+        val request = Request.Builder().url(url).build()
+
+        val client = OkHttpClient()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // 네트워크 요청 실패 시 처리
+                e.printStackTrace()
+                Log.e("ChattingRoom", "Failed to fetch chat messages", e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (!response.isSuccessful) {
+                    Log.e("ChattingRoom", "Response from server is not successful. Code: ${response.code}")
+                    return
+                }
+
+                // 네트워크 요청 성공 시 처리
+                val responseBody = response.body?.string()
+                if (responseBody == null) {
+                    Log.e("ChattingRoom", "Response body is null")
+                    return
+                }
+
+                val messages: Array<ChatItem>
+                try {
+                    messages = Gson().fromJson(responseBody, Array<ChatItem>::class.java)
+                } catch (e: JsonSyntaxException) {
+                    Log.e("ChattingRoom", "Failed to parse chat messages", e)
+                    return
+                }
+
+                runOnUiThread {
+                    chatList.addAll(messages)
+                    recyclerViewChattingRoomAdapter.submitData(chatList)
+                    Log.d("ChattingRoom", "Chat messages fetched successfully")
+                }
+            }
+        })
+    }
+
+
 
     //타이틀바 설정
     private fun setupActionBarTitle(nickname: String?, brand: String?) {

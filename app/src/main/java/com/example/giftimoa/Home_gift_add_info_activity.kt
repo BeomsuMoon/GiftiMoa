@@ -58,7 +58,7 @@ class Home_gift_add_info_activity : AppCompatActivity() {
 
         // 좋아요 클릭 시
         binding.favoriteClk.setOnClickListener {
-            Log.d("로그","찜 추가 클릭")
+            Log.d("로그", "찜 추가 클릭")
             toggleFavorite(gift)
             updateFavoriteImage(gift)
         }
@@ -98,14 +98,29 @@ class Home_gift_add_info_activity : AppCompatActivity() {
                             val mynickname = responseData?.takeIf { it.isNotBlank() } ?: ""
                             val formattedNickname = mynickname.replace("\"", "")
 
-                            // 이후의 동작은 이 안에서 수행
-                            val intent = Intent(this@Home_gift_add_info_activity, Chatting_room_activity::class.java)
-                            intent.putExtra("nickname", gift.nickname)
-                            intent.putExtra("brand", gift.h_brand)
-                            intent.putExtra(Chatting_room_activity.USERNAME, gift.nickname)
-                            intent.putExtra(Chatting_room_activity.USERNAME, formattedNickname)
+                            // 자신과 채팅할 수 없음을 확인
+                            if (formattedNickname == gift.nickname) {
+                                val dialogBuilder =
+                                    AlertDialog.Builder(this@Home_gift_add_info_activity)
+                                dialogBuilder.setMessage("자신과 채팅을 할 수 없습니다.")
+                                    .setCancelable(false)
+                                    .setPositiveButton("확인") { _, _ -> }
+                                val alert = dialogBuilder.create()
+                                alert.setTitle("알림")
+                                alert.show()
+                            } else {
+                                // 이후의 동작은 이 안에서 수행
+                                val intent = Intent(
+                                    this@Home_gift_add_info_activity,
+                                    Chatting_room_activity::class.java
+                                )
+                                intent.putExtra("nickname", gift.nickname)
+                                intent.putExtra("brand", gift.h_brand)
+                                intent.putExtra(Chatting_room_activity.USERNAME, gift.nickname)
+                                intent.putExtra(Chatting_room_activity.USERNAME, formattedNickname)
 
-                            startActivity(intent)
+                                startActivity(intent)
+                            }
                         }
                     }
                 })
@@ -113,7 +128,7 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         }
     }
 
-    private fun getNicknameFromServer(userEmail: String?) {
+        private fun getNicknameFromServer(userEmail: String?) {
         val client = OkHttpClient()
         val url = "http://3.35.110.246:3306/getNicknameByEmail" // 서버의 닉네임 확인 엔드포인트
 

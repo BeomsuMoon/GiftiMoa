@@ -13,7 +13,8 @@ import com.example.giftimoa.databinding.ItemChattingCardviewBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-class RecyclerViewChattingRoomAdapter : RecyclerView.Adapter<RecyclerViewChattingRoomAdapter.ChatRoomViewHolder>() {
+class RecyclerViewChattingRoomAdapter(private val onChatRoomClick: (ChatRoom) -> Unit) :
+    RecyclerView.Adapter<RecyclerViewChattingRoomAdapter.ChatRoomViewHolder>() {
     private val chatRooms = mutableListOf<ChatRoom>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRoomViewHolder {
@@ -37,10 +38,8 @@ class RecyclerViewChattingRoomAdapter : RecyclerView.Adapter<RecyclerViewChattin
             binding.timestamp.text = formatTimestamp(chatRoom.last_date)
 
             // 채팅방 아이템 클릭 이벤트 처리
-            itemView.setOnClickListener {
-                val intent = Intent(it.context, Chatting_room_activity::class.java)
-                intent.putExtra("chatroom_id", chatRoom.id)
-                it.context.startActivity(intent)
+            binding.chatCardview.setOnClickListener {
+                onChatRoomClick(chatRoom)
             }
         }
 
@@ -60,4 +59,6 @@ class RecyclerViewChattingRoomAdapter : RecyclerView.Adapter<RecyclerViewChattin
     fun submitList(chatRooms: List<ChatRoom>) {
         setChatRooms(chatRooms)
     }
+
+
 }

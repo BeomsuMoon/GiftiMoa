@@ -1,6 +1,5 @@
 package com.example.giftimoa.bottom_nav_fragment
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,18 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.example.giftimoa.Chatting_room_activity
 import com.example.giftimoa.R
 import com.example.giftimoa.ViewModel.ChatViewModel
-import com.example.giftimoa.ViewModel.Gificon_ViewModel
 import com.example.giftimoa.adpater_list.RecyclerViewChattingRoomAdapter
-import com.example.giftimoa.adpater_list.RecyclerViewCollectGiftAdapter
 import com.example.giftimoa.databinding.FragmentChatBinding
-import com.example.giftimoa.dto.Collect_Gift
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -64,19 +60,25 @@ class Chat_Fragment : Fragment() {
                 setDisplayUseLogoEnabled(true)
             }
         }
+        val nickname = binding.root.findViewById<TextView>(R.id.user_nickname).text.toString()
 
         chatViewModel = ViewModelProvider(requireActivity()).get(ChatViewModel::class.java)
 
         // 리사이클러뷰 어댑터 초기화
-        recyclerViewChattingRoomAdapter = RecyclerViewChattingRoomAdapter()
+        recyclerViewChattingRoomAdapter = RecyclerViewChattingRoomAdapter { chatRoom ->
+            // 클릭 이벤트를 처리하는 코드를 여기에 작성합니다.
+            val intent = Intent(context, Chatting_room_activity::class.java)
+            intent.putExtra(Chatting_room_activity.USERNAME, nickname)
+            intent.putExtra("nickname", chatRoom.nickname)
+            intent.putExtra("chatroom_id", chatRoom.id)
+            startActivity(intent)
+        }
         recyclerView = binding.root.findViewById<RecyclerView>(R.id.rv_chat).apply {
             adapter = recyclerViewChattingRoomAdapter
         }
 
-        val nickname = binding.root.findViewById<TextView>(R.id.user_nickname).text.toString()
+
         chatViewModel.fetchChatRooms(nickname)
-
-
         chatViewModel.chatRooms.observe(viewLifecycleOwner, { chatRooms ->
             Log.d("ChatFragment", "chatRooms data is updated to: $chatRooms")
             if (chatRooms != null) {
@@ -86,7 +88,6 @@ class Chat_Fragment : Fragment() {
             }
         })
     }
-
 
     //서버에서 이메일 체크하여 닉네임 가져오기
     private fun getNicknameFromServer(userEmail: String?) {

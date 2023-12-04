@@ -18,7 +18,7 @@
             android:adjustViewBounds="true"
             android:background="@color/grey_09"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_camera"
+            android:src="@drawable/profile52x52_purple"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.044"

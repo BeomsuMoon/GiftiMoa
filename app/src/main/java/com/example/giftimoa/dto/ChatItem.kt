@@ -8,5 +8,5 @@ data class ChatItem(
     val timestamp: Long,
     val isSelf: Boolean = false,
     val isDate: Boolean = false,
-    val chatroom_id: Int? = null
+    val chatroom_id: Int
 )

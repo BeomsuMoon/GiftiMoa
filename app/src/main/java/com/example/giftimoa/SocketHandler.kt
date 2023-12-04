@@ -17,31 +17,16 @@ class SocketHandler {
     private var _onNewChat = MutableLiveData<ChatItem>()
     val onNewChatItem: LiveData<ChatItem> get() = _onNewChat
 
-    private val _onChatroomCreated = MutableLiveData<List<ChatRoom>>()
-    val roomCreated: LiveData<List<ChatRoom>> get() = _onChatroomCreated
-
     init {
         try {
             socket = IO.socket(SOCKET_URL)
             socket?.connect()
             registerOnNewChat()
-/*            registerOnChatroomCreated()*/
 
         } catch (e: URISyntaxException) {
             e.printStackTrace()
         }
     }
-
-/*    private fun registerOnChatroomCreated() {
-        socket?.on("chatroom_created") { args ->
-            val chatroomJson = (args[0] as JSONObject).toString()
-            Log.d("SocketHandler", "Received data from server: $chatroomJson")
-            val chatroom = Gson().fromJson(chatroomJson, ChatRoom::class.java)
-            Log.d("SocketHandler", "Converted data to ChatRoom: $chatroom")
-             _onChatroomCreated.postValue(listOf(chatroom))
-            Log.d("SocketHandler", "Posted data to LiveData: $chatroom")
-        }
-    }*/
 
     private fun registerOnNewChat() {
         socket?.on(CHAT_KEYS.BROADCAST){ args->
