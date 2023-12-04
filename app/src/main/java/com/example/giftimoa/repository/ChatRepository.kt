@@ -15,7 +15,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import java.io.IOException
 
-class ChatRepository {
+/*class ChatRepository {
     // MutableLiveData를 사용하여 홈 기프트 목록을 보관
     private val _chatroomList: MutableLiveData<List<ChatRoom>> = MutableLiveData()
     val chatroomList: LiveData<List<ChatRoom>>
@@ -93,4 +93,4 @@ class ChatRepository {
             throw IOException("서버에서 데이터를 가져오지 못했습니다")
         }
     }
-}
+}*/
