@@ -27,7 +27,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btn_no"
-        android:foreground="?attr/selectableItemBackground"/>
+        android:foreground="?attr/selectableItemBackground"
+        android:fontFamily="@font/jalnan2"/>
 
     <TextView
         android:id="@+id/btn_no"
@@ -42,7 +43,8 @@
         app:layout_constraintEnd_toStartOf="@+id/btn_yes"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        android:foreground="?attr/selectableItemBackground"/>
+        android:foreground="?attr/selectableItemBackground"
+        android:fontFamily="@font/jalnan2"/>
 
     <TextView
         android:id="@+id/textView3"
@@ -52,8 +54,10 @@
         android:layout_marginBottom="64dp"
         android:textColor="#333333"
         android:text="회원탈퇴 하시겠습니까?"
+        android:textSize="16dp"
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/notosanskr_medium"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,8 +18,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-
-
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
@@ -34,7 +32,7 @@
             <ImageView
                 android:id="@+id/upload_image"
                 android:layout_width="match_parent"
-                android:layout_height="311dp"
+                android:layout_height="350dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="?attr/actionBarSize"
                 android:adjustViewBounds="true"
@@ -45,14 +43,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="405dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="55dp"
                 android:background="@drawable/card_view"
                 android:elevation="8dp"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp">
 
                     <!--유저 프로필-->
                     <ImageView
@@ -67,6 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:textStyle="bold"
                         android:text="유저 닉네임" />
 
                 </LinearLayout>
@@ -85,7 +86,7 @@
                         android:layout_marginLeft="2dp"
                         android:text="스타벅스 아메리카노 Tall 1잔"
                         android:textColor="@color/black"
-                        android:textSize="20dp"
+                        android:textSize="26dp"
                         android:textStyle="bold" />
 
                     <!--기프티콘 기간-->
@@ -96,24 +97,43 @@
                         android:layout_marginLeft="2dp"
                         android:text="2024-12-12까지"
                         android:textColor="@color/black"
-                        android:textSize="13dp" />
+                        android:textStyle="bold"
+                        android:textSize="16dp" />
+
+                    <!--기프티콘 브랜드-->
+                    <TextView
+                        android:id="@+id/text_expiration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="2dp"
+                        android:text="스타벅스"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:background="@color/grey_02" />
-
+                    android:background="@color/grey_09" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="4dp"
+                    android:text="상품설명"
+                    android:textColor="@color/black"
+                    android:textSize="12dp" />
                 <TextView
                     android:id="@+id/text_Product_Description"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="2dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:text="본문 내용"
                     android:textColor="@color/black"
-                    android:textSize="14dp" />
+                    android:textSize="19dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -147,22 +167,12 @@
             android:id="@+id/text_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="53dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="16dp"
             android:text="99,000원"
             android:textColor="@color/black"
-            android:textSize="15dp"
+            android:textSize="18dp"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/text_expiration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="53dp"
-            android:layout_marginTop="29dp"
-            android:text="스타벅스"
-            android:textColor="@color/black"
-            android:textSize="12dp" />
 
         <Button
             android:id="@+id/chat_btn"
@@ -177,7 +187,7 @@
             android:layout_toEndOf="@+id/text_price"
             android:background="@drawable/edittext_border"
             android:text="채팅하기"
-            android:textStyle="bold" />
-
+            android:foreground="?attr/selectableItemBackground"
+            android:fontFamily="@font/jalnan2"/>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

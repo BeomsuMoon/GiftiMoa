@@ -15,5 +15,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/background_chatting_date_radius"/>
+        android:background="@drawable/background_chatting_date_radius"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

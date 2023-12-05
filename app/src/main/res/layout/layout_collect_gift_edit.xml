@@ -62,7 +62,8 @@
                         android:text="상품명"
                         android:layout_marginLeft="6dp"
                         android:textColor="@color/black"
-                        android:textSize="13dp"/>
+                        android:textSize="13dp"
+                        android:fontFamily="@font/jalnan2"/>
                     <EditText
                         android:id="@+id/editGiftName"
                         android:layout_width="match_parent"
@@ -83,7 +84,8 @@
                         android:text="유효기간"
                         android:layout_marginLeft="6dp"
                         android:textColor="@color/black"
-                        android:textSize="13dp"/>
+                        android:textSize="13dp"
+                        android:fontFamily="@font/jalnan2"/>
                     <EditText
                         android:id="@+id/editEffectiveDate"
                         android:layout_width="match_parent"
@@ -104,7 +106,8 @@
                         android:text="바코드"
                         android:layout_marginLeft="6dp"
                         android:textColor="@color/black"
-                        android:textSize="13dp"/>
+                        android:textSize="13dp"
+                        android:fontFamily="@font/jalnan2"/>
 
                     <EditText
                         android:id="@+id/editBarcode"
@@ -126,7 +129,8 @@
                         android:text="사용처"
                         android:layout_marginLeft="6dp"
                         android:textColor="@color/black"
-                        android:textSize="13dp"/>
+                        android:textSize="13dp"
+                        android:fontFamily="@font/jalnan2"/>
 
                     <EditText
                         android:id="@+id/editUsage"
@@ -148,7 +152,8 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_solid"
                         android:layout_marginTop="20dp"
-                        android:text="수   정"/>
+                        android:text="수   정"
+                        android:fontFamily="@font/jalnan2"/>
                 </LinearLayout>
 
             </LinearLayout>

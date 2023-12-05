@@ -31,11 +31,11 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:textStyle="bold|italic"
-            android:text="GIFTI MOA"
+            android:text="GIFTIMOA"
             android:gravity="center"
             android:layout_marginLeft="40dp"
             android:textColor="#8b00ff"
-            android:textSize="30dp" />
+            android:textSize="30dp"/>
 
         <TextView
             android:layout_width="wrap_content"

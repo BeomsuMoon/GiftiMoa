@@ -17,14 +17,13 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import java.security.MessageDigest
 
-
-private val home_Fragment = Home_Fragment()
-private val collect_fragment = Collect_fragment()
-private val chat_Fragment = Chat_Fragment()
-private val menu_Fragment = Menu_Fragment()
-private var waitTime = 0L
-
 class MainActivity : AppCompatActivity() {
+
+    private val home_Fragment = Home_Fragment()
+    private val collect_fragment = Collect_fragment()
+    private val chat_Fragment = Chat_Fragment()
+    private val menu_Fragment = Menu_Fragment()
+    private var waitTime = 0L
 
     private val TAG = "SOL_LOG"
 
@@ -40,12 +39,11 @@ class MainActivity : AppCompatActivity() {
                 val md: MessageDigest
                 md = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
-                var hashcode = String(Base64.encode(md.digest(), 0))
+                val hashcode = String(Base64.encode(md.digest(), 0))
                 Log.d("hashcode", "" + hashcode)
             }
         } catch (e: Exception) {
             Log.d("hashcode", "에러::" + e.toString())
-
         }
 
         super.onCreate(savedInstanceState)
@@ -55,29 +53,57 @@ class MainActivity : AppCompatActivity() {
 
         replaceFragment(home_Fragment)
 
-        bottomNavigationView.setOnItemSelectedListener {
-            when(it.itemId){
-                R.id.ic_home -> replaceFragment(home_Fragment)
-                R.id.ic_collect -> replaceFragment(collect_fragment)
-                R.id.ic_chat -> replaceFragment(chat_Fragment)
-                R.id.ic_usermenu -> replaceFragment(menu_Fragment)
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
+
+            when (menuItem.itemId) {
+                R.id.ic_home -> {
+                    if (currentFragment is Home_Fragment) {
+                        // Home_Fragment를 새 인스턴스로 교체하여 새로 고침
+                        replaceFragment(Home_Fragment())
+                    } else {
+                        replaceFragment(home_Fragment)
+                    }
+                }
+                R.id.ic_collect -> {
+                    if (currentFragment is Collect_fragment) {
+                        // Collect_fragment를 새 인스턴스로 교체하여 새로 고침
+                        replaceFragment(Collect_fragment())
+                    } else {
+                        replaceFragment(collect_fragment)
+                    }
+                }
+                R.id.ic_chat -> {
+                    if (currentFragment is Chat_Fragment) {
+                        // Chat_Fragment를 새 인스턴스로 교체하여 새로 고침
+                        replaceFragment(Chat_Fragment())
+                    } else {
+                        replaceFragment(chat_Fragment)
+                    }
+                }
+                R.id.ic_usermenu -> {
+                    if (currentFragment is Menu_Fragment) {
+                        // Menu_Fragment를 새 인스턴스로 교체하여 새로 고침
+                        replaceFragment(Menu_Fragment())
+                    } else {
+                        replaceFragment(menu_Fragment)
+                    }
+                }
             }
             true
         }
     }
 
-    private fun replaceFragment(fragment: Fragment){
-        if(fragment != null){
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout, fragment)
-            transaction.commit()
-        }
+    private fun replaceFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frame_layout, fragment)
+        transaction.commit()
     }
 
     override fun onBackPressed() {
-        if(System.currentTimeMillis() - waitTime >=1500 ) {
+        if (System.currentTimeMillis() - waitTime >= 1500) {
             waitTime = System.currentTimeMillis()
-            Toast.makeText(this,"'뒤로' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
         } else {
             finish() // 액티비티 종료
         }

@@ -39,7 +39,7 @@
             android:textSize="30dp"
             android:textStyle="bold" />
 
-        <!--프로필설정-->
+<!--        &lt;!&ndash;프로필설정&ndash;&gt;
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -70,14 +70,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
         <!--이메일 -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ID_textField"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginTop="10dp"
+
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginBottom="10dp"

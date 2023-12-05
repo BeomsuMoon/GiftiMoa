@@ -95,7 +95,7 @@ class Chatting_room_activity : AppCompatActivity() {
         }
         socketHandler.onNewChatItem.observe(this) { newItem ->
             newItem?.let {
-                val snickname = it.nickname ?: "기본값"
+                val nickname = it.nickname ?: user_nickname
 
                 if (it.nickname != null) {
                     val chat = it.copy(isSelf = it.nickname == user_nickname)

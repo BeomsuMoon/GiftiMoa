@@ -3,7 +3,7 @@
     <style name="Regular">
         <item name="android:includeFontPadding">false</item>
         <item name="android:textColor">@color/black</item>
-
+        <item name="fontFamily">@font/jalnan2</item>
     </style>
 
     <style name="Medium">
@@ -34,8 +34,12 @@
     <style name="Medium.Grey">
         <item name="android:textColor">"#5A5A5A"</item>
     </style>
+    <style name="Medium.White">
+    <item name="android:textColor">@color/white</item>
+    </style>
     <style name="Regular.White">
         <item name="android:textColor">@color/white</item>
+
     </style>
     <style name="Regular.Grey">
         <item name="android:textColor">#969696</item>

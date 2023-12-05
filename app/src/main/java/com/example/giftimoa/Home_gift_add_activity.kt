@@ -84,14 +84,14 @@ class Home_gift_add_activity : AppCompatActivity() {
         )
 
         // 카테고리 스피너 어댑터 설정
-        val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
+        val categoryAdapter = ArrayAdapter(this, R.layout.a_home_spinner, categories)
         binding.spinnerCategory.adapter = categoryAdapter
 
         // 카테고리 선택이 변경될 때마다 브랜드 스피너 업데이트
         binding.spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val selectedCategory = categories[position]
-                val brandAdapter = ArrayAdapter(this@Home_gift_add_activity, android.R.layout.simple_spinner_item, brands[selectedCategory]!!)
+                val brandAdapter = ArrayAdapter(this@Home_gift_add_activity, R.layout.a_home_spinner, brands[selectedCategory]!!)
                 binding.spinnerBrand.adapter = brandAdapter
             }
             override fun onNothingSelected(parent: AdapterView<*>) {

@@ -11,6 +11,8 @@ dependencyResolutionManagement {
         google()
         maven(url = "https://devrepo.kakao.com/nexus/repository/kakaomap-releases/")
         mavenCentral()
+        jcenter()
+        maven(url = "https://jitpack.io")
     }
 
 

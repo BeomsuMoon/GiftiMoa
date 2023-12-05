@@ -151,7 +151,6 @@ class Menu_Fragment : Fragment() {
         }
         //로그아웃
         binding.tvLogout.setOnClickListener {
-
             val dialogBinding = DialogYcBtnBinding.inflate(LayoutInflater.from(requireContext()))
             val builder = AlertDialog.Builder(requireContext()).setView(dialogBinding.root)
 

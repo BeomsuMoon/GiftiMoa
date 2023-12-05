@@ -112,6 +112,8 @@ class Home_Fragment : Fragment() {
 
         return rootView
     }
+
+    //카테고리 클릭 리스너
     fun getCommonClickListener(activity: Activity, tabIndex: Int): View.OnClickListener {
         return View.OnClickListener {
             val intent = Intent(activity, Search_gift_activity::class.java)
@@ -155,22 +157,7 @@ class Home_Fragment : Fragment() {
                 mIndicator.animatePageSelected(position % numPage)
             }
         })
-/*
-        // 자동 슬라이드 코드 추가
-        var currentPage = 1000
-        val handler = Handler(Looper.getMainLooper())
-        val update = Runnable {
-            if (currentPage == numPage) {
-                currentPage = 0
-            }
-            mPager.setCurrentItem(currentPage++, true)
-        }
 
-        Timer().schedule(object : TimerTask() {
-            override fun run() {
-                handler.post(update)
-            }
-        }, 500, 20000)*/
 
         recyclerView = view.findViewById<RecyclerView>(R.id.rv_Gift_Home)
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireActivity(), 2)

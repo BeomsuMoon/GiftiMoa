@@ -57,10 +57,6 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.9.1")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     implementation("androidx.fragment:fragment-ktx:1.5.5")
-    implementation(fileTree("libs") {
-        include("*.jar")
-    })
-
     implementation ("com.kakao.maps.open:android:2.6.0")
 
     //갤러리 사진 가져오는 라이브러리 기타 등등..
@@ -77,9 +73,8 @@ dependencies {
     implementation("io.socket:socket.io-client:2.0.0"){
         exclude("org.json","json")
     }
-
+    implementation(files("src/main/jniLibs"))
     implementation(files("libs/libDaumMapAndroid.jar"))
-    implementation(files("app/src/main/jniLibs"))
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -53,7 +53,9 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
-                    android:textSize="11dp"/>
+                    android:layout_marginBottom="5dp"
+                    android:textSize="11dp"
+                    android:fontFamily="@font/jalnan2"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -81,7 +83,8 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.526" />
+                                app:layout_constraintVertical_bias="0.526"
+                                android:fontFamily="@font/jalnan2"/>
 
                             <TextView
                                 android:id="@+id/text_giftName"
@@ -90,12 +93,13 @@
                                 android:layout_marginEnd="4dp"
                                 android:text="상품명"
                                 android:textColor="@color/grey_02"
-
                                 android:textSize="14dp"
+                                android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.526" />
+                                app:layout_constraintVertical_bias="0.526"
+                                />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
 
@@ -120,7 +124,8 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.526" />
+                                app:layout_constraintVertical_bias="0.526"
+                                android:fontFamily="@font/jalnan2"/>
 
                             <TextView
                                 android:id="@+id/text_Effective_date"
@@ -129,7 +134,7 @@
                                 android:layout_marginEnd="4dp"
                                 android:text="유효기간"
                                 android:textColor="@color/grey_02"
-
+                                android:textStyle="bold"
                                 android:textSize="14dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -159,7 +164,8 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.526" />
+                                app:layout_constraintVertical_bias="0.526"
+                                android:fontFamily="@font/jalnan2"/>
 
                             <TextView
                                 android:id="@+id/text_barcode"
@@ -169,10 +175,12 @@
                                 android:text="바코드"
                                 android:textColor="@color/grey_02"
                                 android:textSize="14dp"
+                                android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.526" />
+                                app:layout_constraintVertical_bias="0.526"
+                                />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
 
@@ -197,7 +205,8 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.526" />
+                                app:layout_constraintVertical_bias="0.526"
+                                android:fontFamily="@font/jalnan2"/>
 
                             <TextView
                                 android:id="@+id/text_usage"
@@ -206,7 +215,7 @@
                                 android:layout_marginEnd="4dp"
                                 android:text="사용처"
                                 android:textColor="@color/grey_02"
-
+                                android:textStyle="bold"
                                 android:textSize="14dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -243,7 +252,8 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/imageView"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.5" />
+                                app:layout_constraintVertical_bias="0.5"
+                                android:fontFamily="@font/jalnan2"/>
 
                             <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/map_btn"
@@ -253,6 +263,7 @@
                                 android:text="현재위치 보기"
                                 android:textColor="@color/black"
                                 android:textSize="12dp"
+                                android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -267,7 +278,8 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_solid"
                         android:layout_marginTop="20dp"
-                        android:text="사 용 완 료"/>
+                        android:text="사 용 완 료"
+                        android:fontFamily="@font/jalnan2"/>
                 </LinearLayout>
 
             </LinearLayout>

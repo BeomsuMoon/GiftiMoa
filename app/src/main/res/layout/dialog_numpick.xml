@@ -43,7 +43,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/np_select"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            android:fontFamily="@font/jalnan2"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -57,6 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/l_select"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fontFamily="@font/jalnan2"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

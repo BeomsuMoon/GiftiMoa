@@ -64,12 +64,13 @@
                         android:layout_marginTop="7dp"
                         android:text="닉네임님 환영합니다."
                         style="@style/Bold"
+                        android:textStyle="bold"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_account"
-                        style="@style/Regular"
+                        style="@style/Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="test@naver.com"
@@ -110,7 +111,8 @@
                     style="@style/Bold"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:fontFamily="@font/jalnangothicttf"/>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_noti"
@@ -149,6 +151,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/noti_title_first"
                         android:textSize="12sp"
+                        android:textStyle="bold"
                         android:textColor="@color/black_03"/>
 
                     <LinearLayout
@@ -159,7 +162,6 @@
                         <!--마감입박 최초 알림 숫자-->
                         <TextView
                             android:id="@+id/tv_noti_setting_first"
-                            style="@style/Regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
@@ -167,7 +169,6 @@
 
                         <TextView
                             android:id="@+id/tv_noti_setting_first_text"
-                            style="@style/Regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
@@ -197,6 +198,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/noti_title_interval"
                         android:textSize="12sp"
+                        android:textStyle="bold"
                         android:textColor="@color/black_03"/>
 
                     <LinearLayout
@@ -207,7 +209,6 @@
                         <!--마감임박 알림 간격 숫자-->
                         <TextView
                             android:id="@+id/tv_noti_setting_interval"
-                            style="@style/Regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
@@ -215,7 +216,6 @@
 
                         <TextView
                             android:id="@+id/tv_noti_setting_interval_text"
-                            style="@style/Regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
@@ -244,11 +244,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/noti_title_time"
                         android:textSize="12sp"
+                        android:textStyle="bold"
                         android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/tv_noti_setting_time"
-                        style="@style/Regular"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
@@ -273,6 +274,7 @@
             android:paddingBottom="16dp"
             android:background="@drawable/change_color_press_white"
             android:text="나의 관심 기프티콘"
+            android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/l_noti"
             android:foreground="?attr/selectableItemBackground"/>
 
@@ -289,6 +291,7 @@
             android:paddingRight="20dp"
             android:paddingBottom="16dp"
             android:text="내 상품 관리"
+            android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/tv_favorite"
             tools:layout_editor_absoluteX="0dp" />
 
@@ -304,15 +307,15 @@
             android:paddingRight="20dp"
             android:paddingBottom="16dp"
             android:text="@string/logout"
+            android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/my_gifticon"
             tools:layout_editor_absoluteX="0dp" />
 
         <TextView
             android:id="@+id/tv_withdraw"
-            style="@style/Regular"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:paddingTop="16dp"
             android:paddingRight="20dp"
             android:paddingLeft="20dp"

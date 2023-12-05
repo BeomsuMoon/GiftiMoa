@@ -57,7 +57,8 @@
             app:layout_constraintHorizontal_bias="0.04"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.086" />
+            app:layout_constraintVertical_bias="0.086"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -69,20 +70,22 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/user_nickname"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.086" />
+            app:layout_constraintVertical_bias="0.086"
+            />
 
         <TextView
             android:id="@+id/noChatTextView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="지금 바로 대화를 시작해 보세요."
+            android:text="지금 바로 대화를 시작해 보세요!"
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:fontFamily="@font/jalnan2"/>
 
         <TextView
             android:id="@+id/noChatTextView2"
@@ -94,7 +97,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.552" />
+            app:layout_constraintVertical_bias="0.552"
+            android:fontFamily="@font/notosanskr_medium"
+/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

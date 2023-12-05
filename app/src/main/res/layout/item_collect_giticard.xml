@@ -41,16 +41,16 @@
             app:layout_constraintStart_toStartOf="@id/iv_product_preview"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="0dp" />
-
+0
         <TextView
             android:id="@+id/tv_brand"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_product_preview"
-            tools:text="스타벅스" />
+            tools:text="스타벅스"
+            style="@style/Regular"/>
 
         <TextView
             android:id="@+id/tv_name"
@@ -79,7 +79,7 @@
 
         <TextView
             android:id="@+id/tv_banner_badge"
-            style="@style/Regular.White"
+            style="@style/Bold.White"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/grey_02"

@@ -168,7 +168,7 @@
                 android:gravity="center"
                 android:text="커피"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/jalnan2"/>
 
             <TextView
                 android:layout_width="50dp"
@@ -178,7 +178,7 @@
                 android:gravity="center"
                 android:text="치킨"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/jalnan2" />
 
             <TextView
                 android:layout_width="50dp"
@@ -188,7 +188,7 @@
                 android:gravity="center"
                 android:text="피자"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/jalnan2" />
 
             <TextView
                 android:layout_width="50dp"
@@ -198,7 +198,7 @@
                 android:gravity="center"
                 android:text="패스트푸드"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/jalnan2"/>
 
             <TextView
                 android:layout_width="60dp"
@@ -208,18 +208,18 @@
                 android:gravity="center"
                 android:text="편의점･마트"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/jalnan2" />
 
             <!--하단 아이콘 목록 이름-->
             <TextView
                 android:layout_width="50dp"
-                android:layout_height="20dp"
+                android:layout_height="25dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="133dp"
                 android:gravity="center"
                 android:text="베이커리"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/jalnan2" />
 
             <TextView
                 android:layout_width="50dp"
@@ -229,7 +229,7 @@
                 android:gravity="center"
                 android:text="아이스크림"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/jalnan2" />
 
             <TextView
                 android:layout_width="50dp"
@@ -239,7 +239,7 @@
                 android:gravity="center"
                 android:text="외식･분식"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/jalnan2" />
 
             <TextView
                 android:layout_width="50dp"
@@ -249,7 +249,7 @@
                 android:gravity="center"
                 android:text="영화･엔터"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/jalnan2" />
 
             <TextView
                 android:layout_width="50dp"
@@ -259,7 +259,7 @@
                 android:gravity="center"
                 android:text="기타"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/jalnan2" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -267,11 +267,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="최신 기프티콘"
-        android:layout_marginTop="435dp"
+        android:layout_marginTop="445dp"
         android:layout_marginLeft="15dp"
-        android:textStyle="bold"
+
         android:textSize="18dp"
-        android:textColor="@color/black"/>
+        android:textColor="@color/grey_02"
+        style="@style/Regular"/>
 
     <!--중고 아이템 목록-->
 
