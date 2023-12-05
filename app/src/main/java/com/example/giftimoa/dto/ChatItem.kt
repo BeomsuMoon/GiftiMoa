@@ -2,7 +2,7 @@ package com.example.giftimoa.dto
 
 data class ChatItem(
     //val profileImageUrl: String,
-    val nickname: String,
+    val nickname: String?,
     val reciver_nickname: String?,
     val message: String,
     val timestamp: Long,

@@ -93,13 +93,22 @@ class Chatting_room_activity : AppCompatActivity() {
                 binding.messageText.text.clear()
             }
         }
-
-        socketHandler.onNewChatItem.observe(this){
-            val chat = it.copy(isSelf = it.nickname == user_nickname)
-            chatList.add(chat)
-            recyclerViewChattingRoomAdapter.submitData(chatList)
-            binding.rvChattingRoom.scrollToPosition(chatList.size - 1)
+        socketHandler.onNewChatItem.observe(this) { newItem ->
+            newItem?.let {
+                val snickname = it.nickname ?: "기본값"
+                if (it.nickname != null) {
+                    val chat = it.copy(isSelf = it.nickname == user_nickname)
+                    chatList.add(chat)
+                    recyclerViewChattingRoomAdapter.submitData(chatList)
+                    binding.rvChattingRoom.scrollToPosition(chatList.size - 1)
+                } else {
+                    Log.e("ChattingRoom", "nickname이 ${it.nickname}입니다.")
+                    // 사용자에게 에러 메시지를 보여줄 수 있음
+                }
+            }
         }
+
+
         //키보드 내리기
         binding.rvChattingRoom.setOnTouchListener { _, _ -> //리사이클러뷰 영역 터치 시 키보드 내리기
             hideKeyboard()
@@ -121,19 +130,28 @@ class Chatting_room_activity : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 // 네트워크 요청 실패 시 처리
                 e.printStackTrace()
-                Log.e("ChattingRoom", "Failed to fetch chat messages", e)
+                Log.e("ChattingRoom", "채팅 메시지 가져오기 실패", e)
+                runOnUiThread {
+                    // 사용자에게 에러 메시지를 보여주는 작업 수행 (Toast 등)
+                }
             }
 
             override fun onResponse(call: Call, response: Response) {
                 if (!response.isSuccessful) {
-                    Log.e("ChattingRoom", "Response from server is not successful. Code: ${response.code}")
+                    Log.e("ChattingRoom", "서버 응답 실패. 코드: ${response.code}")
+                    runOnUiThread {
+                        // 사용자에게 에러 메시지를 보여주는 작업 수행 (Toast 등)
+                    }
                     return
                 }
 
                 // 네트워크 요청 성공 시 처리
                 val responseBody = response.body?.string()
                 if (responseBody == null) {
-                    Log.e("ChattingRoom", "Response body is null")
+                    Log.e("ChattingRoom", "응답 본문이 비어 있음")
+                    runOnUiThread {
+                        // 사용자에게 에러 메시지를 보여주는 작업 수행 (Toast 등)
+                    }
                     return
                 }
 
@@ -141,22 +159,21 @@ class Chatting_room_activity : AppCompatActivity() {
                 try {
                     messages = Gson().fromJson(responseBody, Array<ChatItem>::class.java)
                 } catch (e: JsonSyntaxException) {
-                    Log.e("ChattingRoom", "Failed to parse chat messages", e)
+                    Log.e("ChattingRoom", "채팅 메시지 파싱 실패", e)
+                    runOnUiThread {
+                        // 사용자에게 에러 메시지를 보여주는 작업 수행 (Toast 등)
+                    }
                     return
                 }
-
                 runOnUiThread {
                     chatList.addAll(messages)
                     recyclerViewChattingRoomAdapter.submitData(chatList)
-                    Log.d("ChattingRoom", "Chat messages fetched successfully")
+                    Log.d("ChattingRoom", "채팅 메시지 성공적으로 가져옴")
                 }
             }
         })
     }
 
-
-
-    //타이틀바 설정
     private fun setupActionBarTitle(nickname: String?, brand: String?) {
         // 주 제목과 서브 제목을 포함하는 레이아웃 생성
         val layout = LinearLayout(this)
