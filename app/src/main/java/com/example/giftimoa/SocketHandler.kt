@@ -11,7 +11,6 @@ import io.socket.client.Socket
 import org.json.JSONObject
 import java.net.URISyntaxException
 
-
 class SocketHandler {
     private var socket: Socket? = null
     private var _onNewChat = MutableLiveData<ChatItem>()
@@ -29,14 +28,16 @@ class SocketHandler {
     }
 
     private fun registerOnNewChat() {
-        socket?.on(CHAT_KEYS.BROADCAST){ args->
-            args?.let { d->
-                if(d.isNotEmpty()){
-                    val data = d[0]
-                    Log.d("DATADEBUG","$data")
-                    if(d.toString().isNotEmpty()) {
-                        val chat = Gson().fromJson(data.toString(), ChatItem::class.java)
+        socket?.on(CHAT_KEYS.BROADCAST) { args ->
+            args?.let { d ->
+                if (d.isNotEmpty()) {
+                    try {
+                        val jsonObject = JSONObject(d[0].toString())
+                        val chat = Gson().fromJson(jsonObject.getString("chat"), ChatItem::class.java)
                         _onNewChat.postValue(chat)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Log.e("ChattingRoom", "Error parsing chat JSON", e)
                     }
                 }
             }

@@ -96,17 +96,19 @@ class Chatting_room_activity : AppCompatActivity() {
         socketHandler.onNewChatItem.observe(this) { newItem ->
             newItem?.let {
                 val snickname = it.nickname ?: "기본값"
+
                 if (it.nickname != null) {
                     val chat = it.copy(isSelf = it.nickname == user_nickname)
                     chatList.add(chat)
                     recyclerViewChattingRoomAdapter.submitData(chatList)
                     binding.rvChattingRoom.scrollToPosition(chatList.size - 1)
                 } else {
-                    Log.e("ChattingRoom", "nickname이 ${it.nickname}입니다.")
+                    Log.e("ChattingRoom", "nickname이 null입니다. newItem: $newItem")
                     // 사용자에게 에러 메시지를 보여줄 수 있음
                 }
-            }
+            } ?: Log.e("ChattingRoom", "Received newItem is null")
         }
+
 
 
         //키보드 내리기
