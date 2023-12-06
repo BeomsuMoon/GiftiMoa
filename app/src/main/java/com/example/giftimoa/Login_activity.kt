@@ -1,7 +1,9 @@
 package com.example.giftimoa
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -9,6 +11,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -19,9 +23,37 @@ import kotlin.system.exitProcess
 
 class Login_activity : AppCompatActivity() {
 
+    private val LOCATION_PERMISSION_REQUEST_CODE = 11
+    private val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 22
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_login)
+
+        // 위치 권한 요청
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
+
+        // 갤러리 읽기 권한 요청
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE
+            )
+        }
 
         // XML에서 정의한 위젯들과 연결
         val emailEditText = findViewById<EditText>(R.id.emailEditText)
@@ -150,5 +182,31 @@ class Login_activity : AppCompatActivity() {
         moveTaskToBack(true) // 태스크를 백그라운드로 이동
         android.os.Process.killProcess(android.os.Process.myPid()) // 프로세스 종료
         exitProcess(1) // 시스템 종료
+    }
+    // 권한 요청 결과 처리
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 위치 권한 획득 완료
+                } else {
+                    // 위치 권한 거부됨
+                    Toast.makeText(this, "위치 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 갤러리 읽기 권한 획득 완료
+                } else {
+                    // 갤러리 읽기 권한 거부됨
+                    Toast.makeText(this, "갤러리 읽기 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }
