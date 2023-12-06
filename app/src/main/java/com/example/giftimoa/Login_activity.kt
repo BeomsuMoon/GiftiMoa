@@ -24,36 +24,12 @@ import kotlin.system.exitProcess
 class Login_activity : AppCompatActivity() {
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 11
-    private val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 22
+    private val REQUEST_READ_EXTERNAL_STORAGE = 896
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_login)
 
-        // 위치 권한 요청
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-        }
-
-        // 갤러리 읽기 권한 요청
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE
-            )
-        }
+        requestGalleryPermission()
 
         // XML에서 정의한 위젯들과 연결
         val emailEditText = findViewById<EditText>(R.id.emailEditText)
@@ -108,41 +84,60 @@ class Login_activity : AppCompatActivity() {
                             if (result == 0) {
 
                                 // SharedPreferences에 email 저장
-                                val sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+                                val sharedPreferences =
+                                    getSharedPreferences("user_data", Context.MODE_PRIVATE)
                                 val editor = sharedPreferences.edit()
                                 editor.putString("user_email", email)
                                 editor.apply()
 
                                 // 로그인 성공 시 다음 화면으로 이동
                                 val intent = Intent(this, MainActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                intent.flags =
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 startActivity(intent)
                                 finish()
                             } else if (result == 1) {
                                 runOnUiThread {
-                                    Toast.makeText(applicationContext, "이메일 또는 비밀번호가 틀립니다.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "이메일 또는 비밀번호가 틀립니다.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             } else {
                                 runOnUiThread {
-                                    Toast.makeText(applicationContext, "서버 오류 또는 알 수 없는 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "서버 오류 또는 알 수 없는 오류가 발생했습니다.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
                         } catch (e: JSONException) {
                             e.printStackTrace()
                             runOnUiThread {
-                                Toast.makeText(applicationContext, "응답 데이터 파싱 오류", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "응답 데이터 파싱 오류",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     } else {
                         // 서버 응답이 실패인 경우
                         runOnUiThread {
-                            Toast.makeText(applicationContext, "서버 응답 실패", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, "서버 응답 실패", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     runOnUiThread {
-                        Toast.makeText(applicationContext, "오류 발생: " + e.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            applicationContext,
+                            "오류 발생: " + e.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }.start()
@@ -170,7 +165,8 @@ class Login_activity : AppCompatActivity() {
     override fun onBackPressed() {
         val currentTime = System.currentTimeMillis()
         if (currentTime - backPressedTime > 2000) {
-            Toast.makeText(this, "'뒤로' 버튼을 한 번 더 누르시면 " + '\n' +"앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "'뒤로' 버튼을 한 번 더 누르시면 " + '\n' + "앱이 종료됩니다.", Toast.LENGTH_SHORT)
+                .show()
             backPressedTime = currentTime
         } else {
             exitApp() // 앱 종료 함수 호출
@@ -183,6 +179,21 @@ class Login_activity : AppCompatActivity() {
         android.os.Process.killProcess(android.os.Process.myPid()) // 프로세스 종료
         exitProcess(1) // 시스템 종료
     }
+
+    private fun requestGalleryPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                REQUEST_READ_EXTERNAL_STORAGE
+            )
+        }
+
+    }
     // 권한 요청 결과 처리
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -191,20 +202,19 @@ class Login_activity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
+            REQUEST_READ_EXTERNAL_STORAGE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    // 갤러리 읽기 권한 거부됨
+                    Toast.makeText(this, "갤러리 읽기 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
             LOCATION_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // 위치 권한 획득 완료
                 } else {
                     // 위치 권한 거부됨
                     Toast.makeText(this, "위치 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // 갤러리 읽기 권한 획득 완료
-                } else {
-                    // 갤러리 읽기 권한 거부됨
-                    Toast.makeText(this, "갤러리 읽기 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
