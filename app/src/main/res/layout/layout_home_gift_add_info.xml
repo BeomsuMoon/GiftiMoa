@@ -186,7 +186,7 @@
             android:layout_marginRight="10dp"
             android:layout_toEndOf="@+id/text_price"
             android:background="@drawable/edittext_border"
-            android:text="채팅하기"
+            android:text="메시지보내기"
             android:foreground="?attr/selectableItemBackground"
             android:fontFamily="@font/jalnan2"/>
     </RelativeLayout>

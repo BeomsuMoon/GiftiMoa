@@ -26,7 +26,7 @@ class RecyclerViewChattingRoomAdapter(private val onChatItemClick: (ChatItem) ->
     inner class ChatItemViewHolder(private val binding: ItemChattingCardviewBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatItem: ChatItem) {
             Log.d("로그", "Bind ViewHolder with: $chatItem")
-            binding.userNickname.text = chatItem.reciver_nickname
+            binding.userNickname.text = chatItem.nickname
             binding.userMessage.text = chatItem.message
             binding.brand.text = chatItem.brand
             binding.timestamp.text = chatItem.timestamp
