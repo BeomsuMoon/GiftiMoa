@@ -33,9 +33,9 @@
         <activity
             android:name=".Collect_gift_MapView"
             android:exported="true"/>
-        <activity
+<!--        <activity
             android:name=".Chatting_room_activity"
-            android:exported="true"/>
+            android:exported="true"/>-->
         <activity
             android:name=".Home_category_brand_list"
             android:exported="true"/>

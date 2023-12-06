@@ -1,3 +1,4 @@
+/*
 package com.example.giftimoa
 
 import android.util.Log
@@ -62,4 +63,4 @@ class SocketHandler {
     companion object{
         private const val SOCKET_URL = "http://3.35.110.246:3306/"
     }
-}
+}*/

@@ -1,62 +1,51 @@
 package com.example.giftimoa.adpater_list
 
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.giftimoa.dto.ChatRoom
 import com.example.giftimoa.databinding.ItemChattingCardviewBinding
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-class RecyclerViewChattingRoomAdapter(private val onChatRoomClick: (ChatRoom) -> Unit) :
-    RecyclerView.Adapter<RecyclerViewChattingRoomAdapter.ChatRoomViewHolder>() {
-    private val chatRooms = mutableListOf<ChatRoom>()
+import com.example.giftimoa.dto.ChatItem
+class RecyclerViewChattingRoomAdapter(private val onChatItemClick: (ChatItem) -> Unit) :
+    RecyclerView.Adapter<RecyclerViewChattingRoomAdapter.ChatItemViewHolder>() {
+    private val chatItem = mutableListOf<ChatItem>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRoomViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemChattingCardviewBinding.inflate(layoutInflater, parent, false)
-        return ChatRoomViewHolder(binding)
+        return ChatItemViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ChatRoomViewHolder, position: Int) {
-        val chatRoom = chatRooms[position]
-        holder.bind(chatRoom)
+    override fun onBindViewHolder(holder: ChatItemViewHolder, position: Int) {
+        val chatItem = chatItem[position]
+        holder.bind(chatItem)
     }
 
-    override fun getItemCount(): Int = chatRooms.size
+    override fun getItemCount(): Int = chatItem.size
 
-    inner class ChatRoomViewHolder(private val binding: ItemChattingCardviewBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatRoom: ChatRoom) {
-            Log.d("로그", "Bind ViewHolder with: $chatRoom")
-            binding.userNickname.text = chatRoom.nickname
-            binding.userMessage.text = chatRoom.last_message
-            binding.timestamp.text = formatTimestamp(chatRoom.last_date)
+    inner class ChatItemViewHolder(private val binding: ItemChattingCardviewBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(chatItem: ChatItem) {
+            Log.d("로그", "Bind ViewHolder with: $chatItem")
+            binding.userNickname.text = chatItem.reciver_nickname
+            binding.userMessage.text = chatItem.message
+            binding.brand.text = chatItem.brand
+            binding.timestamp.text = chatItem.timestamp
 
             // 채팅방 아이템 클릭 이벤트 처리
-            binding.chatCardview.setOnClickListener {
-                onChatRoomClick(chatRoom)
+            binding.root.setOnClickListener {
+                onChatItemClick(chatItem) // 클릭된 아이템 데이터를 ChatFragment로 전달
             }
-        }
-
-        private fun formatTimestamp(timestamp: Long): String {
-            val date = Date(timestamp)
-            val format = SimpleDateFormat("MM월 dd일", Locale.getDefault())
-            return format.format(date)
         }
     }
 
-    fun setChatRooms(chatRooms: List<ChatRoom>) {
-        this.chatRooms.clear()
-        this.chatRooms.addAll(chatRooms)
+    fun setChatItem(chatItem: List<ChatItem>) {
+        this.chatItem.clear()
+        this.chatItem.addAll(chatItem)
         notifyDataSetChanged()
     }
 
-    fun submitList(chatRooms: List<ChatRoom>) {
-        setChatRooms(chatRooms)
+    fun submitList(chatItem: List<ChatItem>) {
+        setChatItem(chatItem)
     }
 
 

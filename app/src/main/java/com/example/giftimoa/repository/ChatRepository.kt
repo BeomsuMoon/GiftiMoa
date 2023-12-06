@@ -1,53 +1,79 @@
 package com.example.giftimoa.repository
 
 
-import com.example.giftimoa.dto.ChatRoom
 import android.util.Log
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonParseException
-import com.google.gson.reflect.TypeToken
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.giftimoa.dto.ChatItem
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.lang.reflect.Type
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
 
 
 class ChatRepository {
+    private val _chatMessages = MutableLiveData<List<ChatItem>>()
+    val chatMessages: LiveData<List<ChatItem>> get() = _chatMessages
     private val client = OkHttpClient()
-    suspend fun getChatRooms(nickname: String): List<ChatRoom>? {
-        Log.d("ChatRepository", "getChatRooms is called with nickname: $nickname")
-        val url = "http://3.35.110.246:3306/chatList?nickname=$nickname"
-        val request = Request.Builder().url(url).build()
-        return try {
-            withContext(Dispatchers.IO) {
+
+    suspend fun fetchChatMessages(nickname: String) {
+        withContext(Dispatchers.IO) {
+            val url = "http://3.35.110.246:3306/message?nickname=$nickname"
+            val request = Request.Builder().url(url).build()
+
+            try {
                 client.newCall(request).execute().use { response ->
-                    val responseData = response.body?.string()
-                    parseChatRoomsFromJson(responseData)
+                    if (response.isSuccessful) {
+                        val responseData = response.body?.string()
+                        val messages = Gson().fromJson(responseData, Array<ChatItem>::class.java).toList()
+
+                        _chatMessages.postValue(messages)
+                    } else {
+                        // Handle unsuccessful response here
+                        Log.e("ChatRepository", "Unsuccessful response: ${response.code}")
+                        // 예외를 던지거나 적절한 처리를 수행합니다.
+                    }
                 }
+            } catch (e: IOException) {
+                // Handle IO exception here
+                e.printStackTrace()
+                // 예외를 던지거나 적절한 처리를 수행합니다.
             }
-        } catch (e: Exception) {
-            null
         }
     }
-    private fun parseChatRoomsFromJson(json: String?): List<ChatRoom> {
-        val gson = GsonBuilder()
-            .registerTypeAdapter(Date::class.java, object : JsonDeserializer<Date> {
-                val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 
-                @Throws(JsonParseException::class)
-                override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Date {
-                    return df.parse(json.asString)
+    suspend fun sendMessage(nickname: String, receiverNickname: String, brand: String, message: String, timestamp: String) {
+        withContext(Dispatchers.IO) {
+            val url = "http://3.35.110.246:3306/chatmessage_add"
+            val json = """{
+                "nickname": "$nickname",
+                "reciver_nickname": "$receiverNickname",
+                "brand": "$brand",
+                "message": "$message",
+                "timestamp": "$timestamp"
+            }"""
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            val requestBody = json.toRequestBody(mediaType)
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build()
+
+            try {
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) {
+                        throw IOException("Unexpected code $response")
+                    }
                 }
-            })
-            .create()
-        val type = object : TypeToken<List<ChatRoom>>() {}.type
-        return gson.fromJson(json, type)
+            } catch (e: IOException) {
+                // Handle IO exception here
+                e.printStackTrace()
+                // 예외를 던지거나 적절한 처리를 수행합니다.
+            }
+        }
     }
 }

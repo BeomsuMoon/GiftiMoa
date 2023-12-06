@@ -69,10 +69,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
 
-    //웹소켓 라이브러리
+/*    //웹소켓 라이브러리
     implementation("io.socket:socket.io-client:2.0.0"){
         exclude("org.json","json")
-    }
+    }*/
     implementation(files("src/main/jniLibs"))
     implementation(files("libs/libDaumMapAndroid.jar"))
 
