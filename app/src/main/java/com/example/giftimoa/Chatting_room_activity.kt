@@ -1,3 +1,4 @@
+/*
 package com.example.giftimoa
 
 import android.content.Context
@@ -225,4 +226,4 @@ class Chatting_room_activity : AppCompatActivity() {
         const val USERNAME = "username"
         const val RECIVER_USERNAME = "reciver_username"
     }
-}
+}*/

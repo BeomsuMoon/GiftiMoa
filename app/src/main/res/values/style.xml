@@ -22,6 +22,14 @@
         <item name="android:textColor">@color/black</item>
 
     </style>
+    <style name="Black">
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/notosanskr_black</item>
+    </style>
+    <style name="Black.maincolor">
+        <item name="android:textColor">@color/maincolor</item>
+    </style>
     <style name="Bold.Brown">
         <item name="android:textColor">@color/brown</item>
     </style>

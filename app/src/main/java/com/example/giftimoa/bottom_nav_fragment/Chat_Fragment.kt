@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.giftimoa.Chatting_room_activity
 import com.example.giftimoa.R
 import com.example.giftimoa.ViewModel.ChatViewModel
 import com.example.giftimoa.adpater_list.RecyclerViewChattingRoomAdapter
@@ -66,12 +65,6 @@ class Chat_Fragment : Fragment() {
 
         // 리사이클러뷰 어댑터 초기화
         recyclerViewChattingRoomAdapter = RecyclerViewChattingRoomAdapter { chatRoom ->
-            // 클릭 이벤트를 처리하는 코드를 여기에 작성합니다.
-            val intent = Intent(context, Chatting_room_activity::class.java)
-            intent.putExtra(Chatting_room_activity.USERNAME, nickname)
-            intent.putExtra("nickname", chatRoom.nickname)
-            intent.putExtra("chatroom_id", chatRoom.id)
-            startActivity(intent)
         }
         recyclerView = binding.root.findViewById<RecyclerView>(R.id.rv_chat).apply {
             adapter = recyclerViewChattingRoomAdapter

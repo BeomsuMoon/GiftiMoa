@@ -1,12 +1,10 @@
 package com.example.giftimoa.dto
 
 data class ChatItem(
-    //val profileImageUrl: String,
-    val nickname: String?,
-    val reciver_nickname: String?,
+    val id: Int,
+    val nickname: String,
+    val reciver_nickname: String,
+    val brand: String,
     val message: String,
-    val timestamp: Long,
-    val isSelf: Boolean = false,
-    val isDate: Boolean = false,
-    val chatroom_id: Int
+    val timestamp: String,
 )

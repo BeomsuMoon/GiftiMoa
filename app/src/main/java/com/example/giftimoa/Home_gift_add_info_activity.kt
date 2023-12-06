@@ -71,8 +71,6 @@ class Home_gift_add_info_activity : AppCompatActivity() {
         val userEmail = sharedPreferences.getString("user_email", "")
 
         binding.chatBtn.setOnClickListener {
-            val nickname = binding.userNickname.text.toString()
-
             val client = OkHttpClient()
             val url = "http://3.35.110.246:3306/getNicknameByEmail" // 서버의 닉네임 확인 엔드포인트
 
@@ -109,55 +107,23 @@ class Home_gift_add_info_activity : AppCompatActivity() {
                                 alert.setTitle("알림")
                                 alert.show()
                             } else {
-                                // 이후의 동작은 이 안에서 수행
-                                val intent = Intent(
-                                    this@Home_gift_add_info_activity,
-                                    Chatting_room_activity::class.java
-                                )
-                                intent.putExtra("nickname", gift.nickname)
-                                intent.putExtra("brand", gift.h_brand)
-                                intent.putExtra(Chatting_room_activity.USERNAME, gift.nickname)
-                                intent.putExtra(Chatting_room_activity.USERNAME, formattedNickname)
-
-                                startActivity(intent)
+                                // 다이얼로그 생성
+                                val dialogFragment = ChatDialogFragment()
+                                val bundle = Bundle()
+                                bundle.putString("renickname", gift.nickname)
+                                bundle.putString("brand", gift.h_brand)
+                                bundle.putString("myNickname", formattedNickname) // 내 닉네임 추가
+                                dialogFragment.arguments = bundle
+                                dialogFragment.show(supportFragmentManager, "ChatDialogFragment")
                             }
                         }
                     }
                 })
             }
         }
+
     }
 
-        private fun getNicknameFromServer(userEmail: String?) {
-        val client = OkHttpClient()
-        val url = "http://3.35.110.246:3306/getNicknameByEmail" // 서버의 닉네임 확인 엔드포인트
-
-        // 이메일이 null이 아니면 서버에 요청을 보냄
-        if (!userEmail.isNullOrBlank()) {
-            val json = """{"email": "$userEmail"}"""
-            val mediaType = "application/json; charset=utf-8".toMediaType()
-            val requestBody = json.toRequestBody(mediaType)
-            val request = Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build()
-
-            client.newCall(request).enqueue(object : okhttp3.Callback {
-                override fun onFailure(call: okhttp3.Call, e: IOException) {
-                    e.printStackTrace()
-                }
-
-                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                    val responseData = response.body?.string()
-                    runOnUiThread {
-                        val intent = Intent(this@Home_gift_add_info_activity, Chatting_room_activity::class.java)
-                        intent.putExtra("nickname", responseData)
-
-                    }
-                }
-            })
-        }
-    }
 
     fun toggleFavorite(homeGift: Home_gift) {
         homeGift.favorite = if (homeGift.favorite == 0) 1 else 0

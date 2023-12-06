@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.giftimoa.Chatting_room_activity
 import com.example.giftimoa.dto.ChatRoom
 import com.example.giftimoa.databinding.ItemChattingCardviewBinding
 import java.text.SimpleDateFormat

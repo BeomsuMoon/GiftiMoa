@@ -1,3 +1,4 @@
+/*
 package com.example.giftimoa.adpater_list
 
 import android.view.LayoutInflater
@@ -112,4 +113,4 @@ class RecyclerViewChattingMessageAdapter : RecyclerView.Adapter<RecyclerView.Vie
     fun addMessage(chatItem: ChatItem) {
         differ.submitList(differ.currentList + chatItem)
     }
-}
+}*/
